@@ -108,7 +108,7 @@ SVC_Handler:
 DebugMon_Handler:
 	.thumb_func
 PendSV_Handler:
-	.thumb_func
-SysTick_Handler:
+@;	.thumb_func
+@;SysTick_Handler:
 	bx  r14	 /* put a breakpoint here when we're debugging so we can trap here but then return to interrupted code */
  

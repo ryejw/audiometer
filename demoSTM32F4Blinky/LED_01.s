@@ -27,14 +27,14 @@ led_mask:
 	.word	32768
 	.text
 	.align	2
-	.global	LED_Init
+	.global	SEG7_Init
 	.thumb
 	.thumb_func
-	.type	LED_Init, %function
-LED_Init:
+	.type	SEG7_Init, %function
+SEG7_Init:
 .LFB0:
 	.file 1 "LED_01.c"
-	.loc 1 91 0
+	.loc 1 99 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -46,7 +46,31 @@ LED_Init:
 	add	r7, sp, #0
 .LCFI1:
 	.cfi_def_cfa_register 7
-	.loc 1 93 0
+	.loc 1 100 0
+	mov	r3, #14336
+	movt	r3, 16386
+	mov	r2, #14336
+	movt	r2, 16386
+	ldr	r2, [r2, #48]
+	orr	r2, r2, #1
+	str	r2, [r3, #48]
+	.loc 1 101 0
+	mov	r3, #14336
+	movt	r3, 16386
+	mov	r2, #14336
+	movt	r2, 16386
+	ldr	r2, [r2, #48]
+	orr	r2, r2, #2
+	str	r2, [r3, #48]
+	.loc 1 102 0
+	mov	r3, #14336
+	movt	r3, 16386
+	mov	r2, #14336
+	movt	r2, 16386
+	ldr	r2, [r2, #48]
+	orr	r2, r2, #4
+	str	r2, [r3, #48]
+	.loc 1 103 0
 	mov	r3, #14336
 	movt	r3, 16386
 	mov	r2, #14336
@@ -54,7 +78,408 @@ LED_Init:
 	ldr	r2, [r2, #48]
 	orr	r2, r2, #8
 	str	r2, [r3, #48]
-	.loc 1 95 0
+	.loc 1 107 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldr	r2, [r2, #0]
+	bic	r2, r2, #12
+	str	r2, [r3, #0]
+	.loc 1 108 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldr	r2, [r2, #0]
+	orr	r2, r2, #4
+	str	r2, [r3, #0]
+	.loc 1 109 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldr	r2, [r2, #4]
+	bic	r2, r2, #2
+	str	r2, [r3, #4]
+	.loc 1 110 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldr	r2, [r2, #8]
+	bic	r2, r2, #12
+	str	r2, [r3, #8]
+	.loc 1 111 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldr	r2, [r2, #8]
+	orr	r2, r2, #8
+	str	r2, [r3, #8]
+	.loc 1 112 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldr	r2, [r2, #12]
+	bic	r2, r2, #12
+	str	r2, [r3, #12]
+	.loc 1 113 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldr	r2, [r2, #12]
+	orr	r2, r2, #4
+	str	r2, [r3, #12]
+	.loc 1 116 0
+	mov	r2, #1024
+	movt	r2, 16386
+	mov	r3, #1024
+	movt	r3, 16386
+	ldr	r1, [r3, #0]
+	movw	r3, #61680
+	movt	r3, 65343
+	ands	r3, r3, r1
+	str	r3, [r2, #0]
+	.loc 1 117 0
+	mov	r2, #1024
+	movt	r2, 16386
+	mov	r3, #1024
+	movt	r3, 16386
+	ldr	r1, [r3, #0]
+	movw	r3, #1285
+	movt	r3, 64
+	orrs	r3, r3, r1
+	str	r3, [r2, #0]
+	.loc 1 118 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldr	r2, [r2, #4]
+	bic	r2, r2, #2096
+	bic	r2, r2, #3
+	str	r2, [r3, #4]
+	.loc 1 119 0
+	mov	r2, #1024
+	movt	r2, 16386
+	mov	r3, #1024
+	movt	r3, 16386
+	ldr	r1, [r3, #8]
+	movw	r3, #61680
+	movt	r3, 65343
+	ands	r3, r3, r1
+	str	r3, [r2, #8]
+	.loc 1 120 0
+	mov	r2, #1024
+	movt	r2, 16386
+	mov	r3, #1024
+	movt	r3, 16386
+	ldr	r1, [r3, #8]
+	movw	r3, #2570
+	movt	r3, 128
+	orrs	r3, r3, r1
+	str	r3, [r2, #8]
+	.loc 1 121 0
+	mov	r2, #1024
+	movt	r2, 16386
+	mov	r3, #1024
+	movt	r3, 16386
+	ldr	r1, [r3, #12]
+	movw	r3, #61680
+	movt	r3, 65343
+	ands	r3, r3, r1
+	str	r3, [r2, #12]
+	.loc 1 122 0
+	mov	r2, #1024
+	movt	r2, 16386
+	mov	r3, #1024
+	movt	r3, 16386
+	ldr	r1, [r3, #12]
+	movw	r3, #1285
+	movt	r3, 64
+	orrs	r3, r3, r1
+	str	r3, [r2, #12]
+	.loc 1 125 0
+	mov	r2, #2048
+	movt	r2, 16386
+	mov	r3, #2048
+	movt	r3, 16386
+	ldr	r1, [r3, #0]
+	movw	r3, #61635
+	movt	r3, 65343
+	ands	r3, r3, r1
+	str	r3, [r2, #0]
+	.loc 1 126 0
+	mov	r2, #2048
+	movt	r2, 16386
+	mov	r3, #2048
+	movt	r3, 16386
+	ldr	r1, [r3, #0]
+	movw	r3, #1300
+	movt	r3, 64
+	orrs	r3, r3, r1
+	str	r3, [r2, #0]
+	.loc 1 127 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldr	r2, [r2, #4]
+	bic	r2, r2, #2096
+	bic	r2, r2, #6
+	str	r2, [r3, #4]
+	.loc 1 128 0
+	mov	r2, #2048
+	movt	r2, 16386
+	mov	r3, #2048
+	movt	r3, 16386
+	ldr	r1, [r3, #8]
+	movw	r3, #61635
+	movt	r3, 65343
+	ands	r3, r3, r1
+	str	r3, [r2, #8]
+	.loc 1 129 0
+	mov	r2, #2048
+	movt	r2, 16386
+	mov	r3, #2048
+	movt	r3, 16386
+	ldr	r1, [r3, #8]
+	movw	r3, #2600
+	movt	r3, 128
+	orrs	r3, r3, r1
+	str	r3, [r2, #8]
+	.loc 1 130 0
+	mov	r2, #2048
+	movt	r2, 16386
+	mov	r3, #2048
+	movt	r3, 16386
+	ldr	r1, [r3, #12]
+	movw	r3, #61635
+	movt	r3, 65343
+	ands	r3, r3, r1
+	str	r3, [r2, #12]
+	.loc 1 131 0
+	mov	r2, #2048
+	movt	r2, 16386
+	mov	r3, #2048
+	movt	r3, 16386
+	ldr	r1, [r3, #12]
+	movw	r3, #1300
+	movt	r3, 64
+	orrs	r3, r3, r1
+	str	r3, [r2, #12]
+	.loc 1 134 0
+	mov	r3, #3072
+	movt	r3, 16386
+	mov	r2, #3072
+	movt	r2, 16386
+	ldr	r2, [r2, #0]
+	bic	r2, r2, #48
+	str	r2, [r3, #0]
+	.loc 1 135 0
+	mov	r3, #3072
+	movt	r3, 16386
+	mov	r2, #3072
+	movt	r2, 16386
+	ldr	r2, [r2, #0]
+	orr	r2, r2, #16
+	str	r2, [r3, #0]
+	.loc 1 136 0
+	mov	r3, #3072
+	movt	r3, 16386
+	mov	r2, #3072
+	movt	r2, 16386
+	ldr	r2, [r2, #4]
+	bic	r2, r2, #4
+	str	r2, [r3, #4]
+	.loc 1 137 0
+	mov	r3, #3072
+	movt	r3, 16386
+	mov	r2, #3072
+	movt	r2, 16386
+	ldr	r2, [r2, #8]
+	bic	r2, r2, #48
+	str	r2, [r3, #8]
+	.loc 1 138 0
+	mov	r3, #3072
+	movt	r3, 16386
+	mov	r2, #3072
+	movt	r2, 16386
+	ldr	r2, [r2, #8]
+	orr	r2, r2, #32
+	str	r2, [r3, #8]
+	.loc 1 139 0
+	mov	r3, #3072
+	movt	r3, 16386
+	mov	r2, #3072
+	movt	r2, 16386
+	ldr	r2, [r2, #12]
+	bic	r2, r2, #48
+	str	r2, [r3, #12]
+	.loc 1 140 0
+	mov	r3, #3072
+	movt	r3, 16386
+	mov	r2, #3072
+	movt	r2, 16386
+	ldr	r2, [r2, #12]
+	orr	r2, r2, #16
+	str	r2, [r3, #12]
+	.loc 1 144 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 145 0
+	mov	r3, #3072
+	movt	r3, 16386
+	mov	r2, #3072
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 149 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 152 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 153 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 154 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 155 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 156 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 157 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 158 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 161 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 162 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 165 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 167 0
+	mov	sp, r7
+	pop	{r7}
+	bx	lr
+	.cfi_endproc
+.LFE0:
+	.size	SEG7_Init, .-SEG7_Init
+	.align	2
+	.global	LED_Init
+	.thumb
+	.thumb_func
+	.type	LED_Init, %function
+LED_Init:
+.LFB1:
+	.loc 1 172 0
+	.cfi_startproc
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 1, uses_anonymous_args = 0
+	@ link register save eliminated.
+	push	{r7}
+.LCFI2:
+	.cfi_def_cfa_offset 4
+	.cfi_offset 7, -4
+	add	r7, sp, #0
+.LCFI3:
+	.cfi_def_cfa_register 7
+	.loc 1 174 0
+	mov	r3, #14336
+	movt	r3, 16386
+	mov	r2, #14336
+	movt	r2, 16386
+	ldr	r2, [r2, #48]
+	orr	r2, r2, #8
+	str	r2, [r3, #48]
+	.loc 1 176 0
 	mov	r3, #3072
 	movt	r3, 16386
 	mov	r2, #3072
@@ -62,7 +487,7 @@ LED_Init:
 	ldr	r2, [r2, #0]
 	bic	r2, r2, #-16777216
 	str	r2, [r3, #0]
-	.loc 1 99 0
+	.loc 1 180 0
 	mov	r3, #3072
 	movt	r3, 16386
 	mov	r2, #3072
@@ -70,7 +495,7 @@ LED_Init:
 	ldr	r2, [r2, #0]
 	orr	r2, r2, #1426063360
 	str	r2, [r3, #0]
-	.loc 1 103 0
+	.loc 1 184 0
 	mov	r3, #3072
 	movt	r3, 16386
 	mov	r2, #3072
@@ -78,7 +503,7 @@ LED_Init:
 	ldr	r2, [r2, #4]
 	bic	r2, r2, #61440
 	str	r2, [r3, #4]
-	.loc 1 107 0
+	.loc 1 188 0
 	mov	r3, #3072
 	movt	r3, 16386
 	mov	r2, #3072
@@ -86,7 +511,7 @@ LED_Init:
 	ldr	r2, [r2, #8]
 	bic	r2, r2, #-16777216
 	str	r2, [r3, #8]
-	.loc 1 111 0
+	.loc 1 192 0
 	mov	r3, #3072
 	movt	r3, 16386
 	mov	r2, #3072
@@ -94,7 +519,7 @@ LED_Init:
 	ldr	r2, [r2, #8]
 	orr	r2, r2, #-1442840576
 	str	r2, [r3, #8]
-	.loc 1 115 0
+	.loc 1 196 0
 	mov	r3, #3072
 	movt	r3, 16386
 	mov	r2, #3072
@@ -102,7 +527,7 @@ LED_Init:
 	ldr	r2, [r2, #12]
 	bic	r2, r2, #-16777216
 	str	r2, [r3, #12]
-	.loc 1 119 0
+	.loc 1 200 0
 	mov	r3, #3072
 	movt	r3, 16386
 	mov	r2, #3072
@@ -110,12 +535,12 @@ LED_Init:
 	ldr	r2, [r2, #12]
 	orr	r2, r2, #1426063360
 	str	r2, [r3, #12]
-	.loc 1 123 0
+	.loc 1 204 0
 	mov	sp, r7
 	pop	{r7}
 	bx	lr
 	.cfi_endproc
-.LFE0:
+.LFE1:
 	.size	LED_Init, .-LED_Init
 	.align	2
 	.global	LED_On
@@ -123,28 +548,28 @@ LED_Init:
 	.thumb_func
 	.type	LED_On, %function
 LED_On:
-.LFB1:
-	.loc 1 128 0
+.LFB2:
+	.loc 1 209 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
 	@ link register save eliminated.
 	push	{r7}
-.LCFI2:
+.LCFI4:
 	.cfi_def_cfa_offset 4
 	.cfi_offset 7, -4
 	sub	sp, sp, #12
-.LCFI3:
+.LCFI5:
 	.cfi_def_cfa_offset 16
 	add	r7, sp, #0
-.LCFI4:
+.LCFI6:
 	.cfi_def_cfa_register 7
 	str	r0, [r7, #4]
-	.loc 1 130 0
+	.loc 1 211 0
 	ldr	r3, [r7, #4]
 	cmp	r3, #3
-	bhi	.L2
-	.loc 1 131 0
+	bhi	.L3
+	.loc 1 212 0
 	mov	r3, #3072
 	movt	r3, 16386
 	movw	r2, #:lower16:led_mask
@@ -153,14 +578,14 @@ LED_On:
 	ldr	r2, [r2, r1, lsl #2]
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-.L2:
-	.loc 1 133 0
+.L3:
+	.loc 1 214 0
 	add	r7, r7, #12
 	mov	sp, r7
 	pop	{r7}
 	bx	lr
 	.cfi_endproc
-.LFE1:
+.LFE2:
 	.size	LED_On, .-LED_On
 	.align	2
 	.global	LED_Off
@@ -168,28 +593,28 @@ LED_On:
 	.thumb_func
 	.type	LED_Off, %function
 LED_Off:
-.LFB2:
-	.loc 1 138 0
+.LFB3:
+	.loc 1 219 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
 	@ link register save eliminated.
 	push	{r7}
-.LCFI5:
+.LCFI7:
 	.cfi_def_cfa_offset 4
 	.cfi_offset 7, -4
 	sub	sp, sp, #12
-.LCFI6:
+.LCFI8:
 	.cfi_def_cfa_offset 16
 	add	r7, sp, #0
-.LCFI7:
+.LCFI9:
 	.cfi_def_cfa_register 7
 	str	r0, [r7, #4]
-	.loc 1 140 0
+	.loc 1 221 0
 	ldr	r3, [r7, #4]
 	cmp	r3, #3
-	bhi	.L4
-	.loc 1 141 0
+	bhi	.L5
+	.loc 1 222 0
 	mov	r3, #3072
 	movt	r3, 16386
 	movw	r2, #:lower16:led_mask
@@ -198,14 +623,14 @@ LED_Off:
 	ldr	r2, [r2, r1, lsl #2]
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-.L4:
-	.loc 1 143 0
+.L5:
+	.loc 1 224 0
 	add	r7, r7, #12
 	mov	sp, r7
 	pop	{r7}
 	bx	lr
 	.cfi_endproc
-.LFE2:
+.LFE3:
 	.size	LED_Off, .-LED_Off
 	.align	2
 	.global	LED_Out
@@ -213,29 +638,29 @@ LED_Off:
 	.thumb_func
 	.type	LED_Out, %function
 LED_Out:
-.LFB3:
-	.loc 1 148 0
+.LFB4:
+	.loc 1 229 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 16
 	@ frame_needed = 1, uses_anonymous_args = 0
 	push	{r7, lr}
-.LCFI8:
+.LCFI10:
 	.cfi_def_cfa_offset 8
 	.cfi_offset 7, -8
 	.cfi_offset 14, -4
 	sub	sp, sp, #16
-.LCFI9:
+.LCFI11:
 	.cfi_def_cfa_offset 24
 	add	r7, sp, #0
-.LCFI10:
+.LCFI12:
 	.cfi_def_cfa_register 7
 	str	r0, [r7, #4]
-	.loc 1 151 0
+	.loc 1 232 0
 	mov	r3, #0
 	str	r3, [r7, #12]
-	b	.L7
-.L10:
-	.loc 1 152 0
+	b	.L8
+.L11:
+	.loc 1 233 0
 	mov	r2, #1
 	ldr	r3, [r7, #12]
 	lsl	r3, r2, r3
@@ -243,39 +668,39 @@ LED_Out:
 	ldr	r3, [r7, #4]
 	ands	r3, r3, r2
 	cmp	r3, #0
-	beq	.L8
-	.loc 1 153 0
+	beq	.L9
+	.loc 1 234 0
 	ldr	r3, [r7, #12]
 	mov	r0, r3
 	bl	LED_On
-	b	.L9
-.L8:
-	.loc 1 155 0
+	b	.L10
+.L9:
+	.loc 1 236 0
 	ldr	r3, [r7, #12]
 	mov	r0, r3
 	bl	LED_Off
-.L9:
-	.loc 1 151 0
+.L10:
+	.loc 1 232 0
 	ldr	r3, [r7, #12]
 	add	r3, r3, #1
 	str	r3, [r7, #12]
-.L7:
-	.loc 1 151 0 is_stmt 0 discriminator 1
+.L8:
+	.loc 1 232 0 is_stmt 0 discriminator 1
 	ldr	r3, [r7, #12]
 	cmp	r3, #3
-	ble	.L10
-	.loc 1 158 0 is_stmt 1
+	ble	.L11
+	.loc 1 239 0 is_stmt 1
 	add	r7, r7, #16
 	mov	sp, r7
 	pop	{r7, pc}
 	.cfi_endproc
-.LFE3:
+.LFE4:
 	.size	LED_Out, .-LED_Out
 .Letext0:
 	.file 2 "c:/yagarto/lib/gcc/../../arm-none-eabi/sys-include/stdint.h"
 	.section	.debug_info,"",%progbits
 .Ldebug_info0:
-	.4byte	0x3b2
+	.4byte	0x3c7
 	.2byte	0x2
 	.4byte	.Ldebug_abbrev0
 	.byte	0x4
@@ -340,12 +765,12 @@ LED_Out:
 	.uleb128 0x5
 	.byte	0x28
 	.byte	0x1
-	.byte	0x1a
+	.byte	0x22
 	.4byte	0x116
 	.uleb128 0x6
 	.4byte	.LASF11
 	.byte	0x1
-	.byte	0x1c
+	.byte	0x24
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -353,7 +778,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF12
 	.byte	0x1
-	.byte	0x1d
+	.byte	0x25
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -361,7 +786,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF13
 	.byte	0x1
-	.byte	0x1e
+	.byte	0x26
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -369,7 +794,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF14
 	.byte	0x1
-	.byte	0x1f
+	.byte	0x27
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -377,7 +802,7 @@ LED_Out:
 	.uleb128 0x7
 	.ascii	"IDR\000"
 	.byte	0x1
-	.byte	0x20
+	.byte	0x28
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -385,7 +810,7 @@ LED_Out:
 	.uleb128 0x7
 	.ascii	"ODR\000"
 	.byte	0x1
-	.byte	0x21
+	.byte	0x29
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -393,7 +818,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF15
 	.byte	0x1
-	.byte	0x22
+	.byte	0x2a
 	.4byte	0x3a
 	.byte	0x2
 	.byte	0x23
@@ -401,7 +826,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF16
 	.byte	0x1
-	.byte	0x23
+	.byte	0x2b
 	.4byte	0x3a
 	.byte	0x2
 	.byte	0x23
@@ -409,7 +834,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF17
 	.byte	0x1
-	.byte	0x24
+	.byte	0x2c
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -417,7 +842,7 @@ LED_Out:
 	.uleb128 0x7
 	.ascii	"AFR\000"
 	.byte	0x1
-	.byte	0x25
+	.byte	0x2d
 	.4byte	0x116
 	.byte	0x2
 	.byte	0x23
@@ -437,17 +862,17 @@ LED_Out:
 	.uleb128 0x3
 	.4byte	.LASF19
 	.byte	0x1
-	.byte	0x26
+	.byte	0x2e
 	.4byte	0x81
 	.uleb128 0x5
 	.byte	0x88
 	.byte	0x1
-	.byte	0x2a
+	.byte	0x32
 	.4byte	0x2e6
 	.uleb128 0x7
 	.ascii	"CR\000"
 	.byte	0x1
-	.byte	0x2c
+	.byte	0x34
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -455,7 +880,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF20
 	.byte	0x1
-	.byte	0x2d
+	.byte	0x35
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -463,7 +888,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF21
 	.byte	0x1
-	.byte	0x2e
+	.byte	0x36
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -471,7 +896,7 @@ LED_Out:
 	.uleb128 0x7
 	.ascii	"CIR\000"
 	.byte	0x1
-	.byte	0x2f
+	.byte	0x37
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -479,7 +904,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF22
 	.byte	0x1
-	.byte	0x30
+	.byte	0x38
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -487,7 +912,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF23
 	.byte	0x1
-	.byte	0x31
+	.byte	0x39
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -495,7 +920,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF24
 	.byte	0x1
-	.byte	0x32
+	.byte	0x3a
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -503,7 +928,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF25
 	.byte	0x1
-	.byte	0x33
+	.byte	0x3b
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -511,7 +936,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF26
 	.byte	0x1
-	.byte	0x34
+	.byte	0x3c
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -519,7 +944,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF27
 	.byte	0x1
-	.byte	0x35
+	.byte	0x3d
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -527,7 +952,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF28
 	.byte	0x1
-	.byte	0x36
+	.byte	0x3e
 	.4byte	0x116
 	.byte	0x2
 	.byte	0x23
@@ -535,7 +960,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF29
 	.byte	0x1
-	.byte	0x37
+	.byte	0x3f
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -543,7 +968,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF30
 	.byte	0x1
-	.byte	0x38
+	.byte	0x40
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -551,7 +976,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF31
 	.byte	0x1
-	.byte	0x39
+	.byte	0x41
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -559,7 +984,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF32
 	.byte	0x1
-	.byte	0x3a
+	.byte	0x42
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -567,7 +992,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF33
 	.byte	0x1
-	.byte	0x3b
+	.byte	0x43
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -575,7 +1000,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF34
 	.byte	0x1
-	.byte	0x3c
+	.byte	0x44
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -583,7 +1008,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF35
 	.byte	0x1
-	.byte	0x3d
+	.byte	0x45
 	.4byte	0x116
 	.byte	0x2
 	.byte	0x23
@@ -591,7 +1016,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF36
 	.byte	0x1
-	.byte	0x3e
+	.byte	0x46
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -599,7 +1024,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF37
 	.byte	0x1
-	.byte	0x3f
+	.byte	0x47
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -607,7 +1032,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF38
 	.byte	0x1
-	.byte	0x40
+	.byte	0x48
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -615,7 +1040,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF39
 	.byte	0x1
-	.byte	0x41
+	.byte	0x49
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -623,7 +1048,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF40
 	.byte	0x1
-	.byte	0x42
+	.byte	0x4a
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -631,7 +1056,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF41
 	.byte	0x1
-	.byte	0x43
+	.byte	0x4b
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -639,7 +1064,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF42
 	.byte	0x1
-	.byte	0x44
+	.byte	0x4c
 	.4byte	0x116
 	.byte	0x2
 	.byte	0x23
@@ -647,7 +1072,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF43
 	.byte	0x1
-	.byte	0x45
+	.byte	0x4d
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -655,7 +1080,7 @@ LED_Out:
 	.uleb128 0x7
 	.ascii	"CSR\000"
 	.byte	0x1
-	.byte	0x46
+	.byte	0x4e
 	.4byte	0x53
 	.byte	0x2
 	.byte	0x23
@@ -663,7 +1088,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF44
 	.byte	0x1
-	.byte	0x47
+	.byte	0x4f
 	.4byte	0x116
 	.byte	0x2
 	.byte	0x23
@@ -671,7 +1096,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF45
 	.byte	0x1
-	.byte	0x48
+	.byte	0x50
 	.4byte	0x53
 	.byte	0x3
 	.byte	0x23
@@ -679,7 +1104,7 @@ LED_Out:
 	.uleb128 0x6
 	.4byte	.LASF46
 	.byte	0x1
-	.byte	0x49
+	.byte	0x51
 	.4byte	0x53
 	.byte	0x3
 	.byte	0x23
@@ -688,81 +1113,90 @@ LED_Out:
 	.uleb128 0x3
 	.4byte	.LASF47
 	.byte	0x1
-	.byte	0x4a
+	.byte	0x52
 	.4byte	0x138
 	.uleb128 0xa
 	.byte	0x1
 	.4byte	.LASF55
 	.byte	0x1
-	.byte	0x5b
-	.byte	0x1
+	.byte	0x63
 	.4byte	.LFB0
 	.4byte	.LFE0
 	.4byte	.LLST0
 	.byte	0x1
 	.uleb128 0xb
 	.byte	0x1
-	.4byte	.LASF48
+	.4byte	.LASF56
 	.byte	0x1
-	.byte	0x80
+	.byte	0xac
 	.byte	0x1
 	.4byte	.LFB1
 	.4byte	.LFE1
 	.4byte	.LLST1
 	.byte	0x1
-	.4byte	0x330
 	.uleb128 0xc
-	.ascii	"num\000"
 	.byte	0x1
-	.byte	0x80
-	.4byte	0x7a
-	.byte	0x2
-	.byte	0x91
-	.sleb128 -12
-	.byte	0
-	.uleb128 0xb
+	.4byte	.LASF48
 	.byte	0x1
-	.4byte	.LASF49
-	.byte	0x1
-	.byte	0x8a
+	.byte	0xd1
 	.byte	0x1
 	.4byte	.LFB2
 	.4byte	.LFE2
 	.4byte	.LLST2
 	.byte	0x1
-	.4byte	0x359
-	.uleb128 0xc
+	.4byte	0x345
+	.uleb128 0xd
 	.ascii	"num\000"
 	.byte	0x1
-	.byte	0x8a
+	.byte	0xd1
 	.4byte	0x7a
 	.byte	0x2
 	.byte	0x91
 	.sleb128 -12
 	.byte	0
-	.uleb128 0xd
+	.uleb128 0xc
 	.byte	0x1
-	.4byte	.LASF50
+	.4byte	.LASF49
 	.byte	0x1
-	.byte	0x94
+	.byte	0xdb
 	.byte	0x1
 	.4byte	.LFB3
 	.4byte	.LFE3
 	.4byte	.LLST3
 	.byte	0x1
-	.4byte	0x38e
+	.4byte	0x36e
+	.uleb128 0xd
+	.ascii	"num\000"
+	.byte	0x1
+	.byte	0xdb
+	.4byte	0x7a
+	.byte	0x2
+	.byte	0x91
+	.sleb128 -12
+	.byte	0
 	.uleb128 0xe
+	.byte	0x1
+	.4byte	.LASF50
+	.byte	0x1
+	.byte	0xe5
+	.byte	0x1
+	.4byte	.LFB4
+	.4byte	.LFE4
+	.4byte	.LLST4
+	.byte	0x1
+	.4byte	0x3a3
+	.uleb128 0xf
 	.4byte	.LASF51
 	.byte	0x1
-	.byte	0x94
+	.byte	0xe5
 	.4byte	0x7a
 	.byte	0x2
 	.byte	0x91
 	.sleb128 -20
-	.uleb128 0xf
+	.uleb128 0x10
 	.ascii	"i\000"
 	.byte	0x1
-	.byte	0x95
+	.byte	0xe6
 	.4byte	0x73
 	.byte	0x2
 	.byte	0x91
@@ -770,22 +1204,22 @@ LED_Out:
 	.byte	0
 	.uleb128 0x8
 	.4byte	0x5e
-	.4byte	0x39e
+	.4byte	0x3b3
 	.uleb128 0x9
 	.4byte	0x126
 	.byte	0x3
 	.byte	0
-	.uleb128 0x10
-	.4byte	.LASF56
+	.uleb128 0x11
+	.4byte	.LASF57
 	.byte	0x1
-	.byte	0x56
-	.4byte	0x3b0
+	.byte	0x5d
+	.4byte	0x3c5
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
 	.4byte	led_mask
-	.uleb128 0x11
-	.4byte	0x38e
+	.uleb128 0x12
+	.4byte	0x3a3
 	.byte	0
 	.section	.debug_abbrev,"",%progbits
 .Ldebug_abbrev0:
@@ -915,6 +1349,27 @@ LED_Out:
 	.uleb128 0xb
 	.uleb128 0x3b
 	.uleb128 0xb
+	.uleb128 0x11
+	.uleb128 0x1
+	.uleb128 0x12
+	.uleb128 0x1
+	.uleb128 0x40
+	.uleb128 0x6
+	.uleb128 0x2117
+	.uleb128 0xc
+	.byte	0
+	.byte	0
+	.uleb128 0xb
+	.uleb128 0x2e
+	.byte	0
+	.uleb128 0x3f
+	.uleb128 0xc
+	.uleb128 0x3
+	.uleb128 0xe
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0xb
 	.uleb128 0x27
 	.uleb128 0xc
 	.uleb128 0x11
@@ -927,7 +1382,7 @@ LED_Out:
 	.uleb128 0xc
 	.byte	0
 	.byte	0
-	.uleb128 0xb
+	.uleb128 0xc
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -952,7 +1407,7 @@ LED_Out:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0xc
+	.uleb128 0xd
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -967,7 +1422,7 @@ LED_Out:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0xd
+	.uleb128 0xe
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x3f
@@ -992,7 +1447,7 @@ LED_Out:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0xe
+	.uleb128 0xf
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -1007,7 +1462,7 @@ LED_Out:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0xf
+	.uleb128 0x10
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -1022,7 +1477,7 @@ LED_Out:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0x10
+	.uleb128 0x11
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -1039,7 +1494,7 @@ LED_Out:
 	.uleb128 0xa
 	.byte	0
 	.byte	0
-	.uleb128 0x11
+	.uleb128 0x12
 	.uleb128 0x26
 	.byte	0
 	.uleb128 0x49
@@ -1079,34 +1534,29 @@ LED_Out:
 	.byte	0x7d
 	.sleb128 4
 	.4byte	.LCFI3-.Ltext0
-	.4byte	.LCFI4-.Ltext0
-	.2byte	0x2
-	.byte	0x7d
-	.sleb128 16
-	.4byte	.LCFI4-.Ltext0
 	.4byte	.LFE1-.Ltext0
 	.2byte	0x2
 	.byte	0x77
-	.sleb128 16
+	.sleb128 4
 	.4byte	0
 	.4byte	0
 .LLST2:
 	.4byte	.LFB2-.Ltext0
-	.4byte	.LCFI5-.Ltext0
+	.4byte	.LCFI4-.Ltext0
 	.2byte	0x2
 	.byte	0x7d
 	.sleb128 0
+	.4byte	.LCFI4-.Ltext0
+	.4byte	.LCFI5-.Ltext0
+	.2byte	0x2
+	.byte	0x7d
+	.sleb128 4
 	.4byte	.LCFI5-.Ltext0
 	.4byte	.LCFI6-.Ltext0
 	.2byte	0x2
 	.byte	0x7d
-	.sleb128 4
-	.4byte	.LCFI6-.Ltext0
-	.4byte	.LCFI7-.Ltext0
-	.2byte	0x2
-	.byte	0x7d
 	.sleb128 16
-	.4byte	.LCFI7-.Ltext0
+	.4byte	.LCFI6-.Ltext0
 	.4byte	.LFE2-.Ltext0
 	.2byte	0x2
 	.byte	0x77
@@ -1115,22 +1565,45 @@ LED_Out:
 	.4byte	0
 .LLST3:
 	.4byte	.LFB3-.Ltext0
-	.4byte	.LCFI8-.Ltext0
+	.4byte	.LCFI7-.Ltext0
 	.2byte	0x2
 	.byte	0x7d
 	.sleb128 0
+	.4byte	.LCFI7-.Ltext0
+	.4byte	.LCFI8-.Ltext0
+	.2byte	0x2
+	.byte	0x7d
+	.sleb128 4
 	.4byte	.LCFI8-.Ltext0
 	.4byte	.LCFI9-.Ltext0
 	.2byte	0x2
 	.byte	0x7d
-	.sleb128 8
+	.sleb128 16
 	.4byte	.LCFI9-.Ltext0
+	.4byte	.LFE3-.Ltext0
+	.2byte	0x2
+	.byte	0x77
+	.sleb128 16
+	.4byte	0
+	.4byte	0
+.LLST4:
+	.4byte	.LFB4-.Ltext0
 	.4byte	.LCFI10-.Ltext0
 	.2byte	0x2
 	.byte	0x7d
-	.sleb128 24
+	.sleb128 0
 	.4byte	.LCFI10-.Ltext0
-	.4byte	.LFE3-.Ltext0
+	.4byte	.LCFI11-.Ltext0
+	.2byte	0x2
+	.byte	0x7d
+	.sleb128 8
+	.4byte	.LCFI11-.Ltext0
+	.4byte	.LCFI12-.Ltext0
+	.2byte	0x2
+	.byte	0x7d
+	.sleb128 24
+	.4byte	.LCFI12-.Ltext0
+	.4byte	.LFE4-.Ltext0
 	.2byte	0x2
 	.byte	0x77
 	.sleb128 24
@@ -1165,7 +1638,7 @@ LED_Out:
 	.ascii	"SSCGR\000"
 .LASF43:
 	.ascii	"BDCR\000"
-.LASF56:
+.LASF57:
 	.ascii	"led_mask\000"
 .LASF36:
 	.ascii	"AHB1LPENR\000"
@@ -1204,6 +1677,8 @@ LED_Out:
 	.ascii	"short unsigned int\000"
 .LASF20:
 	.ascii	"PLLCFGR\000"
+.LASF55:
+	.ascii	"SEG7_Init\000"
 .LASF31:
 	.ascii	"AHB3ENR\000"
 .LASF34:
@@ -1258,7 +1733,7 @@ LED_Out:
 	.ascii	"AHB2RSTR\000"
 .LASF0:
 	.ascii	"signed char\000"
-.LASF55:
+.LASF56:
 	.ascii	"LED_Init\000"
 .LASF29:
 	.ascii	"AHB1ENR\000"

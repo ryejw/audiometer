@@ -177,7 +177,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>442</LineNumber>
+          <LineNumber>443</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -244,10 +244,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>8</ColumnNumber>
+      <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>425</TopLine>
-      <CurrentLine>444</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>711</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\STM32F4main01.c</PathWithFileName>
       <FilenameWithoutPath>STM32F4main01.c</FilenameWithoutPath>

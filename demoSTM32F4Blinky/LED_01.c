@@ -23,6 +23,14 @@
   #define AHB1PERIPH_BASE       (PERIPH_BASE + 0x00020000)
   #define RCC_BASE              (AHB1PERIPH_BASE + 0x3800)
   #define GPIOA_BASE            (AHB1PERIPH_BASE + 0x0000)
+	#define GPIOA               	((GPIO_TypeDef *) GPIOA_BASE)
+	#define GPIOB_BASE            (AHB1PERIPH_BASE + 0x0400)
+	#define GPIOB               	((GPIO_TypeDef *) GPIOB_BASE)
+	#define GPIOC_BASE            (AHB1PERIPH_BASE + 0x0800)
+	#define GPIOC               	((GPIO_TypeDef *) GPIOC_BASE)
+  #define GPIOD_BASE            (AHB1PERIPH_BASE + 0x0C00)
+  #define GPIOD               ((GPIO_TypeDef *) GPIOD_BASE)
+	
 typedef struct
 {
   __IO uint32_t MODER;    /*!< GPIO port mode register,               Address offset: 0x00      */
@@ -75,8 +83,7 @@ typedef struct
   
   #define RCC                 ((RCC_TypeDef *) RCC_BASE)
 
-  #define GPIOD_BASE            (AHB1PERIPH_BASE + 0x0C00)
-  #define GPIOD               ((GPIO_TypeDef *) GPIOD_BASE)
+
   
 //!!things we commented out to squelch compiler complaints			
 //#include "STM32F4xx.h"
@@ -84,6 +91,80 @@ typedef struct
 #include "LED.h"
 
 const unsigned long led_mask[] = {1UL << 12, 1UL << 13, 1UL << 14, 1UL << 15};
+
+
+/*----------------------------------------------------------------------------
+  Initialize 7-Segments Display Pins
+ *----------------------------------------------------------------------------*/
+void SEG7_Init() {
+	RCC->AHB1ENR  |= ((1UL <<  0) );         /* Enable GPIOA clock                */
+	RCC->AHB1ENR  |= ((1UL <<  1) );         /* Enable GPIOB clock                */
+	RCC->AHB1ENR  |= ((1UL <<  2) );         /* Enable GPIOC clock                */
+	RCC->AHB1ENR  |= ((1UL <<  3) );         /* Enable GPIOD clock                */
+	
+	//Initialize Cathode and Anode Pins
+	//Initialize Port A: 1
+	GPIOA->MODER    &= ~((3UL << 2*1));   /* PA.1 is output               */
+  GPIOA->MODER    |=  ((1UL << 2*1)); 
+	GPIOA->OTYPER   &= ~((1UL <<   1));   /* PA.1 is output Push-Pull     */
+  GPIOA->OSPEEDR  &= ~((3UL << 2*1));   /* PA.1 is 50MHz Fast Speed     */
+  GPIOA->OSPEEDR  |=  ((2UL << 2*1)); 
+  GPIOA->PUPDR    &= ~((3UL << 2*1));   /* PA.1 is Pull up              */
+  GPIOA->PUPDR    |=  ((1UL << 2*1));  
+
+	//Initialize Port B: 0,1,4,5,11
+  GPIOB->MODER    &= ~((3UL << 2*0) | (3UL << 2*1) | (3UL << 2*4) | (3UL << 2*5) | (3UL << 2*11));   /* PB.0,1,4,5,11 is output               */
+  GPIOB->MODER    |=  ((1UL << 2*0) | (1UL << 2*1) | (1UL << 2*4) | (1UL << 2*5) | (1UL << 2*11)); 
+  GPIOB->OTYPER   &= ~((1UL <<   0) | (1UL <<   1) | (1UL <<   4) | (1UL <<   5) | (1UL <<   11));   /* PB.0,1,4,5,11 is output Push-Pull     */
+  GPIOB->OSPEEDR  &= ~((3UL << 2*0) | (3UL << 2*1) | (3UL << 2*4) | (3UL << 2*5) | (3UL << 2*11));   /* PB.0,1,4,5,11 is 50MHz Fast Speed     */
+  GPIOB->OSPEEDR  |=  ((2UL << 2*0) | (2UL << 2*1) | (2UL << 2*4) | (2UL << 2*5) | (2UL << 2*11)); 
+  GPIOB->PUPDR    &= ~((3UL << 2*0) | (3UL << 2*1) | (3UL << 2*4) | (3UL << 2*5) | (3UL << 2*11));   /* PB.0,1,4,5,11 is Pull up              */
+  GPIOB->PUPDR    |=  ((1UL << 2*0) | (1UL << 2*1) | (1UL << 2*4) | (1UL << 2*5) | (1UL << 2*11)); 
+											 						 
+	//Initialize Port C: 1,2,4,5,11
+	GPIOC->MODER    &= ~((3UL << 2*1) | (3UL << 2*2) | (3UL << 2*4) | (3UL << 2*5) | (3UL << 2*11));   /* PC.1,2,4,5,11 is output               */
+  GPIOC->MODER    |=  ((1UL << 2*1) | (1UL << 2*2) | (1UL << 2*4) | (1UL << 2*5) | (1UL << 2*11)); 
+  GPIOC->OTYPER   &= ~((1UL <<   1) | (1UL <<   2) | (1UL <<   4) | (1UL <<   5) | (1UL <<   11));   /* PC.1,2,4,5,11 is output Push-Pull     */
+  GPIOC->OSPEEDR  &= ~((3UL << 2*1) | (3UL << 2*2) | (3UL << 2*4) | (3UL << 2*5) | (3UL << 2*11));   /* PC.1,2,4,5,11 is 50MHz Fast Speed     */
+  GPIOC->OSPEEDR  |=  ((2UL << 2*1) | (2UL << 2*2) | (2UL << 2*4) | (2UL << 2*5) | (2UL << 2*11)); 
+  GPIOC->PUPDR    &= ~((3UL << 2*1) | (3UL << 2*2) | (3UL << 2*4) | (3UL << 2*5) | (3UL << 2*11));   /* PC.1,2,4,5,11 is Pull up              */
+  GPIOC->PUPDR    |=  ((1UL << 2*1) | (1UL << 2*2) | (1UL << 2*4) | (1UL << 2*5) | (1UL << 2*11)); 
+	
+	//Initialize Port D: 2
+	GPIOD->MODER    &= ~((3UL << 2*2));   /* PD.2 is output               */
+  GPIOD->MODER    |=  ((1UL << 2*2)); 
+	GPIOD->OTYPER   &= ~((1UL <<   2));   /* PD.2 is output Push-Pull     */
+  GPIOD->OSPEEDR  &= ~((3UL << 2*2));   /* PD.2 is 50MHz Fast Speed     */
+  GPIOD->OSPEEDR  |=  ((2UL << 2*2)); 
+  GPIOD->PUPDR    &= ~((3UL << 2*2));   /* PD.2 is Pull up              */
+  GPIOD->PUPDR    |=  ((1UL << 2*2)); 
+	
+	
+/* set anode and cathode clocks high (b/c clock on rising edge) */
+	GPIOC->BSRRL |= (1ul << 11); //set AN_CLK (PC11) high
+	GPIOD->BSRRL |= (1ul << 2);  //set CA_CLK (PD2)  high
+	
+/* initialize seg7 to be disabled */
+	//disable anode driver
+	GPIOB->BSRRL |= (1ul << 4); //set AN_EN (PB4) high b/c active low
+
+	// set anode lines high
+	GPIOC->BSRRL |= (1ul << 2); //set DIGIT1 anode (PC2) high
+	GPIOA->BSRRL |= (1ul << 1); //set DIGIT2 anode (PA1) high
+	GPIOC->BSRRL |= (1ul << 4); //set DIGIT3 anode (PC4) high
+	GPIOB->BSRRL |= (1ul << 1); //set DIGIT4 anode (PB1) high
+	GPIOC->BSRRL |= (1ul << 5); //set COLON  anode (PC5) high
+	GPIOB->BSRRL |= (1ul << 0); //set  AN_G  anode (PB0) high
+	GPIOB->BSRRL |= (1ul << 11); //set AN_R   anode (PB11) high
+	
+	// clock the anode driver
+	GPIOC->BSRRH |= (1ul << 11); //set AN_CLK (PC11) low
+	GPIOC->BSRRL |= (1ul << 11); //set AN_CLK (PC11) high
+	
+	// enable anode driver
+	GPIOB->BSRRH |= (1ul << 4); //set AN_EN (PB4) low b/c active low
+	
+}
 
 /*----------------------------------------------------------------------------
   initialize LED Pins

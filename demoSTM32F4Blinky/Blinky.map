@@ -18,7 +18,7 @@ Name             Origin             Length             Attributes
 Linker script and memory map
 
 
-.flash          0x08000000      0x7b8
+.flash          0x08000000     0x2420
  *(.cs3.interrupt_vector)
  .cs3.interrupt_vector
                 0x08000000       0x40 aStartup.o
@@ -26,69 +26,90 @@ Linker script and memory map
  .text          0x08000040       0x62 aStartup.o
                 0x08000040                Reset_Handler
  *fill*         0x080000a2        0x2 
- .text          0x080000a4      0x1d0 aDemo.o
+ .text          0x080000a4      0x364 aDemo.o
                 0x080000a4                testmacro
                 0x080000b2                CortexM4asmOps_init
                 0x080000de                asmLDR_examples
                 0x080000e0                asmSTR_examples
                 0x080000e2                CortexM4asmOps_test1
-                0x08000102                asmDelay
-                0x08000116                doJump
-                0x08000144                ROMdata
- .text          0x08000274      0x180 cLED.o
-                0x08000274                LED_Init
-                0x08000340                LED_On
-                0x08000374                LED_Off
-                0x080003a8                LED_Out
- .text          0x080003f4      0x3b4 cMain.o
-                0x080003f4                SystemCoreClockUpdate
-                0x080005e8                SysTick_Handler
-                0x0800060c                Delay
-                0x08000644                BTN_Init
-                0x080006c8                BTN_Get
-                0x080006e4                main
+                0x08000102                bin2bcd_asm
+                0x08000192                MyasmDelay
+                0x080001aa                asmLED_ON
+                0x080001c2                asmLED_OFF
+                0x080001da                sub_uchar_from_quad_asm
+                0x0800021a                test_update_mask32
+                0x0800023c                test_op
+                0x08000242                atoi
+                0x080002a6                doJump
+                0x080002d4                ROMdata
+ .text          0x08000408      0x62c cLED.o
+                0x08000408                SEG7_Init
+                0x080008b4                LED_Init
+                0x08000980                LED_On
+                0x080009b4                LED_Off
+                0x080009e8                LED_Out
+ .text          0x08000a34     0x19dc cMain.o
+                0x08000a34                SystemCoreClockUpdate
+                0x08000c28                SysTick_Handler
+                0x08000c4c                Delay
+                0x08000c84                BTN_Init
+                0x08000d08                BTN_Get
+                0x08000d24                sub_uchar_from_quad_example
+                0x08000dd4                seg7_handler
+                0x08000f00                seg7_update
+                0x080021f8                bin2bcd
+                0x080022fc                main
  *(.rodata .rodata.*)
- .rodata        0x080007a8       0x10 cLED.o
-                0x080007a8                led_mask
-                0x080007b8                __sidata = .
+ .rodata        0x08002410       0x10 cLED.o
+                0x08002410                led_mask
+                0x08002420                __sidata = .
 
-.glue_7         0x080007b8        0x0
+.glue_7         0x08002420        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x080007b8        0x0
+.glue_7t        0x08002420        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x080007b8        0x0
+.vfp11_veneer   0x08002420        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x080007b8        0x0
+.v4_bx          0x08002420        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x080007b8        0x0
+.iplt           0x08002420        0x0
  .iplt          0x00000000        0x0 aStartup.o
 
-.igot.plt       0x080007b8        0x0
+.igot.plt       0x08002420        0x0
  .igot.plt      0x00000000        0x0 aStartup.o
 
-.rel.dyn        0x080007b8        0x0
+.rel.dyn        0x08002420        0x0
  .rel.iplt      0x00000000        0x0 aStartup.o
 
-.data_at_ram    0x20000000      0x120 load address 0x080007b8
+.data_at_ram    0x20000000      0x140 load address 0x08002420
                 0x20000000                __sdata = .
  *(.data .data.*)
  .data          0x20000000        0x0 aStartup.o
  .data          0x20000000       0x10 aDemo.o
                 0x20000000                Dint
+                0x20000007                mask32
  .data          0x20000010        0x0 cLED.o
- .data          0x20000010        0x0 cMain.o
-                0x20000010                __edata = .
-                0x20000010                __sbss = .
+ .data          0x20000010       0x20 cMain.o
+                0x20000010                SEG7_COUNTER
+                0x20000014                SEG7_DIGIT1
+                0x20000018                SEG7_DIGIT2
+                0x2000001c                SEG7_DIGIT3
+                0x20000020                SEG7_DIGIT4
+                0x20000024                SEG7_COLON_DEGREE
+                0x20000028                LED_GREEN
+                0x2000002c                LED_RED
+                0x20000030                __edata = .
+                0x20000030                __sbss = .
  *(.bss .bss.*)
- .bss           0x20000010        0x0 aStartup.o
- .bss           0x20000010      0x110 aDemo.o
- .bss           0x20000120        0x0 cLED.o
- .bss           0x20000120        0x0 cMain.o
-                0x20000120                __ebss = .
+ .bss           0x20000030        0x0 aStartup.o
+ .bss           0x20000030      0x110 aDemo.o
+ .bss           0x20000140        0x0 cLED.o
+ .bss           0x20000140        0x0 cMain.o
+                0x20000140                __ebss = .
                 0x20020000                __cs3_stack = 0x20020000
 LOAD aStartup.o
 LOAD aDemo.o
@@ -118,23 +139,23 @@ OUTPUT(Blinky.elf elf32-littlearm)
                                  0x12 (size before relaxing)
  .comment       0x00000000       0x12 cMain.o
 
-.debug_line     0x00000000      0x278
+.debug_line     0x00000000      0x45d
  .debug_line    0x00000000       0x63 aStartup.o
- .debug_line    0x00000063       0x94 aDemo.o
- .debug_line    0x000000f7       0x97 cLED.o
- .debug_line    0x0000018e       0xea cMain.o
+ .debug_line    0x00000063      0x115 aDemo.o
+ .debug_line    0x00000178       0xc6 cLED.o
+ .debug_line    0x0000023e      0x21f cMain.o
 
-.debug_info     0x00000000      0xeb9
+.debug_info     0x00000000     0x10f8
  .debug_info    0x00000000       0x7e aStartup.o
  .debug_info    0x0000007e       0x7a aDemo.o
- .debug_info    0x000000f8      0x3b6 cLED.o
- .debug_info    0x000004ae      0xa0b cMain.o
+ .debug_info    0x000000f8      0x3cb cLED.o
+ .debug_info    0x000004c3      0xc35 cMain.o
 
-.debug_abbrev   0x00000000      0x2ea
+.debug_abbrev   0x00000000      0x3a9
  .debug_abbrev  0x00000000       0x14 aStartup.o
  .debug_abbrev  0x00000014       0x14 aDemo.o
- .debug_abbrev  0x00000028      0x105 cLED.o
- .debug_abbrev  0x0000012d      0x1bd cMain.o
+ .debug_abbrev  0x00000028      0x11b cLED.o
+ .debug_abbrev  0x00000143      0x266 cMain.o
 
 .debug_aranges  0x00000000       0x80
  .debug_aranges
@@ -146,27 +167,27 @@ OUTPUT(Blinky.elf elf32-littlearm)
  .debug_aranges
                 0x00000060       0x20 cMain.o
 
-.bss            0x20000120      0x11c load address 0x080008e0
- COMMON         0x20000120      0x110 aDemo.o
-                0x20000120                Gshort
-                0x20000122                Gchar
-                0x20000124                Gint
-                0x20000130                Garray
- COMMON         0x20000230        0xc cMain.o
-                0x20000230                SystemCoreClock
-                0x20000234                Cint
-                0x20000238                msTicks
+.bss            0x20000140      0x11c load address 0x08002560
+ COMMON         0x20000140      0x110 aDemo.o
+                0x20000140                Gshort
+                0x20000142                Gchar
+                0x20000144                Gint
+                0x20000150                Garray
+ COMMON         0x20000250        0xc cMain.o
+                0x20000250                SystemCoreClock
+                0x20000254                Cint
+                0x20000258                msTicks
 
-.debug_loc      0x00000000      0x270
- .debug_loc     0x00000000       0xd4 cLED.o
- .debug_loc     0x000000d4      0x19c cMain.o
+.debug_loc      0x00000000      0x370
+ .debug_loc     0x00000000      0x100 cLED.o
+ .debug_loc     0x00000100      0x270 cMain.o
 
-.debug_str      0x00000000      0x8a2
- .debug_str     0x00000000      0x221 cLED.o
-                                0x25a (size before relaxing)
- .debug_str     0x00000221      0x681 cMain.o
-                                0x8b0 (size before relaxing)
+.debug_str      0x00000000      0x995
+ .debug_str     0x00000000      0x22b cLED.o
+                                0x264 (size before relaxing)
+ .debug_str     0x0000022b      0x76a cMain.o
+                                0x9a3 (size before relaxing)
 
-.debug_frame    0x00000000      0x16c
- .debug_frame   0x00000000       0x80 cLED.o
- .debug_frame   0x00000080       0xec cMain.o
+.debug_frame    0x00000000      0x1fc
+ .debug_frame   0x00000000       0x98 cLED.o
+ .debug_frame   0x00000098      0x164 cMain.o

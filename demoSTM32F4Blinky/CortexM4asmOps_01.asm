@@ -19,6 +19,11 @@ Dint: 	.word  0xFFFFFFFF   	@; these won't actually be initialized unless we do 
 Dshort:	.hword 0xABCD       	@; this won't be global unless we make it so
 Dchar: 	.byte  0x55   		    @;       
   
+  .global mask32
+mask32: .word  0x00000003
+  
+  
+  
 	.bss						@;start the uninitialized RAM data section				 
 @; global uninitialized variables 
 	.align	4					@;pad memory if necessary to align on word boundary for word storage 
@@ -46,6 +51,22 @@ local_bss_end:					@;marker for end of locally defined (this sourcefile) .bss va
 	b 1b						@; 'b 1b' : branch to local label '1' in the 'b'ackward direction 
 								@; ('1f' would be 'f'oward) 
 .endm	
+
+
+.macro update_mask32 addr val
+	@; enter macro following AAPCS
+	push {r4-r11,lr}
+	mov r7, sp
+	
+	@; execute code in macro
+	ldr r2, [\addr]		@; load the value of mask into r2
+	orr r2, r2, \val	@; modify mask value
+	str r2, [\addr]		@; store new mask value back into mask address
+	
+	@; exit macro following AAPCS
+	mov sp, r7
+	pop {r4-r11,lr}
+.endm
 
 	
 @; --- begin code memory
@@ -129,18 +150,213 @@ CortexM4asmOps_test1: 	@; asm function which decrements Cint by 2, increments Gi
 	bx lr				@;return to the caller
 	
 
-	.global asmDelay 			@; make this function visible everywhere
+	.global bin2bcd_asm
+	.thumb_func
+bin2bcd_asm:
+	@; r0 is binary
+	movw 	r1, #0 			@; r1 is ones
+	movw 	r2, #0	 		@; r2 is tens
+	movw 	r3, #0	 	@; r3 is hundreds
+	movw 	r4, #0 			@; r4 is thousands
+	movw	r5, #15			@; r5 is index, i=15
+	movw	r6, #0			@; r6 is temp
+	movw	r7, #0			@; r7 is temp2
+	
+loop:
+	@; add 3 to columns >= 5
+	cmp 	r4, #5			@; thousands
+	it 		ge
+	addge 	r4, #3
+	cmp 	r3, #5			@; hundreds
+	it 		ge
+	addge 	r3, #3
+	cmp 	r2, #5			@; tens
+	it 		ge
+	addge 	r2, #3
+	cmp 	r1, #5			@; ones
+	it 		ge
+	addge 	r1, #3
+	
+	@; shift left one
+	lsl 	r4, #1			@; thousands << 1
+	and		r6, r3, #0x08	@; thousands[0] = hundreds[3]
+	lsr		r6, #3
+	add		r4, r6
+	lsl 	r3, #1			@; hundreds << 1
+	and		r6, r2, #0x08	@; hundreds[0] = tens[3]
+	lsr		r6, #3
+	add		r3, r6
+	lsl 	r2, #1			@; tens << 1
+	and		r6, r1, #0x08	@; tens[0] = ones[3]
+	lsr		r6, #3
+	add		r2, r6
+	
+	lsl 	r1, #1			@; ones << 1
+	movw	r7, #1			@; r7 = 1ul << i
+	lsl		r7, r5			
+	and		r6, r0, r7		@; ones[0] = binary[i]
+	lsr		r6, r5
+	add		r1, r6
+	
+	@; pretend data type is a nibble
+	and 	r4, #0x0F		@; thousands
+	and 	r3, #0x0F		@; hundreds
+	and 	r2, #0x0F		@; tens
+	and 	r1, #0x0F		@; ones
+	
+	@; check loop condition
+	sub		r5, #1
+	cmp 	r5, #0
+	bge		loop
+	
+	@; return
+	bx lr
+
+
+	.global MyasmDelay 			@; make this function visible everywhere
 	.thumb_func					@; make sure it starts in thumb mode
-asmDelay:						@; short software delay
-	MOVW    R3, #0xFFFF			@; r3=0x0000FFFF
+MyasmDelay:						@; short software delay
+	MOVW    R3, #0x0F88		    @; r3=0x00000F88
 	MOVT    R3, #0x0000			@; ..
+	MUL 	R3, R0;
 delay_loop:						@; repeat here
 	CBZ     R3, delay_exit		@; r3 == 0?
 	SUB     R3, R3, #1			@; 	no --
 	B       delay_loop			@;	  continue 
 delay_exit:						@;  yes --
 	BX      LR					@;    return to caller
- 
+
+	.global asmLED_ON 			@; make this function visible everywhere
+	.thumb_func					@; make sure it starts in thumb mode
+asmLED_ON: 						@; turn on LED
+	MOVW 	r1, #0x1000			@; r1=UL1<<12, UL1=000....001
+	MOVT 	r1, #0x0000	
+	LSL		r1, r1, r0			@; r1<<r0
+	MOVW	r2, #0x0C18			@; r2=0x40020C18
+	MOVT 	r2, #0x4002			
+	STR		r1, [r2]
+	BX LR
+	
+	.global asmLED_OFF 			@; make this function visible everywhere
+	.thumb_func					@; make sure it starts in thumb mode
+asmLED_OFF: 					@; turn off LED
+	MOVW 	r1, #0x1000			@; r1=UL1<<12, UL1=000....001
+	MOVT 	r1, #0x0000	
+	LSL		r1, r1, r0			@; r1<<r0
+	MOVW	r2, #0x0C1A			@; r2=0x40020C1A
+	MOVT 	r2, #0x4002			
+	STR		r1, [r2]
+	BX LR
+
+	.global sub_uchar_from_quad_asm
+	.thumb_func
+sub_uchar_from_quad_asm:
+
+@; load registers
+	ldr 	r3, [r1,#0]
+	ldr 	r4, [r1,#4]
+	ldr 	r5, [r1,#8]
+	ldr 	r6, [r1,#12]
+	
+@; store initial sign bit
+	mov r8, r3
+	lsr r8, #31
+	
+@; subtract and propogate carry
+	subs 	r6, r2
+	sbcs 	r5, #0
+	sbcs 	r4, #0
+	sbc 	r3, #0
+
+@; check if negative overflow occured
+	mov 	r9, r3
+	lsr 	r9, #31
+	cmp 	r9, r8
+	blt 	overflow_case
+	b 		store_values
+	
+overflow_case:
+@; return -1 if overflow
+	movw	r0, 0xfffe
+	movt	r0, 0xffff
+@; return
+	bx lr
+
+store_values:
+@; store values to RAM destination 
+	str		r3, [r0, #0]
+	str		r4, [r0, #4]
+	str		r5, [r0, #8]
+	str		r6, [r0, #12]
+@; return
+	bx		lr
+
+
+
+	.global test_update_mask32
+	.thumb_func
+test_update_mask32:
+	ldr r0, =mask32			@; load mask address
+	movw r1, #0x0005		@; set value to be or'd with existing mask
+	movt r1, #0x0000
+	update_mask32 r0 r1	
+	ldr r3, [r0]			@; check to see if mask got updated correctly
+	bx lr
+
+	.global test_op
+	.thumb_func
+test_op:
+	ldr r0, =mask32 @; address of label goes into r0
+	ldr r1, [r0]
+	bx lr
+	
+	.global atoi
+	.thumb_func
+atoi:
+	movw r4, #0		@; pointer offset
+	movt r4, #0
+	movw r10, #10 	@; r10 = const 10
+	movt r10, #0
+	movw r9, #1 	@; place holder multiplier
+	movt r9, #0
+	movw r11, #0 	@; accumulator
+	movt r11, #0
+	movw r7, #0		@; negative flag
+	movt r7, #0		
+
+check_negative:
+	ldrb r5, [r0,r4] 		@; load in first byte
+	cmp r5, #0x2D
+	itt eq
+	addeq r7, #1			@; set negative flag
+	addeq r0, #1			@; increment pointer start by 1 byte
+	
+str_length:
+	ldrb r5, [r0,r4] 		@; load in next byte
+	add r4,	#1				@; increment pointer offset by 1 byte
+	cmp r5, #0
+	bne	str_length
+	sub r4, #2
+	
+update_accumulator:	
+	ldrb r5, [r0,r4] 		@; load in next byte
+	sub r5, #0x30	 		@; convert ascii to decimal digit
+	mla r11, r5, r9, r11	@; acc += decimal digit * place holder multiplier
+	
+	mul r9, r10				@; place holder multiplier *= 10
+	sub r4, #1				@; decrement pointer offsey by 1 byte
+	
+	cmp r4, #0
+	bge update_accumulator
+
+update_sign:
+	cmp r7, #1
+	it eq
+	rsbeq r11, #0 
+	
+bx lr
+
+
 
 	.global doJump
 	.thumb_func

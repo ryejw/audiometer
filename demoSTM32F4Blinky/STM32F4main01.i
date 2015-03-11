@@ -4,6 +4,14 @@
 # 1 "STM32F4main01.c"
 # 18 "STM32F4main01.c"
  int Cint;
+ int SEG7_COUNTER = 1;
+ int SEG7_DIGIT1 = 14;
+ int SEG7_DIGIT2 = 15;
+ int SEG7_DIGIT3 = 16;
+ int SEG7_DIGIT4 = 3;
+ int SEG7_COLON_DEGREE = 10;
+ int LED_GREEN = 0xC;
+ int LED_RED = 0x3;
 
 
 
@@ -73,7 +81,7 @@ typedef uint64_t uint_least64_t;
 typedef signed int intptr_t;
 typedef unsigned int uintptr_t;
 # 4 "c:\\yagarto\\bin\\../lib/gcc/arm-none-eabi/4.7.2/include/stdint.h" 2 3 4
-# 23 "STM32F4main01.c" 2
+# 31 "STM32F4main01.c" 2
 
 
 
@@ -81,12 +89,7 @@ typedef unsigned int uintptr_t;
 
 
   uint32_t SystemCoreClock;
-
-
-
-
-
-
+# 52 "STM32F4main01.c"
 typedef struct
 {
   uint32_t MODER;
@@ -136,7 +139,7 @@ typedef struct
   uint32_t SSCGR;
   uint32_t PLLI2SCFGR;
 } RCC_TypeDef;
-# 101 "STM32F4main01.c"
+# 117 "STM32F4main01.c"
 typedef enum IRQn
 {
 
@@ -242,7 +245,7 @@ extern void LED_Init(void);
 extern void LED_On (unsigned int num);
 extern void LED_Off (unsigned int num);
 extern void LED_Out (unsigned int value);
-# 201 "STM32F4main01.c" 2
+# 217 "STM32F4main01.c" 2
 
 
 
@@ -304,7 +307,7 @@ typedef struct
        uint32_t RESERVED0[5];
   uint32_t CPACR;
 } SCB_Type;
-# 301 "STM32F4main01.c"
+# 317 "STM32F4main01.c"
 void SystemCoreClockUpdate(void)
 {
   uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
@@ -378,6 +381,7 @@ volatile uint32_t msTicks;
 
 void SysTick_Handler(void) {
   msTicks++;
+ seg7_handler();
 }
 
 
@@ -419,10 +423,401 @@ uint32_t BTN_Get(void) {
 
 
 
+
+
+void MyasmDelay(int);
+
+
+
+
+void asmLED_ON(int);
+
+
+
+
+void asmLED_OFF(int);
+
+
+
+
+void sub_uchar_from_quad_asm(int *quad_dest_addr, int *quad_base_addr, char uchar_addr);
+
+void sub_uchar_from_quad_example() {
+ unsigned int quad_dest[4];
+
+  unsigned int quad_base[4] = {0x0, 0x0, 0x0, 0x4};
+ unsigned char uchar = 0x1;
+  sub_uchar_from_quad_asm(quad_dest, quad_base, uchar);
+
+ quad_base[0] = 0x0;
+ quad_base[1] = 0x0;
+ quad_base[2] = 0x3;
+ quad_base[3] = 0x10;
+ uchar = 0x20;
+  sub_uchar_from_quad_asm(quad_dest, quad_base, uchar);
+
+ quad_base[0] = 0x80000000;
+ quad_base[1] = 0x0;
+ quad_base[2] = 0x0;
+ quad_base[3] = 0x0;
+ uchar = 0x01;
+  sub_uchar_from_quad_asm(quad_dest, quad_base, uchar);
+}
+
+
+
+
+
+void test_update_mask32();
+
+
+
+
+
+void test_op();
+
+
+
+
+int atoi(char* num_char);
+
+
+
+
+int seg7_handler() {
+ switch (SEG7_COUNTER) {
+  case 1:
+   seg7_update(1, SEG7_DIGIT1);
+   SEG7_COUNTER++;
+   break;
+  case 2:
+   seg7_update(2, SEG7_DIGIT2);
+   SEG7_COUNTER++;
+   break;
+  case 3:
+   seg7_update(3, SEG7_DIGIT3);
+   SEG7_COUNTER++;
+   break;
+  case 4:
+   seg7_update(4, SEG7_DIGIT4);
+    SEG7_COUNTER++;
+   break;
+  case 5:
+   seg7_update(5, SEG7_COLON_DEGREE);
+    SEG7_COUNTER++;
+   break;
+  default:
+   SEG7_COUNTER = 1;
+   break;
+ }
+}
+
+
+
+
+int seg7_update(int digit, int val) {
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 1);
+
+
+ switch(val) {
+  case 0:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 1:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 2:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 3:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 4:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 5:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 6:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 7:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 8:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 9:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 10:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 11:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 12:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 13:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 14:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 15:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+  case 16:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+
+ }
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00))->BSRRH |= (1ul << 2);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00))->BSRRL |= (1ul << 2);
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 4);
+
+
+ switch(digit) {
+  case 1:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   break;
+  case 2:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   break;
+  case 3:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   break;
+  case 4:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   break;
+  case 5:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   break;
+}
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 11);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 11);
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 4);
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 1);
+}
+
+
+
+
+
+
+void bin2bcd (uint16_t binary) {
+ uint8_t thousands = 0, hundreds = 0, tens = 0, ones = 0;
+
+ int i;
+ for (i=15; i>=0; i--) {
+
+  if (thousands >= 5)
+    thousands += 3;
+  if (hundreds >= 5)
+    hundreds += 3;
+  if (tens >= 5)
+    tens += 3;
+  if (ones >= 5)
+    ones += 3;
+
+
+  thousands << 1;
+  thousands += (hundreds & 0x08) >> 3;
+  hundreds = hundreds << 1;
+  hundreds += (tens & 0x08) >> 3;
+  tens = tens << 1;
+  tens += (ones & 0x08) >> 3;
+  ones = ones << 1;
+  ones += (binary & (1ul << i)) >> i;
+
+
+  thousands &= 0x0F;
+  hundreds &= 0x0F;
+  tens &= 0x0F;
+  ones &= 0x0F;
+ }
+}
+
+
+
+
+void bin2bcd_asm (uint16_t binary);
+
+
+
+
 int main (void) {
+ uint16_t binary=1096;
+
+ bin2bcd_asm(binary);
+# 828 "STM32F4main01.c"
   int32_t num = -1;
   int32_t dir = 1;
- uint32_t btns = 0;
+  uint32_t btns = 0;
+
+
+
+
 
   SystemCoreClock = 168000000;
 
@@ -433,12 +828,13 @@ int main (void) {
   if (SysTick_Config(SystemCoreClock / 1000)) {
     while (1);
   }
-
+ SEG7_Init();
   LED_Init();
   BTN_Init();
+  int toggle=0;
 
   while(1) {
-    btns = BTN_Get();
+  btns = BTN_Get();
 
     if (btns != (1UL << 0)) {
 
@@ -446,10 +842,22 @@ int main (void) {
       if (num == 4) { dir = -1; num = 4 -1; }
       else if (num < 0) { dir = 1; num = 0; }
 
-      LED_On (num);
-      Delay(50);
+   if (toggle==0) {
+    asmLED_ON (num);
+    MyasmDelay(50);
+    asmLED_OFF(num);
+    MyasmDelay(100);
+    toggle=1;
+   }
+   else {
+    LED_On (num);
+    Delay(50);
+    LED_Off(num);
+    Delay(100);
+    toggle=0;
+   }
 
-      Delay(200);
+
     }
     else {
       LED_Out (0x0F);

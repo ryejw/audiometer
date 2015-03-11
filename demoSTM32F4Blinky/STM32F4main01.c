@@ -16,8 +16,16 @@
 
 //global variables used in CortexM4asmOps_01.asm but defined here
 	int Cint;
+	int SEG7_COUNTER = 1; 
+	int SEG7_DIGIT1 = 14; //Initialize Display to 'Ehn3'
+	int SEG7_DIGIT2 = 15;
+	int SEG7_DIGIT3 = 16;
+	int SEG7_DIGIT4 = 3;
+	int SEG7_COLON_DEGREE = 10; //10-OFF, 11-colon, 12-degree, 13-colon and degree
+	int LED_GREEN = 0xC;
+	int LED_RED = 0x3;
 
- 
+	
 //!!added stuff to get it to compile
   #include <stdint.h>	//various versions of this in yagarto -- gives unint32_t and other definitions
 
@@ -33,6 +41,14 @@
   #define AHB1PERIPH_BASE       (PERIPH_BASE + 0x00020000)
   #define RCC_BASE              (AHB1PERIPH_BASE + 0x3800)
   #define GPIOA_BASE            (AHB1PERIPH_BASE + 0x0000)
+	#define GPIOA               	((GPIO_TypeDef *) GPIOA_BASE)
+	#define GPIOB_BASE            (AHB1PERIPH_BASE + 0x0400)
+	#define GPIOB               	((GPIO_TypeDef *) GPIOB_BASE)
+	#define GPIOC_BASE            (AHB1PERIPH_BASE + 0x0800)
+	#define GPIOC               	((GPIO_TypeDef *) GPIOC_BASE)
+  #define GPIOD_BASE            (AHB1PERIPH_BASE + 0x0C00)
+  #define GPIOD               ((GPIO_TypeDef *) GPIOD_BASE)
+	
 typedef struct
 {
   __IO uint32_t MODER;    /*!< GPIO port mode register,               Address offset: 0x00      */
@@ -370,7 +386,8 @@ volatile uint32_t msTicks;                      /* counts 1ms timeTicks       */
   SysTick_Handler
  *----------------------------------------------------------------------------*/
 void SysTick_Handler(void) {
-  msTicks++;
+  msTicks++; //need this for Delay()
+	seg7_handler();
 }
 
 /*----------------------------------------------------------------------------
@@ -409,13 +426,412 @@ uint32_t BTN_Get(void) {
  return (GPIOA->IDR & (1UL << 0));
 }
 
+
+
+/*----------------------------------------------------------------------------
+  MyasmDelay function
+ *----------------------------------------------------------------------------*/
+void MyasmDelay(int);
+
+/*----------------------------------------------------------------------------
+  asmLED_ON function
+ *----------------------------------------------------------------------------*/
+void asmLED_ON(int);
+
+/*----------------------------------------------------------------------------
+  asmLED_OFF function
+ *----------------------------------------------------------------------------*/
+void asmLED_OFF(int);
+
+/*----------------------------------------------------------------------------
+  sub_uchar_from_quad_asm function & function wrapper
+ *----------------------------------------------------------------------------*/
+void sub_uchar_from_quad_asm(int *quad_dest_addr, int *quad_base_addr, char uchar_addr); 
+
+void sub_uchar_from_quad_example() {
+	unsigned int quad_dest[4];
+  
+  unsigned int quad_base[4] = {0x0, 0x0, 0x0, 0x4}; 	//test 1 - basic case
+	unsigned char uchar = 0x1;
+  sub_uchar_from_quad_asm(quad_dest, quad_base, uchar); 
+
+	quad_base[0] = 0x0; //test 2 - propogation case
+	quad_base[1] = 0x0;
+	quad_base[2] = 0x3;
+	quad_base[3] = 0x10;
+	uchar = 0x20;
+  sub_uchar_from_quad_asm(quad_dest, quad_base, uchar); 
+
+	quad_base[0] = 0x80000000; //test 3 - overflow case
+	quad_base[1] = 0x0;
+	quad_base[2] = 0x0;
+	quad_base[3] = 0x0;
+	uchar = 0x01;
+  sub_uchar_from_quad_asm(quad_dest, quad_base, uchar);
+}
+
+
+/*----------------------------------------------------------------------------
+  test_update_mask32 function
+ *----------------------------------------------------------------------------*/
+void test_update_mask32();
+
+
+/*----------------------------------------------------------------------------
+  test_op function
+ *----------------------------------------------------------------------------*/
+void test_op();
+
+/*----------------------------------------------------------------------------
+  atoi function "19" -> 19 aka array to integer
+ *----------------------------------------------------------------------------*/
+int atoi(char* num_char);
+
+/*----------------------------------------------------------------------------
+  seg7_handler function - called from systick
+ *----------------------------------------------------------------------------*/
+int seg7_handler() {
+	switch (SEG7_COUNTER) {
+		case 1:
+			seg7_update(1, SEG7_DIGIT1);
+			SEG7_COUNTER++;
+			break;
+		case 2:
+			seg7_update(2, SEG7_DIGIT2);
+			SEG7_COUNTER++;
+			break;
+		case 3:
+			seg7_update(3, SEG7_DIGIT3);
+			SEG7_COUNTER++;
+			break;
+		case 4:
+			seg7_update(4, SEG7_DIGIT4);
+		  SEG7_COUNTER++;
+			break;
+		case 5:
+			seg7_update(5, SEG7_COLON_DEGREE);
+		  SEG7_COUNTER++;
+			break;
+		default:
+			SEG7_COUNTER = 1;
+			break;
+	}
+}
+
+/*----------------------------------------------------------------------------
+  seg7_update function - updates a single seg7 digit to write passed value
+ *----------------------------------------------------------------------------*/
+int seg7_update(int digit, int val) {
+	//disable cathode driver
+	GPIOC->BSRRL |= (1ul << 1); //set CA_EN (PC1) high b/c active low
+	
+	//set cathode lines
+	switch(val) {
+		case 0: //'0'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRH |= (1ul << 5); //set  CA_D (PB5) low
+			GPIOB->BSRRH |= (1ul << 11); //set  CA_E (PB11) low
+			GPIOC->BSRRH |= (1ul << 2); //set  CA_F (PC2) low
+			GPIOC->BSRRL |= (1ul << 4); //set  CA_G (PC4) high
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;
+		case 1: //'1'
+			GPIOC->BSRRL |= (1ul << 5); //set  CA_A (PC5) high
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
+			GPIOC->BSRRL |= (1ul << 4); //set  CA_G (PC4) high
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;
+		case 2: //'2'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRL |= (1ul << 1); //set  CA_C (PA1) high
+			GPIOB->BSRRH |= (1ul << 5); //set  CA_D (PB5) low
+			GPIOB->BSRRH |= (1ul << 11); //set  CA_E (PB11) low
+			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;
+		case 3: //'3'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRH |= (1ul << 5); //set  CA_D (PB5) low
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;
+		case 4: //'4'
+			GPIOC->BSRRL |= (1ul << 5); //set  CA_A (PC5) high
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRH |= (1ul << 2); //set  CA_F (PC2) low
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;	
+		case 5: //'5'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRL |= (1ul << 1); //set  CA_B (PB1) high
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRH |= (1ul << 5); //set  CA_D (PB5) low
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRH |= (1ul << 2); //set  CA_F (PC2) low
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;
+		case 6: //'6'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRL |= (1ul << 1); //set  CA_B (PB1) high
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRH |= (1ul << 5); //set  CA_D (PB5) low
+			GPIOB->BSRRH |= (1ul << 11); //set  CA_E (PB11) low
+			GPIOC->BSRRH |= (1ul << 2); //set  CA_F (PC2) low
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;
+		case 7: //'7'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRH |= (1ul << 2); //set  CA_F (PC2) low
+			GPIOC->BSRRL |= (1ul << 4); //set  CA_G (PC4) high
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;
+		case 8: //'8'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRH |= (1ul << 5); //set  CA_D (PB5) low
+			GPIOB->BSRRH |= (1ul << 11); //set  CA_E (PB11) low
+			GPIOC->BSRRH |= (1ul << 2); //set  CA_F (PC2) low
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;	
+		case 9: //'9'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRH |= (1ul << 2); //set  CA_F (PC2) low
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;
+		case 10: //OFF
+			GPIOC->BSRRL |= (1ul << 5); //set  CA_A (PC5) high
+			GPIOB->BSRRL |= (1ul << 1); //set  CA_B (PB1) high
+			GPIOA->BSRRL |= (1ul << 1); //set  CA_C (PA1) high
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
+			GPIOC->BSRRL |= (1ul << 4); //set  CA_G (PC4) high
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;	
+		case 11: //':'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRL |= (1ul << 1); //set  CA_C (PA1) high
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
+			GPIOC->BSRRL |= (1ul << 4); //set  CA_G (PC4) high
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;	
+		case 12: //'<degree>'
+			GPIOC->BSRRL |= (1ul << 5); //set  CA_A (PC5) high
+			GPIOB->BSRRL |= (1ul << 1); //set  CA_B (PB1) high
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
+			GPIOC->BSRRL |= (1ul << 4); //set  CA_G (PC4) high
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;	
+		case 13: //'<colon> and <degree>'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRH |= (1ul << 1); //set  CA_B (PB1) low
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
+			GPIOC->BSRRL |= (1ul << 4); //set  CA_G (PC4) high
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;		
+		case 14: //'E'
+			GPIOC->BSRRH |= (1ul << 5); //set  CA_A (PC5) low
+			GPIOB->BSRRL |= (1ul << 1); //set  CA_B (PB1) high
+			GPIOA->BSRRL |= (1ul << 1); //set  CA_C (PA1) high
+			GPIOB->BSRRH |= (1ul << 5); //set  CA_D (PB5) low
+			GPIOB->BSRRH |= (1ul << 11); //set  CA_E (PB11) low
+			GPIOC->BSRRH |= (1ul << 2); //set  CA_F (PC2) low
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;		
+		case 15: //'h'
+			GPIOC->BSRRL |= (1ul << 5); //set  CA_A (PC5) high
+			GPIOB->BSRRL |= (1ul << 1); //set  CA_B (PB1) high
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRH |= (1ul << 11); //set  CA_E (PB11) low
+			GPIOC->BSRRH |= (1ul << 2); //set  CA_F (PC2) low
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;		
+		case 16: //'m'
+			GPIOC->BSRRL |= (1ul << 5); //set  CA_A (PC5) high
+			GPIOB->BSRRL |= (1ul << 1); //set  CA_B (PB1) high
+			GPIOA->BSRRH |= (1ul << 1); //set  CA_C (PA1) low
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRH |= (1ul << 11); //set  CA_E (PB11) low
+			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;	
+			
+	}
+	
+	//clock cathode
+	GPIOD->BSRRH |= (1ul << 2); //set CA_CLK (PD2) low
+	GPIOD->BSRRL |= (1ul << 2); //set CA_CLK (PD2) high
+
+	//disable anode driver
+	GPIOB->BSRRL |= (1ul << 4); //set AN_EN (PB4) high b/c active low
+	
+	//set anode lines
+	switch(digit) {
+		case 1: //digit 1
+			GPIOC->BSRRH |= (1ul << 2); //set DIGIT1 anode (PC2) low
+			GPIOA->BSRRL |= (1ul << 1); //set DIGIT2 anode (PA1) high
+			GPIOC->BSRRL |= (1ul << 4); //set DIGIT3 anode (PC4) high
+			GPIOB->BSRRL |= (1ul << 1); //set DIGIT4 anode (PB1) high
+			GPIOC->BSRRL |= (1ul << 5); //set COLON  anode (PC5) high
+			GPIOB->BSRRL |= (1ul << 0); //set  AN_G  anode (PB0) high
+			GPIOB->BSRRL |= (1ul << 11); //set AN_R   anode (PB11) high	
+			break;
+		case 2: //digit 2
+			GPIOC->BSRRL |= (1ul << 2); //set DIGIT1 anode (PC2) high
+			GPIOA->BSRRH |= (1ul << 1); //set DIGIT2 anode (PA1) low
+			GPIOC->BSRRL |= (1ul << 4); //set DIGIT3 anode (PC4) high
+			GPIOB->BSRRL |= (1ul << 1); //set DIGIT4 anode (PB1) high
+			GPIOC->BSRRL |= (1ul << 5); //set COLON  anode (PC5) high
+			GPIOB->BSRRL |= (1ul << 0); //set  AN_G  anode (PB0) high
+			GPIOB->BSRRL |= (1ul << 11); //set AN_R   anode (PB11) high	
+			break;
+		case 3: //digit 3
+			GPIOC->BSRRL |= (1ul << 2); //set DIGIT1 anode (PC2) high
+			GPIOA->BSRRL |= (1ul << 1); //set DIGIT2 anode (PA1) high
+			GPIOC->BSRRH |= (1ul << 4); //set DIGIT3 anode (PC4) low
+			GPIOB->BSRRL |= (1ul << 1); //set DIGIT4 anode (PB1) high
+			GPIOC->BSRRL |= (1ul << 5); //set COLON  anode (PC5) high
+			GPIOB->BSRRL |= (1ul << 0); //set  AN_G  anode (PB0) high
+			GPIOB->BSRRL |= (1ul << 11); //set AN_R   anode (PB11) high	
+			break;
+		case 4: //digit 4
+			GPIOC->BSRRL |= (1ul << 2); //set DIGIT1 anode (PC2) high
+			GPIOA->BSRRL |= (1ul << 1); //set DIGIT2 anode (PA1) high
+			GPIOC->BSRRL |= (1ul << 4); //set DIGIT3 anode (PC4) high
+			GPIOB->BSRRH |= (1ul << 1); //set DIGIT4 anode (PB1) low
+			GPIOC->BSRRL |= (1ul << 5); //set COLON  anode (PC5) high
+			GPIOB->BSRRL |= (1ul << 0); //set  AN_G  anode (PB0) high
+			GPIOB->BSRRL |= (1ul << 11); //set AN_R   anode (PB11) high	
+			break;
+		case 5: //colon_degree
+			GPIOC->BSRRL |= (1ul << 2); //set DIGIT1 anode (PC2) high
+			GPIOA->BSRRL |= (1ul << 1); //set DIGIT2 anode (PA1) high
+			GPIOC->BSRRL |= (1ul << 4); //set DIGIT3 anode (PC4) high
+			GPIOB->BSRRL |= (1ul << 1); //set DIGIT4 anode (PB1) high
+			GPIOC->BSRRH |= (1ul << 5); //set COLON  anode (PC5) low
+			GPIOB->BSRRL |= (1ul << 0); //set  AN_G  anode (PB0) high
+			GPIOB->BSRRL |= (1ul << 11); //set AN_R   anode (PB11) high	
+			break;
+}
+	//clock anode driver
+	GPIOC->BSRRH |= (1ul << 11); //set AN_CLK (PC11) low
+	GPIOC->BSRRL |= (1ul << 11); //set AN_CLK (PC11) high
+
+	//enable anode driver
+	GPIOB->BSRRH |= (1ul << 4); //set AN_EN (PB4) low b/c active low
+	
+	//enable cathode driver
+	GPIOC->BSRRH |= (1ul << 1); //set CA_EN (PC1) low b/c active low
+}
+
+
+
+/*----------------------------------------------------------------------------
+  Binary to BCD function
+ *----------------------------------------------------------------------------*/
+void bin2bcd (uint16_t binary) {
+	uint8_t thousands = 0, hundreds = 0, tens = 0, ones = 0;
+	
+	int i;
+	for (i=15; i>=0; i--) {
+		//add 3 to columns >= 5
+		if (thousands >= 5)
+				thousands += 3;
+		if (hundreds >= 5)
+				hundreds += 3;
+		if (tens >= 5)
+				tens += 3;
+		if (ones >= 5)
+				ones += 3;
+		
+		//shift left one
+		thousands << 1;
+		thousands += (hundreds & 0x08) >> 3; //thousands[0] = hundreds[3]
+		hundreds = hundreds << 1;
+		hundreds += (tens & 0x08) >> 3; //hundreds[0] = tens[3]
+		tens = tens << 1;
+		tens += (ones & 0x08) >> 3; //tens[0] = ones[3]
+		ones = ones << 1;
+		ones += (binary & (1ul << i)) >> i; //ones[0] = binary[i]
+	
+		//pretend data type is a nibble
+		thousands &= 0x0F;
+		hundreds &= 0x0F;
+		tens &= 0x0F;
+		ones &= 0x0F;
+	}	
+}
+
+/*----------------------------------------------------------------------------
+  Binary to BCD Assembly function
+ *----------------------------------------------------------------------------*/
+void bin2bcd_asm (uint16_t binary);
+
 /*----------------------------------------------------------------------------
   MAIN function
  *----------------------------------------------------------------------------*/
 int main (void) {
+	uint16_t binary=1096;
+	//bin2bcd(binary);
+	bin2bcd_asm(binary);
+	
+	//test_op();
+	//test_update_mask32();
+	//char num_char[] = "-1234";
+	//int num_int;
+	
+	//sub_uchar_from_quad_example();
+	//num_int = atoi(num_char); //assum number between 0-9
+	
   int32_t num = -1; 
   int32_t dir =  1;
- uint32_t btns = 0;
+  uint32_t btns = 0;
+	
+	
+	//asmLDR_examples();
+	//asmSTR_examples();
  
   SystemCoreClock = 168000000; 	//!!found in system_stm32f4xx.c, added here instead of as global
 							   //becaus we're trying to avoid need to have crt0.o
@@ -426,27 +842,40 @@ int main (void) {
   if (SysTick_Config(SystemCoreClock / 1000)) { /* SysTick 1 msec interrupts  */
     while (1);                                  /* Capture error              */
   }
-
+	SEG7_Init();
   LED_Init();
-  BTN_Init();                             
- 
-  while(1) {                                    /* Loop forever               */
-    btns = BTN_Get();                           /* Read button states         */
+  BTN_Init();    	
+  int toggle=0;
+	
+  while(1) {                                    // Loop forever 
+		btns = BTN_Get();                           // Read button states       
 
     if (btns != (1UL << 0)) {
-      /* Calculate 'num': 0,1,...,LED_NUM-1,LED_NUM-1,...,1,0,0,...  */
+      // Calculate 'num': 0,1,...,LED_NUM-1,LED_NUM-1,...,1,0,0,...
       num += dir;
       if (num == LED_NUM) { dir = -1; num =  LED_NUM-1; } 
       else if   (num < 0) { dir =  1; num =  0;         }
 
-      LED_On (num);
-      Delay(50);                               /* Delay 50ms                 */
-      //LED_Off(num);
-      Delay(200);                               /* Delay 200ms                */
+			if (toggle==0) {  	//LED and Delay in Assembly
+				asmLED_ON (num);
+				MyasmDelay(50);
+				asmLED_OFF(num);
+				MyasmDelay(100);
+				toggle=1;
+			}
+			else {							//LED and Delay in C
+				LED_On (num);
+				Delay(50);
+				LED_Off(num);
+				Delay(100);
+				toggle=0;
+			}
+			
+			
     }
     else {
       LED_Out (0x0F);
-      Delay(10);                                /* Delay 10ms                 */
+      Delay(10);                                // Delay 10ms
     }
 
   }
