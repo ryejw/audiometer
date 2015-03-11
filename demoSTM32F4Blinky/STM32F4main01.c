@@ -27,8 +27,10 @@
 	int SWITCHES = 0x0;
 	int SW_READ_ODD = 0;
 	int SW_READ_EVEN = 0;
+	int FREQ_VAL = 125;
+	int TEST_VAL = -10;
 	int MODE = 0;
-	
+
 	#define FREQ_MODE 1
 	#define TEST_MODE 2
 	
@@ -426,30 +428,66 @@ void mode_handler() {
   freq_mode_handler function
  *----------------------------------------------------------------------------*/
 void freq_mode_handler() {
-	SEG7_DIGIT1 = 10; //Display "125"
-	SEG7_DIGIT2 = 1;
-	SEG7_DIGIT3 = 2;
-	SEG7_DIGIT4 = 5;
-	SEG7_COLON_DEGREE = 10;
-	
+	display_frequency();
 	if ((SWITCHES >> 9)&(0x1L)) { //if SW10 is pressed
 		MODE = TEST_MODE;
 	}	
 }
 
 /*----------------------------------------------------------------------------
+  display_frequency function
+ *----------------------------------------------------------------------------*/
+void display_frequency(){
+	//We know the frequency will be inbetween 125 and 8000
+	int freq = FREQ_VAL;
+	//DIGIT1
+	if (freq > 999) {
+		SEG7_DIGIT1 = freq / 1000;
+		freq -= 1000*SEG7_DIGIT1;
+	}
+	else {
+		SEG7_DIGIT1 = 10;
+	}
+	//DIGIT2-4
+	SEG7_DIGIT2 = freq / 100;
+	freq -= 100*SEG7_DIGIT2;
+	SEG7_DIGIT3 = freq / 10;
+	freq -= 10*SEG7_DIGIT3;
+	SEG7_DIGIT4 = freq;
+}
+/*----------------------------------------------------------------------------
   test_mode_handler function
  *----------------------------------------------------------------------------*/
 void test_mode_handler() {
-	SEG7_DIGIT1 = 10; //display "-10"
-	SEG7_DIGIT2 = 17;
-	SEG7_DIGIT3 = 1;
-	SEG7_DIGIT4 = 0;
-	SEG7_COLON_DEGREE = 10;
-
+  display_intensity();
 	if ((SWITCHES >> 8)&(0x1L)) { //if SW9 is pressed
 		MODE = FREQ_MODE;
 	}	
+}
+
+/*----------------------------------------------------------------------------
+  display_intensity function
+ *----------------------------------------------------------------------------*/
+void display_intensity() {
+	int val = TEST_VAL;
+	//DIGIT1
+	SEG7_DIGIT1 = 10; //off
+	//DIGIT2
+	if (val < 0) {
+		SEG7_DIGIT2 = 17; //'-'
+		val *= -1;
+	}
+	else if (val < 100){
+		SEG7_DIGIT2 = 10; //off
+	}
+	else {
+		SEG7_DIGIT2 = val / 100;
+		val -= 100*SEG7_DIGIT2;
+	}
+	//DIGIT3,4
+	SEG7_DIGIT3 = val / 10;
+	val -= 10*SEG7_DIGIT3;
+	SEG7_DIGIT4 = val;
 }
 
 /*----------------------------------------------------------------------------
