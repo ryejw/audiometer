@@ -150,69 +150,6 @@ CortexM4asmOps_test1: 	@; asm function which decrements Cint by 2, increments Gi
 	bx lr				@;return to the caller
 	
 
-	.global bin2bcd_asm
-	.thumb_func
-bin2bcd_asm:
-	@; r0 is binary
-	movw 	r1, #0 			@; r1 is ones
-	movw 	r2, #0	 		@; r2 is tens
-	movw 	r3, #0	 	@; r3 is hundreds
-	movw 	r4, #0 			@; r4 is thousands
-	movw	r5, #15			@; r5 is index, i=15
-	movw	r6, #0			@; r6 is temp
-	movw	r7, #0			@; r7 is temp2
-	
-loop:
-	@; add 3 to columns >= 5
-	cmp 	r4, #5			@; thousands
-	it 		ge
-	addge 	r4, #3
-	cmp 	r3, #5			@; hundreds
-	it 		ge
-	addge 	r3, #3
-	cmp 	r2, #5			@; tens
-	it 		ge
-	addge 	r2, #3
-	cmp 	r1, #5			@; ones
-	it 		ge
-	addge 	r1, #3
-	
-	@; shift left one
-	lsl 	r4, #1			@; thousands << 1
-	and		r6, r3, #0x08	@; thousands[0] = hundreds[3]
-	lsr		r6, #3
-	add		r4, r6
-	lsl 	r3, #1			@; hundreds << 1
-	and		r6, r2, #0x08	@; hundreds[0] = tens[3]
-	lsr		r6, #3
-	add		r3, r6
-	lsl 	r2, #1			@; tens << 1
-	and		r6, r1, #0x08	@; tens[0] = ones[3]
-	lsr		r6, #3
-	add		r2, r6
-	
-	lsl 	r1, #1			@; ones << 1
-	movw	r7, #1			@; r7 = 1ul << i
-	lsl		r7, r5			
-	and		r6, r0, r7		@; ones[0] = binary[i]
-	lsr		r6, r5
-	add		r1, r6
-	
-	@; pretend data type is a nibble
-	and 	r4, #0x0F		@; thousands
-	and 	r3, #0x0F		@; hundreds
-	and 	r2, #0x0F		@; tens
-	and 	r1, #0x0F		@; ones
-	
-	@; check loop condition
-	sub		r5, #1
-	cmp 	r5, #0
-	bge		loop
-	
-	@; return
-	bx lr
-
-
 	.global MyasmDelay 			@; make this function visible everywhere
 	.thumb_func					@; make sure it starts in thumb mode
 MyasmDelay:						@; short software delay

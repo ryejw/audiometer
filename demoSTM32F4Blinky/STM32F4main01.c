@@ -16,15 +16,17 @@
 
 //global variables used in CortexM4asmOps_01.asm but defined here
 	int Cint;
-	int SEG7_COUNTER = 1; 
-	int SEG7_DIGIT1 = 14; //Initialize Display to 'Ehn3'
+	int SEG7_COUNTER = 1;
+	int SEG7_DIGIT1 = 14; //Initialize seg7 to "Ehn3"
 	int SEG7_DIGIT2 = 15;
 	int SEG7_DIGIT3 = 16;
 	int SEG7_DIGIT4 = 3;
 	int SEG7_COLON_DEGREE = 10; //10-OFF, 11-colon, 12-degree, 13-colon and degree
 	int LED_GREEN = 0xC;
 	int LED_RED = 0x3;
-
+	int SWITCHES = 0x0;
+	int SW_READ_ODD=0;
+	int SW_READ_EVEN=0;
 	
 //!!added stuff to get it to compile
   #include <stdint.h>	//various versions of this in yagarto -- gives unint32_t and other definitions
@@ -387,8 +389,100 @@ volatile uint32_t msTicks;                      /* counts 1ms timeTicks       */
  *----------------------------------------------------------------------------*/
 void SysTick_Handler(void) {
   msTicks++; //need this for Delay()
+	switch_cluster_handler();
 	seg7_handler();
 }
+
+/*----------------------------------------------------------------------------
+  switch_cluster_handler function
+ *----------------------------------------------------------------------------*/
+void switch_cluster_handler() {
+	switch_handler(1);
+	switch_handler(3);
+	switch_handler(5);
+	switch_handler(7);
+	switch_handler(9);
+	switch_handler(11);
+	switch_handler(13);
+}
+
+/*----------------------------------------------------------------------------
+  switch_handler function
+ *----------------------------------------------------------------------------*/
+void switch_handler(int sw_set) {
+	//initialize (disable) anode lines to prevent flicker in seven segment
+	GPIOC->BSRRL |= (1ul << 2); //set DIGIT1 anode (PC2) high
+	GPIOA->BSRRL |= (1ul << 1); //set DIGIT2 anode (PA1) high
+	GPIOC->BSRRL |= (1ul << 4); //set DIGIT3 anode (PC4) high
+	GPIOB->BSRRL |= (1ul << 1); //set DIGIT4 anode (PB1) high
+	GPIOC->BSRRL |= (1ul << 5); //set COLON  anode (PC5) high
+	GPIOB->BSRRL |= (1ul << 0); //set  AN_G  anode (PB0) high
+	GPIOB->BSRRL |= (1ul << 11); //set AN_R   anode (PB11) high	
+	
+	//clock anode driver
+	GPIOC->BSRRH |= (1ul << 11); //set AN_CLK (PC11) low
+	GPIOC->BSRRL |= (1ul << 11); //set AN_CLK (PC11) high
+
+	//enable anode driver
+	GPIOB->BSRRH |= (1ul << 4); //set AN_EN (PB4) low b/c active low
+	
+	//initialize all cathode lines
+	GPIOB->BSRRL |= (1ul << 5); //set SW_1-2 | CA_D | PB5 high
+	GPIOB->BSRRL |= (1ul << 11); //set SW_3-4 | CA_E | PB11 high
+	GPIOB->BSRRL |= (1ul << 0); //set SW_5-6 | CA_DP | PB0 high
+	GPIOB->BSRRL |= (1ul << 1); //set SW_7-8 | CA_B | PB1 high
+	GPIOC->BSRRL |= (1ul << 4); //set SW_9-10 | CA_G | PC4 high
+	GPIOC->BSRRL |= (1ul << 5); //set SW_11-12 | CA_A | PC5 high
+	GPIOA->BSRRL |= (1ul << 1); //set SW_13 | CA_C | PA1 high	
+	
+	//set switch pair cathode lines
+	switch (sw_set) {
+		case 1: //SW_1-2
+			GPIOB->BSRRH |= (1ul << 5); //set SW_1-2 | CA_D | PB5 low
+			break;
+		case 3: //SW_3-4
+			GPIOB->BSRRH |= (1ul << 11); //set SW_3-4 | CA_E | PB11 low
+			break;
+		case 5: //SW_5-6
+			GPIOB->BSRRH |= (1ul << 0); //set SW_5-6 | CA_DP | PB0 low
+			break;
+		case 7: //SW_7-8
+			GPIOB->BSRRH |= (1ul << 1); //set SW_7-8 | CA_B | PB1 low
+			break;
+		case 9: //SW_9-10
+			GPIOC->BSRRH |= (1ul << 4); //set SW_9-10 | CA_G | PC4 low
+			break;
+		case 11: //SW_11-12
+			GPIOC->BSRRH |= (1ul << 5); //set SW_11-12 | CA_A | PC5 low
+			break;
+		case 13: //SW_13
+			GPIOA->BSRRH |= (1ul << 1); //set SW_13 | CA_C | PA1 low	
+			break;
+	}
+	
+	//clock cathode driver
+	GPIOD->BSRRH |= (1ul << 2); //set CA_CLK | PD2 low
+	GPIOD->BSRRL |= (1ul << 2); //set CA_CLK | PD2 high
+	
+	//enable cathode driver
+	GPIOC->BSRRH |= (1ul << 1); //set CA_EN (PC1) low b/c active low
+	
+	//read switch lines (0: not-pressed, 1: pressed)
+	int val=0xDEAD;
+	val = (~(((GPIOA->IDR) & (1ul<<15))>>15)) & 1ul; //SW_ODD | PA15
+	SWITCHES &= ~(1ul<<(sw_set-1)); //clear bit
+	SWITCHES |= val<<(sw_set-1); //set bit
+	
+	val = (~(((GPIOC->IDR) & (1ul<<8))>>8)) & 1ul; //SW_EVEN | PC8
+	SWITCHES &= ~(1ul<<(sw_set)); //clear bit
+	SWITCHES |= val<<(sw_set); //set bit
+	
+	int sw=0xBAD;
+	sw=SWITCHES;
+	
+	
+}
+
 
 /*----------------------------------------------------------------------------
   delays number of tick Systicks (happens every 1 ms)
@@ -696,8 +790,7 @@ int seg7_update(int digit, int val) {
 			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
 			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
 			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
-			break;	
-			
+			break;		
 	}
 	
 	//clock cathode
@@ -766,57 +859,11 @@ int seg7_update(int digit, int val) {
 	GPIOC->BSRRH |= (1ul << 1); //set CA_EN (PC1) low b/c active low
 }
 
-
-
-/*----------------------------------------------------------------------------
-  Binary to BCD function
- *----------------------------------------------------------------------------*/
-void bin2bcd (uint16_t binary) {
-	uint8_t thousands = 0, hundreds = 0, tens = 0, ones = 0;
-	
-	int i;
-	for (i=15; i>=0; i--) {
-		//add 3 to columns >= 5
-		if (thousands >= 5)
-				thousands += 3;
-		if (hundreds >= 5)
-				hundreds += 3;
-		if (tens >= 5)
-				tens += 3;
-		if (ones >= 5)
-				ones += 3;
-		
-		//shift left one
-		thousands << 1;
-		thousands += (hundreds & 0x08) >> 3; //thousands[0] = hundreds[3]
-		hundreds = hundreds << 1;
-		hundreds += (tens & 0x08) >> 3; //hundreds[0] = tens[3]
-		tens = tens << 1;
-		tens += (ones & 0x08) >> 3; //tens[0] = ones[3]
-		ones = ones << 1;
-		ones += (binary & (1ul << i)) >> i; //ones[0] = binary[i]
-	
-		//pretend data type is a nibble
-		thousands &= 0x0F;
-		hundreds &= 0x0F;
-		tens &= 0x0F;
-		ones &= 0x0F;
-	}	
-}
-
-/*----------------------------------------------------------------------------
-  Binary to BCD Assembly function
- *----------------------------------------------------------------------------*/
-void bin2bcd_asm (uint16_t binary);
-
 /*----------------------------------------------------------------------------
   MAIN function
  *----------------------------------------------------------------------------*/
+
 int main (void) {
-	uint16_t binary=1096;
-	//bin2bcd(binary);
-	bin2bcd_asm(binary);
-	
 	//test_op();
 	//test_update_mask32();
 	//char num_char[] = "-1234";
@@ -843,6 +890,7 @@ int main (void) {
     while (1);                                  /* Capture error              */
   }
 	SEG7_Init();
+	switch_init();
   LED_Init();
   BTN_Init();    	
   int toggle=0;

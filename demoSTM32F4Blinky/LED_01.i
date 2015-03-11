@@ -130,8 +130,54 @@ extern void LED_Out (unsigned int value);
 # 92 "LED_01.c" 2
 
 const unsigned long led_mask[] = {1UL << 12, 1UL << 13, 1UL << 14, 1UL << 15};
+# 107 "LED_01.c"
+void switch_init() {
+
+ ((RCC_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x3800))->AHB1ENR |= ((1UL << 0));
+ ((RCC_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x3800))->AHB1ENR |= ((1UL << 1));
+ ((RCC_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x3800))->AHB1ENR |= ((1UL << 2));
 
 
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->MODER &= ~((3UL << 2*1));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->MODER |= ((1UL << 2*1));
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->OTYPER &= ~((1UL << 1));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->OSPEEDR &= ~((3UL << 2*1));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->OSPEEDR |= ((2UL << 2*1));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->PUPDR &= ~((3UL << 2*1));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->PUPDR |= ((1UL << 2*1));
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->MODER &= ~((3UL << 2*15));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->OSPEEDR &= ~((3UL << 2*15));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->OSPEEDR |= ((2UL << 2*15));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->PUPDR &= ~((3UL << 2*15));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->PUPDR |= ((1UL << 2*15));
+
+
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->MODER &= ~((3UL << 2*0) | (3UL << 2*1) | (3UL << 2*5) | (3UL << 2*11));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->MODER |= ((1UL << 2*0) | (1UL << 2*1) | (1UL << 2*5) | (1UL << 2*11));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->OTYPER &= ~((1UL << 0) | (1UL << 1) | (1UL << 5) | (1UL << 11));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->OSPEEDR &= ~((3UL << 2*0) | (3UL << 2*1) | (3UL << 2*5) | (3UL << 2*11));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->OSPEEDR |= ((2UL << 2*0) | (2UL << 2*1) | (2UL << 2*5) | (2UL << 2*11));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->PUPDR &= ~((3UL << 2*0) | (3UL << 2*1) | (3UL << 2*5) | (3UL << 2*11));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->PUPDR |= ((1UL << 2*0) | (1UL << 2*1) | (1UL << 2*5) | (1UL << 2*11));
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->MODER &= ~((3UL << 2*4) | (3UL << 2*5));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->MODER |= ((1UL << 2*4) | (1UL << 2*5));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->OTYPER &= ~((1UL << 4) | (1UL << 5));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->OSPEEDR &= ~((3UL << 2*4) | (3UL << 2*5));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->OSPEEDR |= ((2UL << 2*4) | (2UL << 2*5));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->PUPDR &= ~((3UL << 2*4) | (3UL << 2*5));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->PUPDR |= ((1UL << 2*4) | (1UL << 2*5));
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->MODER &= ~((3UL << 2*8));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->OSPEEDR &= ~((3UL << 2*8));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->OSPEEDR |= ((2UL << 2*8));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->PUPDR &= ~((3UL << 2*8));
+  ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->PUPDR |= ((1UL << 2*8));
+}
 
 
 

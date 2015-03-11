@@ -12,7 +12,9 @@
  int SEG7_COLON_DEGREE = 10;
  int LED_GREEN = 0xC;
  int LED_RED = 0x3;
-
+ int SWITCHES = 0x0;
+ int SW_READ_ODD=0;
+ int SW_READ_EVEN=0;
 
 
 # 1 "c:\\yagarto\\bin\\../lib/gcc/arm-none-eabi/4.7.2/include/stdint.h" 1 3 4
@@ -81,7 +83,7 @@ typedef uint64_t uint_least64_t;
 typedef signed int intptr_t;
 typedef unsigned int uintptr_t;
 # 4 "c:\\yagarto\\bin\\../lib/gcc/arm-none-eabi/4.7.2/include/stdint.h" 2 3 4
-# 31 "STM32F4main01.c" 2
+# 33 "STM32F4main01.c" 2
 
 
 
@@ -89,7 +91,7 @@ typedef unsigned int uintptr_t;
 
 
   uint32_t SystemCoreClock;
-# 52 "STM32F4main01.c"
+# 54 "STM32F4main01.c"
 typedef struct
 {
   uint32_t MODER;
@@ -139,7 +141,7 @@ typedef struct
   uint32_t SSCGR;
   uint32_t PLLI2SCFGR;
 } RCC_TypeDef;
-# 117 "STM32F4main01.c"
+# 119 "STM32F4main01.c"
 typedef enum IRQn
 {
 
@@ -245,7 +247,7 @@ extern void LED_Init(void);
 extern void LED_On (unsigned int num);
 extern void LED_Off (unsigned int num);
 extern void LED_Out (unsigned int value);
-# 217 "STM32F4main01.c" 2
+# 219 "STM32F4main01.c" 2
 
 
 
@@ -307,7 +309,7 @@ typedef struct
        uint32_t RESERVED0[5];
   uint32_t CPACR;
 } SCB_Type;
-# 317 "STM32F4main01.c"
+# 319 "STM32F4main01.c"
 void SystemCoreClockUpdate(void)
 {
   uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
@@ -381,8 +383,100 @@ volatile uint32_t msTicks;
 
 void SysTick_Handler(void) {
   msTicks++;
+ switch_cluster_handler();
  seg7_handler();
 }
+
+
+
+
+void switch_cluster_handler() {
+ switch_handler(1);
+ switch_handler(3);
+ switch_handler(5);
+ switch_handler(7);
+ switch_handler(9);
+ switch_handler(11);
+ switch_handler(13);
+}
+
+
+
+
+void switch_handler(int sw_set) {
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 11);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 11);
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 4);
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 4);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+
+
+ switch (sw_set) {
+  case 1:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 5);
+   break;
+  case 3:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 11);
+   break;
+  case 5:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 0);
+   break;
+  case 7:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRH |= (1ul << 1);
+   break;
+  case 9:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   break;
+  case 11:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 5);
+   break;
+  case 13:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRH |= (1ul << 1);
+   break;
+ }
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00))->BSRRH |= (1ul << 2);
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0C00))->BSRRL |= (1ul << 2);
+
+
+ ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 1);
+
+
+ int val=0xDEAD;
+ val = (~(((((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->IDR) & (1ul<<15))>>15)) & 1ul;
+ SWITCHES &= ~(1ul<<(sw_set-1));
+ SWITCHES |= val<<(sw_set-1);
+
+ val = (~(((((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->IDR) & (1ul<<8))>>8)) & 1ul;
+ SWITCHES &= ~(1ul<<(sw_set));
+ SWITCHES |= val<<(sw_set);
+
+ int sw=0xBAD;
+ sw=SWITCHES;
+
+
+}
+
 
 
 
@@ -691,7 +785,6 @@ int seg7_update(int digit, int val) {
    ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
    ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
    break;
-
  }
 
 
@@ -764,53 +857,8 @@ int seg7_update(int digit, int val) {
 
 
 
-
-void bin2bcd (uint16_t binary) {
- uint8_t thousands = 0, hundreds = 0, tens = 0, ones = 0;
-
- int i;
- for (i=15; i>=0; i--) {
-
-  if (thousands >= 5)
-    thousands += 3;
-  if (hundreds >= 5)
-    hundreds += 3;
-  if (tens >= 5)
-    tens += 3;
-  if (ones >= 5)
-    ones += 3;
-
-
-  thousands << 1;
-  thousands += (hundreds & 0x08) >> 3;
-  hundreds = hundreds << 1;
-  hundreds += (tens & 0x08) >> 3;
-  tens = tens << 1;
-  tens += (ones & 0x08) >> 3;
-  ones = ones << 1;
-  ones += (binary & (1ul << i)) >> i;
-
-
-  thousands &= 0x0F;
-  hundreds &= 0x0F;
-  tens &= 0x0F;
-  ones &= 0x0F;
- }
-}
-
-
-
-
-void bin2bcd_asm (uint16_t binary);
-
-
-
-
 int main (void) {
- uint16_t binary=1096;
-
- bin2bcd_asm(binary);
-# 828 "STM32F4main01.c"
+# 875 "STM32F4main01.c"
   int32_t num = -1;
   int32_t dir = 1;
   uint32_t btns = 0;
@@ -829,6 +877,7 @@ int main (void) {
     while (1);
   }
  SEG7_Init();
+ switch_init();
   LED_Init();
   BTN_Init();
   int toggle=0;

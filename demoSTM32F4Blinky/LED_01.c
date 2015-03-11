@@ -92,7 +92,65 @@ typedef struct
 
 const unsigned long led_mask[] = {1UL << 12, 1UL << 13, 1UL << 14, 1UL << 15};
 
-
+/*----------------------------------------------------------------------------
+  Initialize Switch Pins
+		Even Input: 			PC8
+		Odd Input:  			PA15
+		SW_1-2 (CA_D):		PB5	
+		SW_3-4 (CA_E): 		PB11
+		SW_5-6 (CA_DP): 	PB0
+		SW_7-8 (CA_B):		PB1
+		SW_9-10 (CA_G): 	PC4
+		SW_11-12 (CA_A):	PC5
+		SW_13 (CA_C):			PA1
+ *----------------------------------------------------------------------------*/
+void switch_init() {
+	//Enable GPIO Clocks
+	RCC->AHB1ENR  |= ((1UL <<  0));         /* Enable GPIOA clock                */
+	RCC->AHB1ENR  |= ((1UL <<  1));         /* Enable GPIOB clock                */
+	RCC->AHB1ENR  |= ((1UL <<  2));         /* Enable GPIOC clock                */
+	
+	//Initialize Port A: 1 (Switch Cathode Latch)
+	GPIOA->MODER    &= ~((3UL << 2*1));   /* PA.1 is output               */
+  GPIOA->MODER    |=  ((1UL << 2*1)); 
+	GPIOA->OTYPER   &= ~((1UL <<   1));   /* PA.1 is output Push-Pull     */
+  GPIOA->OSPEEDR  &= ~((3UL << 2*1));   /* PA.1 is 50MHz Fast Speed     */
+  GPIOA->OSPEEDR  |=  ((2UL << 2*1)); 
+  GPIOA->PUPDR    &= ~((3UL << 2*1));   /* PA.1 is Pull up              */
+  GPIOA->PUPDR    |=  ((1UL << 2*1));  
+	
+	//Initialize Port A: 15 (Odd Input)
+	GPIOA->MODER    &= ~((3UL << 2*15));   /* PA.15 is input               */
+  GPIOA->OSPEEDR  &= ~((3UL << 2*15));   /* PA.15 is 50MHz Fast Speed     */
+  GPIOA->OSPEEDR  |=  ((2UL << 2*15)); 
+  GPIOA->PUPDR    &= ~((3UL << 2*15));   /* PA.15 is Pull up              */
+  GPIOA->PUPDR    |=  ((1UL << 2*15));  
+	
+	//Initialize Port B: 0,1,5,11 (Switch Cathode Latches)
+  GPIOB->MODER    &= ~((3UL << 2*0) | (3UL << 2*1) | (3UL << 2*5) | (3UL << 2*11));   /* PB.0,1,5,11 is output               */
+  GPIOB->MODER    |=  ((1UL << 2*0) | (1UL << 2*1) | (1UL << 2*5) | (1UL << 2*11)); 
+  GPIOB->OTYPER   &= ~((1UL <<   0) | (1UL <<   1) | (1UL <<   5) | (1UL <<   11));   /* PB.0,1,5,11 is output Push-Pull     */
+  GPIOB->OSPEEDR  &= ~((3UL << 2*0) | (3UL << 2*1) | (3UL << 2*5) | (3UL << 2*11));   /* PB.0,1,5,11 is 50MHz Fast Speed     */
+  GPIOB->OSPEEDR  |=  ((2UL << 2*0) | (2UL << 2*1) | (2UL << 2*5) | (2UL << 2*11)); 
+  GPIOB->PUPDR    &= ~((3UL << 2*0) | (3UL << 2*1) | (3UL << 2*5) | (3UL << 2*11));   /* PB.0,1,5,11 is Pull up              */
+  GPIOB->PUPDR    |=  ((1UL << 2*0) | (1UL << 2*1) | (1UL << 2*5) | (1UL << 2*11)); 
+											 						 
+	//Initialize Port C: 4,5 (Switch Cathode Latches)
+	GPIOC->MODER    &= ~((3UL << 2*4) | (3UL << 2*5));   /* PC.4,5 is output               */
+  GPIOC->MODER    |=  ((1UL << 2*4) | (1UL << 2*5)); 
+  GPIOC->OTYPER   &= ~((1UL <<   4) | (1UL <<   5));   /* PC.4,5 is output Push-Pull     */
+  GPIOC->OSPEEDR  &= ~((3UL << 2*4) | (3UL << 2*5));   /* PC.4,5 is 50MHz Fast Speed     */
+  GPIOC->OSPEEDR  |=  ((2UL << 2*4) | (2UL << 2*5)); 
+  GPIOC->PUPDR    &= ~((3UL << 2*4) | (3UL << 2*5));   /* PC.4,5 is Pull up              */
+  GPIOC->PUPDR    |=  ((1UL << 2*4) | (1UL << 2*5)); 
+	
+	//Initialize Port C: 8 (Even Input)
+	GPIOC->MODER    &= ~((3UL << 2*8));   /* PC.8 is input               */
+  GPIOC->OSPEEDR  &= ~((3UL << 2*8));   /* PC.8 is 50MHz Fast Speed     */
+  GPIOC->OSPEEDR  |=  ((2UL << 2*8)); 
+  GPIOC->PUPDR    &= ~((3UL << 2*8));   /* PC.8 is Pull up              */
+  GPIOC->PUPDR    |=  ((1UL << 2*8)); 
+}
 /*----------------------------------------------------------------------------
   Initialize 7-Segments Display Pins
  *----------------------------------------------------------------------------*/
