@@ -13,8 +13,13 @@
  int LED_GREEN = 0xC;
  int LED_RED = 0x3;
  int SWITCHES = 0x0;
- int SW_READ_ODD=0;
- int SW_READ_EVEN=0;
+ int SW_READ_ODD = 0;
+ int SW_READ_EVEN = 0;
+ int MODE = 0;
+
+
+
+
 
 
 # 1 "c:\\yagarto\\bin\\../lib/gcc/arm-none-eabi/4.7.2/include/stdint.h" 1 3 4
@@ -83,7 +88,7 @@ typedef uint64_t uint_least64_t;
 typedef signed int intptr_t;
 typedef unsigned int uintptr_t;
 # 4 "c:\\yagarto\\bin\\../lib/gcc/arm-none-eabi/4.7.2/include/stdint.h" 2 3 4
-# 33 "STM32F4main01.c" 2
+# 38 "STM32F4main01.c" 2
 
 
 
@@ -91,7 +96,7 @@ typedef unsigned int uintptr_t;
 
 
   uint32_t SystemCoreClock;
-# 54 "STM32F4main01.c"
+# 59 "STM32F4main01.c"
 typedef struct
 {
   uint32_t MODER;
@@ -141,7 +146,7 @@ typedef struct
   uint32_t SSCGR;
   uint32_t PLLI2SCFGR;
 } RCC_TypeDef;
-# 119 "STM32F4main01.c"
+# 124 "STM32F4main01.c"
 typedef enum IRQn
 {
 
@@ -247,7 +252,7 @@ extern void LED_Init(void);
 extern void LED_On (unsigned int num);
 extern void LED_Off (unsigned int num);
 extern void LED_Out (unsigned int value);
-# 219 "STM32F4main01.c" 2
+# 224 "STM32F4main01.c" 2
 
 
 
@@ -309,7 +314,7 @@ typedef struct
        uint32_t RESERVED0[5];
   uint32_t CPACR;
 } SCB_Type;
-# 319 "STM32F4main01.c"
+# 324 "STM32F4main01.c"
 void SystemCoreClockUpdate(void)
 {
   uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
@@ -385,6 +390,60 @@ void SysTick_Handler(void) {
   msTicks++;
  switch_cluster_handler();
  seg7_handler();
+ mode_handler();
+}
+
+
+
+
+
+void mode_handler() {
+ switch(MODE){
+  case 0:
+   if ((SWITCHES >> 8)&(0x1L)) {
+    MODE = 1;
+   }
+   else if ((SWITCHES >> 9)&(0x1L)) {
+    MODE = 2;
+   }
+   break;
+  case 1:
+   freq_mode_handler();
+   break;
+  case 2:
+   test_mode_handler();
+   break;
+ }
+}
+
+
+
+
+void freq_mode_handler() {
+ SEG7_DIGIT1 = 10;
+ SEG7_DIGIT2 = 1;
+ SEG7_DIGIT3 = 2;
+ SEG7_DIGIT4 = 5;
+ SEG7_COLON_DEGREE = 10;
+
+ if ((SWITCHES >> 9)&(0x1L)) {
+  MODE = 2;
+ }
+}
+
+
+
+
+void test_mode_handler() {
+ SEG7_DIGIT1 = 10;
+ SEG7_DIGIT2 = 17;
+ SEG7_DIGIT3 = 1;
+ SEG7_DIGIT4 = 0;
+ SEG7_COLON_DEGREE = 10;
+
+ if ((SWITCHES >> 8)&(0x1L)) {
+  MODE = 1;
+ }
 }
 
 
@@ -785,6 +844,17 @@ int seg7_update(int digit, int val) {
    ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
    ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
    break;
+  case 17:
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0000))->BSRRL |= (1ul << 1);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 5);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 11);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRL |= (1ul << 2);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0800))->BSRRH |= (1ul << 4);
+   ((GPIO_TypeDef *) ((((uint32_t)0x40000000) + 0x00020000) + 0x0400))->BSRRL |= (1ul << 0);
+   break;
+
  }
 
 
@@ -858,7 +928,7 @@ int seg7_update(int digit, int val) {
 
 
 int main (void) {
-# 875 "STM32F4main01.c"
+# 945 "STM32F4main01.c"
   int32_t num = -1;
   int32_t dir = 1;
   uint32_t btns = 0;

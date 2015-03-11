@@ -25,8 +25,13 @@
 	int LED_GREEN = 0xC;
 	int LED_RED = 0x3;
 	int SWITCHES = 0x0;
-	int SW_READ_ODD=0;
-	int SW_READ_EVEN=0;
+	int SW_READ_ODD = 0;
+	int SW_READ_EVEN = 0;
+	int MODE = 0;
+	
+	#define FREQ_MODE 1
+	#define TEST_MODE 2
+	
 	
 //!!added stuff to get it to compile
   #include <stdint.h>	//various versions of this in yagarto -- gives unint32_t and other definitions
@@ -391,6 +396,60 @@ void SysTick_Handler(void) {
   msTicks++; //need this for Delay()
 	switch_cluster_handler();
 	seg7_handler();
+	mode_handler();
+}
+
+
+/*----------------------------------------------------------------------------
+  mode_handler function
+ *----------------------------------------------------------------------------*/
+void mode_handler() {
+	switch(MODE){
+		case 0: //INIT_MODE
+			if ((SWITCHES >> 8)&(0x1L)) { //if SW9 is pressed
+				MODE = FREQ_MODE;
+			}
+			else if ((SWITCHES >> 9)&(0x1L)) { //if SW10 is pressed
+				MODE = TEST_MODE;
+			}
+			break;
+		case 1: //FREQ_MODE
+			freq_mode_handler();
+			break;
+		case 2: //TEST_MODE
+			test_mode_handler();
+			break;
+	}
+}
+
+/*----------------------------------------------------------------------------
+  freq_mode_handler function
+ *----------------------------------------------------------------------------*/
+void freq_mode_handler() {
+	SEG7_DIGIT1 = 10; //Display "125"
+	SEG7_DIGIT2 = 1;
+	SEG7_DIGIT3 = 2;
+	SEG7_DIGIT4 = 5;
+	SEG7_COLON_DEGREE = 10;
+	
+	if ((SWITCHES >> 9)&(0x1L)) { //if SW10 is pressed
+		MODE = TEST_MODE;
+	}	
+}
+
+/*----------------------------------------------------------------------------
+  test_mode_handler function
+ *----------------------------------------------------------------------------*/
+void test_mode_handler() {
+	SEG7_DIGIT1 = 10; //display "-10"
+	SEG7_DIGIT2 = 17;
+	SEG7_DIGIT3 = 1;
+	SEG7_DIGIT4 = 0;
+	SEG7_COLON_DEGREE = 10;
+
+	if ((SWITCHES >> 8)&(0x1L)) { //if SW9 is pressed
+		MODE = FREQ_MODE;
+	}	
 }
 
 /*----------------------------------------------------------------------------
@@ -790,7 +849,17 @@ int seg7_update(int digit, int val) {
 			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
 			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
 			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
-			break;		
+			break;	
+		case 17: //'-'
+			GPIOC->BSRRL |= (1ul << 5); //set  CA_A (PC5) high
+			GPIOB->BSRRL |= (1ul << 1); //set  CA_B (PB1) high
+			GPIOA->BSRRL |= (1ul << 1); //set  CA_C (PA1) high
+			GPIOB->BSRRL |= (1ul << 5); //set  CA_D (PB5) high
+			GPIOB->BSRRL |= (1ul << 11); //set  CA_E (PB11) high
+			GPIOC->BSRRL |= (1ul << 2); //set  CA_F (PC2) high
+			GPIOC->BSRRH |= (1ul << 4); //set  CA_G (PC4) low
+			GPIOB->BSRRL |= (1ul << 0); //set  CA_DP (PB0) high
+			break;		 
 	}
 	
 	//clock cathode
