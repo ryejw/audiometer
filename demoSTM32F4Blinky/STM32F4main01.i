@@ -16,6 +16,7 @@
 
  int SWITCH_QUEUE[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
  int SWITCH_COUNTER = 0;
+ int DEBOUNCE_COUNTER=0;
  int SWITCH_DEBOUNCE = 0;
  int SW_READ_ODD = 0;
  int SW_READ_EVEN = 0;
@@ -94,7 +95,7 @@ typedef uint64_t uint_least64_t;
 typedef signed int intptr_t;
 typedef unsigned int uintptr_t;
 # 4 "c:\\yagarto\\bin\\../lib/gcc/arm-none-eabi/4.7.2/include/stdint.h" 2 3 4
-# 44 "STM32F4main01.c" 2
+# 45 "STM32F4main01.c" 2
 
 
 
@@ -102,7 +103,7 @@ typedef unsigned int uintptr_t;
 
 
   uint32_t SystemCoreClock;
-# 65 "STM32F4main01.c"
+# 66 "STM32F4main01.c"
 typedef struct
 {
   uint32_t MODER;
@@ -152,7 +153,7 @@ typedef struct
   uint32_t SSCGR;
   uint32_t PLLI2SCFGR;
 } RCC_TypeDef;
-# 130 "STM32F4main01.c"
+# 131 "STM32F4main01.c"
 typedef enum IRQn
 {
 
@@ -258,7 +259,7 @@ extern void LED_Init(void);
 extern void LED_On (unsigned int num);
 extern void LED_Off (unsigned int num);
 extern void LED_Out (unsigned int value);
-# 230 "STM32F4main01.c" 2
+# 231 "STM32F4main01.c" 2
 
 
 
@@ -320,7 +321,7 @@ typedef struct
        uint32_t RESERVED0[5];
   uint32_t CPACR;
 } SCB_Type;
-# 330 "STM32F4main01.c"
+# 331 "STM32F4main01.c"
 void SystemCoreClockUpdate(void)
 {
   uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
@@ -394,12 +395,16 @@ volatile uint32_t msTicks;
 
 void SysTick_Handler(void) {
   msTicks++;
- switch_cluster_handler();
- switch_queue_handler();
+ if (DEBOUNCE_COUNTER < 20) {
+  DEBOUNCE_COUNTER++;
+ }
+ else {
+  switch_cluster_handler();
+  mode_handler();
+  DEBOUNCE_COUNTER = 0;
+ }
 
- myAsmDelay(20);
  seg7_handler();
- mode_handler();
 }
 
 
@@ -468,7 +473,6 @@ void freq_mode_handler() {
  if ((SWITCHES >> 9)&(0x1L)) {
   MODE = 2;
  }
-
  if ((SWITCHES & 0x1L) & (FREQ_VAL <= 7000)) {
   FREQ_VAL += 1000;
  }
@@ -1016,7 +1020,7 @@ int seg7_update(int digit, int val) {
 
 
 int main (void) {
-# 1033 "STM32F4main01.c"
+# 1037 "STM32F4main01.c"
   int32_t num = -1;
   int32_t dir = 1;
   uint32_t btns = 0;

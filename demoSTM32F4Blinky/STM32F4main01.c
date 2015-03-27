@@ -28,6 +28,7 @@
 	#define SWITCH_SAMPLES 20
 	int SWITCH_QUEUE[SWITCH_SAMPLES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	int SWITCH_COUNTER = 0;
+	int DEBOUNCE_COUNTER=0;
 	int SWITCH_DEBOUNCE = 0;
 	int SW_READ_ODD = 0;
 	int SW_READ_EVEN = 0;
@@ -400,12 +401,16 @@ volatile uint32_t msTicks;                      /* counts 1ms timeTicks       */
  *----------------------------------------------------------------------------*/
 void SysTick_Handler(void) {
   msTicks++; //need this for Delay()
-	switch_cluster_handler();
-	switch_queue_handler();
-	//switch_debounce_handler2();
-	myAsmDelay(20);
+	if (DEBOUNCE_COUNTER < 20) {
+		DEBOUNCE_COUNTER++;
+	}
+	else {
+		switch_cluster_handler();
+		mode_handler();
+		DEBOUNCE_COUNTER = 0;
+	}
+	//switch_queue_handler();
 	seg7_handler();
-	mode_handler();
 }
 
 /*----------------------------------------------------------------------------
@@ -474,7 +479,6 @@ void freq_mode_handler() {
 	if ((SWITCHES >> 9)&(0x1L)) { //if SW10 is pressed
 		MODE = TEST_MODE;
 	}	
-	
 	if ((SWITCHES & 0x1L) & (FREQ_VAL <= 7000)) { //SW1
 		FREQ_VAL += 1000;
 	}
