@@ -13,11 +13,14 @@
  int LED_GREEN = 0xC;
  int LED_RED = 0x3;
  int SWITCHES = 0x0;
+ int SAMPLE_COUNTER=0;
 
- int SWITCH_QUEUE[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
- int SWITCH_COUNTER = 0;
- int DEBOUNCE_COUNTER=0;
- int SWITCH_DEBOUNCE = 0;
+ int SW_QUEUE[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+ int QUEUE_COUNTER = 0;
+ int SW_POS_EDGE = 0x0;
+ int SW_NEG_EDGE = 0x0;
+ int SW_STATE = 0x0;
+
  int SW_READ_ODD = 0;
  int SW_READ_EVEN = 0;
  int FREQ_VAL = 125;
@@ -95,7 +98,7 @@ typedef uint64_t uint_least64_t;
 typedef signed int intptr_t;
 typedef unsigned int uintptr_t;
 # 4 "c:\\yagarto\\bin\\../lib/gcc/arm-none-eabi/4.7.2/include/stdint.h" 2 3 4
-# 45 "STM32F4main01.c" 2
+# 48 "STM32F4main01.c" 2
 
 
 
@@ -103,7 +106,7 @@ typedef unsigned int uintptr_t;
 
 
   uint32_t SystemCoreClock;
-# 66 "STM32F4main01.c"
+# 69 "STM32F4main01.c"
 typedef struct
 {
   uint32_t MODER;
@@ -153,7 +156,7 @@ typedef struct
   uint32_t SSCGR;
   uint32_t PLLI2SCFGR;
 } RCC_TypeDef;
-# 131 "STM32F4main01.c"
+# 134 "STM32F4main01.c"
 typedef enum IRQn
 {
 
@@ -259,7 +262,7 @@ extern void LED_Init(void);
 extern void LED_On (unsigned int num);
 extern void LED_Off (unsigned int num);
 extern void LED_Out (unsigned int value);
-# 231 "STM32F4main01.c" 2
+# 234 "STM32F4main01.c" 2
 
 
 
@@ -321,7 +324,7 @@ typedef struct
        uint32_t RESERVED0[5];
   uint32_t CPACR;
 } SCB_Type;
-# 331 "STM32F4main01.c"
+# 334 "STM32F4main01.c"
 void SystemCoreClockUpdate(void)
 {
   uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
@@ -394,37 +397,46 @@ volatile uint32_t msTicks;
 
 
 void SysTick_Handler(void) {
+
   msTicks++;
- if (DEBOUNCE_COUNTER < 20) {
-  DEBOUNCE_COUNTER++;
+ seg7_handler();
+
+
+ if (SAMPLE_COUNTER < 20) {
+  SAMPLE_COUNTER++;
  }
  else {
   switch_cluster_handler();
+  switch_queue_handler();
+  switch_edge_handler();
   mode_handler();
-  DEBOUNCE_COUNTER = 0;
- }
 
- seg7_handler();
+  SAMPLE_COUNTER = 0;
+ }
 }
 
 
 
 
-void switch_debounce_handler() {
- if (SWITCH_COUNTER == 20) {
-  int j=0;
-  for (j=0; j<13; j++) {
-   int i=0;
-   for (i=0; i<20 -1; i++) {
-    if ((SWITCH_QUEUE[i] & (0x1ul<<j)) != (SWITCH_QUEUE[i+1] & (0x1ul<<j))) {
-     break;
-    }
-   }
-   if (i == 20 -1) {
+switch_edge_handler() {
 
-    SWITCH_DEBOUNCE &= ~(0x1ul<<j);
-    SWITCH_DEBOUNCE += SWITCH_QUEUE[0] & (0x1ul<<j);
-   }
+ SW_POS_EDGE = 0x0;
+ SW_NEG_EDGE = 0x0;
+
+ int i;
+ for (i=0; i<13; i++) {
+
+  if (((SWITCHES & (0x1ul<<i))>>i) & !((SW_STATE & (0x1ul<<i))>>i)) {
+
+    SW_POS_EDGE |= (0x1ul<<i);
+
+    SW_STATE |= (0x1ul<<i);
+  }
+  if (!((SWITCHES & (0x1ul<<i))>>i) & ((SW_STATE & (0x1ul<<i))>>i)) {
+
+    SW_NEG_EDGE |= (0x1ul<<i);
+
+    SW_STATE &= ~(0x1ul<<i);
   }
  }
 }
@@ -432,14 +444,19 @@ void switch_debounce_handler() {
 
 
 
-void switch_queue_handler() {
 
- if (SWITCH_COUNTER < 20) {
-  SWITCH_QUEUE[SWITCH_COUNTER] = SWITCHES;
-  SWITCH_COUNTER++;
+void switch_queue_handler() {
+ if (QUEUE_COUNTER < 20) {
+  int i;
+  for (i=20; i>0; i--) {
+   SW_QUEUE[i] = SW_QUEUE[i-1];
+  }
+  SW_QUEUE[0] = SWITCHES;
+
+  QUEUE_COUNTER++;
  }
  else {
-  SWITCH_COUNTER = 0;
+  QUEUE_COUNTER = 0;
  }
 }
 
@@ -1020,7 +1037,7 @@ int seg7_update(int digit, int val) {
 
 
 int main (void) {
-# 1037 "STM32F4main01.c"
+# 1054 "STM32F4main01.c"
   int32_t num = -1;
   int32_t dir = 1;
   uint32_t btns = 0;
