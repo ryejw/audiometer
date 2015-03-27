@@ -25,7 +25,6 @@
 	int LED_GREEN = 0xC;
 	int LED_RED = 0x3;
 	int SWITCHES = 0x0;
-	
 	#define SWITCH_SAMPLES 20
 	int SWITCH_QUEUE[SWITCH_SAMPLES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	int SWITCH_COUNTER = 0;
@@ -403,7 +402,8 @@ void SysTick_Handler(void) {
   msTicks++; //need this for Delay()
 	switch_cluster_handler();
 	switch_queue_handler();
-	switch_debounce_handler();
+	//switch_debounce_handler2();
+	myAsmDelay(20);
 	seg7_handler();
 	mode_handler();
 }
@@ -475,10 +475,10 @@ void freq_mode_handler() {
 		MODE = TEST_MODE;
 	}	
 	
-	if ((SWITCH_DEBOUNCE & 0x1L) & (FREQ_VAL <= 7000)) { //SW1
+	if ((SWITCHES & 0x1L) & (FREQ_VAL <= 7000)) { //SW1
 		FREQ_VAL += 1000;
 	}
-	if (((SWITCH_DEBOUNCE >> 1) & 0x1L) & (FREQ_VAL >= 1125)) {
+	if (((SWITCHES >> 1) & 0x1L) & (FREQ_VAL >= 1125)) {
 		FREQ_VAL -= 1000;
 	}
 }

@@ -18,7 +18,7 @@ Name             Origin             Length             Attributes
 Linker script and memory map
 
 
-.flash          0x08000000     0x2fa0
+.flash          0x08000000     0x2fa4
  *(.cs3.interrupt_vector)
  .cs3.interrupt_vector
                 0x08000000       0x40 aStartup.o
@@ -48,52 +48,52 @@ Linker script and memory map
                 0x08000c54                LED_On
                 0x08000c88                LED_Off
                 0x08000cbc                LED_Out
- .text          0x08000d08     0x2288 cMain.o
+ .text          0x08000d08     0x228c cMain.o
                 0x08000d08                SystemCoreClockUpdate
                 0x08000efc                SysTick_Handler
-                0x08000f30                switch_debounce_handler
-                0x08001018                switch_queue_handler
-                0x08001078                mode_handler
-                0x080010f0                freq_mode_handler
-                0x080011bc                display_frequency
-                0x080012b0                test_mode_handler
-                0x080012e0                display_intensity
-                0x080013c0                switch_cluster_handler
-                0x08001400                switch_handler
-                0x08001800                Delay
-                0x08001838                BTN_Init
-                0x080018bc                BTN_Get
-                0x080018d8                sub_uchar_from_quad_example
-                0x08001988                seg7_handler
-                0x08001ab4                seg7_update
-                0x08002e84                main
+                0x08000f34                switch_debounce_handler
+                0x0800101c                switch_queue_handler
+                0x0800107c                mode_handler
+                0x080010f4                freq_mode_handler
+                0x080011c0                display_frequency
+                0x080012b4                test_mode_handler
+                0x080012e4                display_intensity
+                0x080013c4                switch_cluster_handler
+                0x08001404                switch_handler
+                0x08001804                Delay
+                0x0800183c                BTN_Init
+                0x080018c0                BTN_Get
+                0x080018dc                sub_uchar_from_quad_example
+                0x0800198c                seg7_handler
+                0x08001ab8                seg7_update
+                0x08002e88                main
  *(.rodata .rodata.*)
- .rodata        0x08002f90       0x10 cLED.o
-                0x08002f90                led_mask
-                0x08002fa0                __sidata = .
+ .rodata        0x08002f94       0x10 cLED.o
+                0x08002f94                led_mask
+                0x08002fa4                __sidata = .
 
-.glue_7         0x08002fa0        0x0
+.glue_7         0x08002fa4        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x08002fa0        0x0
+.glue_7t        0x08002fa4        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x08002fa0        0x0
+.vfp11_veneer   0x08002fa4        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x08002fa0        0x0
+.v4_bx          0x08002fa4        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x08002fa0        0x0
+.iplt           0x08002fa4        0x0
  .iplt          0x00000000        0x0 aStartup.o
 
-.igot.plt       0x08002fa0        0x0
+.igot.plt       0x08002fa4        0x0
  .igot.plt      0x00000000        0x0 aStartup.o
 
-.rel.dyn        0x08002fa0        0x0
+.rel.dyn        0x08002fa4        0x0
  .rel.iplt      0x00000000        0x0 aStartup.o
 
-.data_at_ram    0x20000000      0x1b8 load address 0x08002fa0
+.data_at_ram    0x20000000      0x1b8 load address 0x08002fa4
                 0x20000000                __sdata = .
  *(.data .data.*)
  .data          0x20000000        0x0 aStartup.o
@@ -163,11 +163,11 @@ OUTPUT(Blinky.elf elf32-littlearm)
  .debug_line    0x0000014b       0xea cLED.o
  .debug_line    0x00000235      0x2aa cMain.o
 
-.debug_info     0x00000000     0x1374
+.debug_info     0x00000000     0x1373
  .debug_info    0x00000000       0x7e aStartup.o
  .debug_info    0x0000007e       0x7a aDemo.o
  .debug_info    0x000000f8      0x3e7 cLED.o
- .debug_info    0x000004df      0xe95 cMain.o
+ .debug_info    0x000004df      0xe94 cMain.o
 
 .debug_abbrev   0x00000000      0x3e4
  .debug_abbrev  0x00000000       0x14 aStartup.o
@@ -185,7 +185,7 @@ OUTPUT(Blinky.elf elf32-littlearm)
  .debug_aranges
                 0x00000060       0x20 cMain.o
 
-.bss            0x200001c0      0x11c load address 0x08003160
+.bss            0x200001c0      0x11c load address 0x08003170
  COMMON         0x200001c0      0x110 aDemo.o
                 0x200001c0                Gshort
                 0x200001c2                Gchar
@@ -200,11 +200,11 @@ OUTPUT(Blinky.elf elf32-littlearm)
  .debug_loc     0x00000000      0x12c cLED.o
  .debug_loc     0x0000012c      0x3f4 cMain.o
 
-.debug_str      0x00000000      0xa81
+.debug_str      0x00000000      0xa86
  .debug_str     0x00000000      0x237 cLED.o
                                 0x270 (size before relaxing)
- .debug_str     0x00000237      0x84a cMain.o
-                                0xa9c (size before relaxing)
+ .debug_str     0x00000237      0x84f cMain.o
+                                0xaa7 (size before relaxing)
 
 .debug_frame    0x00000000      0x2f0
  .debug_frame   0x00000000       0xb0 cLED.o
