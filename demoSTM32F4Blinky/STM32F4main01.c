@@ -25,12 +25,17 @@
 	int LED_GREEN = 0xC;
 	int LED_RED = 0x3;
 	int SWITCHES = 0x0;
+	
+	#define SWITCH_SAMPLES 20
+	int SWITCH_QUEUE[SWITCH_SAMPLES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	int SWITCH_COUNTER = 0;
+	int SWITCH_DEBOUNCE = 0;
 	int SW_READ_ODD = 0;
 	int SW_READ_EVEN = 0;
 	int FREQ_VAL = 125;
 	int TEST_VAL = -10;
 	int MODE = 0;
-
+	
 	#define FREQ_MODE 1
 	#define TEST_MODE 2
 	
@@ -397,10 +402,47 @@ volatile uint32_t msTicks;                      /* counts 1ms timeTicks       */
 void SysTick_Handler(void) {
   msTicks++; //need this for Delay()
 	switch_cluster_handler();
+	switch_queue_handler();
+	switch_debounce_handler();
 	seg7_handler();
 	mode_handler();
 }
 
+/*----------------------------------------------------------------------------
+  switch_debounce_handler function
+ *----------------------------------------------------------------------------*/
+void switch_debounce_handler() {
+	if (SWITCH_COUNTER == SWITCH_SAMPLES) { //update every SWITCH_SAMPLES
+		int j=0;
+		for (j=0; j<13; j++) { //loop through all switches
+			int i=0;
+			for (i=0; i<SWITCH_SAMPLES-1; i++) {
+				if ((SWITCH_QUEUE[i] & (0x1ul<<j)) != (SWITCH_QUEUE[i+1] & (0x1ul<<j))) {
+					break;
+				}
+			}
+			if (i == SWITCH_SAMPLES-1) { //if loop makes it all the way through a.k.a. all switch samples are the same value
+				//update SWITCH_DEBOUNCE
+				SWITCH_DEBOUNCE &= ~(0x1ul<<j); //reset bit
+				SWITCH_DEBOUNCE += SWITCH_QUEUE[0] & (0x1ul<<j); //set bit
+			}
+		}
+	}
+}
+
+/*----------------------------------------------------------------------------
+  switch_queue_handler function
+ *----------------------------------------------------------------------------*/
+void switch_queue_handler() { //build the switch queue
+	//NOTE: not actually a queue simply ovewrites oldest sample with newest
+	if (SWITCH_COUNTER < SWITCH_SAMPLES) {
+		SWITCH_QUEUE[SWITCH_COUNTER] = SWITCHES;
+		SWITCH_COUNTER++;
+	}
+	else {
+		SWITCH_COUNTER = 0; //reset switch counter
+	}
+}
 
 /*----------------------------------------------------------------------------
   mode_handler function
@@ -432,7 +474,15 @@ void freq_mode_handler() {
 	if ((SWITCHES >> 9)&(0x1L)) { //if SW10 is pressed
 		MODE = TEST_MODE;
 	}	
+	
+	if ((SWITCH_DEBOUNCE & 0x1L) & (FREQ_VAL <= 7000)) { //SW1
+		FREQ_VAL += 1000;
+	}
+	if (((SWITCH_DEBOUNCE >> 1) & 0x1L) & (FREQ_VAL >= 1125)) {
+		FREQ_VAL -= 1000;
+	}
 }
+
 
 /*----------------------------------------------------------------------------
   display_frequency function
