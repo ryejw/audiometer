@@ -489,7 +489,11 @@ void mode_handler() {
 
 void freq_mode_handler() {
  display_frequency();
+<<<<<<< HEAD
  if ((SWITCHES >> 9)&(0x1L)) {
+=======
+ if ((SWITCHES >> 9)&(0x1)) {
+>>>>>>> parent of c0ce714... something strange
   MODE = 2;
  }
  if ((SWITCHES & 0x1L) & (FREQ_VAL <= 7000)) {

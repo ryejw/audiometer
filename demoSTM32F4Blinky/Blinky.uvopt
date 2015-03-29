@@ -285,6 +285,7 @@
       <tvExp>0</tvExp>
       <Focus>0</Focus>
 <<<<<<< HEAD
+<<<<<<< HEAD
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>607</TopLine>
@@ -295,6 +296,12 @@
       <TopLine>16</TopLine>
       <CurrentLine>36</CurrentLine>
 >>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
+=======
+      <ColumnNumber>3</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>483</TopLine>
+      <CurrentLine>506</CurrentLine>
+>>>>>>> parent of c0ce714... something strange
       <bDave2>0</bDave2>
       <PathWithFileName>.\STM32F4main01.c</PathWithFileName>
       <FilenameWithoutPath>STM32F4main01.c</FilenameWithoutPath>
