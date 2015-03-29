@@ -18,11 +18,9 @@
 
  int SW_QUEUE[20] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
  int QUEUE_COUNTER = 0;
- int SW_STATE = 0x0;
  int SW_POS_EDGE = 0x0;
  int SW_NEG_EDGE = 0x0;
- int SW_PULSE = 0x0;
- int PULSE_STATE = 0x0;
+ int SW_STATE = 0x0;
 
 =======
 
@@ -108,7 +106,11 @@ typedef uint64_t uint_least64_t;
 typedef signed int intptr_t;
 typedef unsigned int uintptr_t;
 # 4 "c:\\yagarto\\bin\\../lib/gcc/arm-none-eabi/4.7.2/include/stdint.h" 2 3 4
+<<<<<<< HEAD
 # 58 "STM32F4main01.c" 2
+=======
+# 48 "STM32F4main01.c" 2
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
 
 
 
@@ -116,7 +118,11 @@ typedef unsigned int uintptr_t;
 
 
   uint32_t SystemCoreClock;
+<<<<<<< HEAD
 # 79 "STM32F4main01.c"
+=======
+# 69 "STM32F4main01.c"
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
 typedef struct
 {
   uint32_t MODER;
@@ -166,7 +172,11 @@ typedef struct
   uint32_t SSCGR;
   uint32_t PLLI2SCFGR;
 } RCC_TypeDef;
+<<<<<<< HEAD
 # 144 "STM32F4main01.c"
+=======
+# 134 "STM32F4main01.c"
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
 typedef enum IRQn
 {
 
@@ -272,7 +282,11 @@ extern void LED_Init(void);
 extern void LED_On (unsigned int num);
 extern void LED_Off (unsigned int num);
 extern void LED_Out (unsigned int value);
+<<<<<<< HEAD
 # 244 "STM32F4main01.c" 2
+=======
+# 234 "STM32F4main01.c" 2
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
 
 
 
@@ -334,7 +348,11 @@ typedef struct
        uint32_t RESERVED0[5];
   uint32_t CPACR;
 } SCB_Type;
+<<<<<<< HEAD
 # 344 "STM32F4main01.c"
+=======
+# 334 "STM32F4main01.c"
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
 void SystemCoreClockUpdate(void)
 {
   uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
@@ -491,13 +509,13 @@ void mode_handler() {
 
 void freq_mode_handler() {
  display_frequency();
- if ((SWITCHES >> 9)&(0x1)) {
+ if ((SWITCHES >> 9)&(0x1L)) {
   MODE = 2;
  }
- if ((SW_POS_EDGE & 0x1) && (FREQ_VAL <= 7000)) {
+ if ((SWITCHES & 0x1L) & (FREQ_VAL <= 7000)) {
   FREQ_VAL += 1000;
  }
- if (((SW_POS_EDGE >> 1) & 0x1) && (FREQ_VAL >= 1125)) {
+ if (((SWITCHES >> 1) & 0x1L) & (FREQ_VAL >= 1125)) {
   FREQ_VAL -= 1000;
  }
 }
@@ -1041,7 +1059,11 @@ int seg7_update(int digit, int val) {
 
 
 int main (void) {
+<<<<<<< HEAD
 # 1058 "STM32F4main01.c"
+=======
+# 1054 "STM32F4main01.c"
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
   int32_t num = -1;
   int32_t dir = 1;
   uint32_t btns = 0;

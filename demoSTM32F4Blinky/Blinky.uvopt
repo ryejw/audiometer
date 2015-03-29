@@ -195,27 +195,22 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SW_NEG_EDGE</ItemText>
+          <ItemText>SWITCH_QUEUE</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SW_POS_EDGE</ItemText>
+          <ItemText>i</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SW_STATE</ItemText>
+          <ItemText>SWITCH_COUNTER</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SWITCHES</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>FREQ_VAL</ItemText>
+          <ItemText>SWITCH_DEBOUNCE</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
@@ -289,10 +284,17 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
+<<<<<<< HEAD
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>607</TopLine>
       <CurrentLine>609</CurrentLine>
+=======
+      <ColumnNumber>21</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>16</TopLine>
+      <CurrentLine>36</CurrentLine>
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
       <bDave2>0</bDave2>
       <PathWithFileName>.\STM32F4main01.c</PathWithFileName>
       <FilenameWithoutPath>STM32F4main01.c</FilenameWithoutPath>

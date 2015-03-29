@@ -30,11 +30,9 @@
 	#define QUEUE_SIZE 20
 	int SW_QUEUE[QUEUE_SIZE] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 	int	QUEUE_COUNTER = 0;
-	int SW_STATE = 0x0;
 	int SW_POS_EDGE = 0x0;
 	int SW_NEG_EDGE = 0x0;
-	int SW_PULSE = 0x0;
-	int PULSE_STATE = 0x0;
+	int SW_STATE = 0x0;
 		
 =======
 	#define SWITCH_SAMPLES 20
@@ -417,7 +415,7 @@ void SysTick_Handler(void) {
 <<<<<<< HEAD
 	seg7_handler();
 	
-	//RUN EVERY 100 ms
+	//RUN EVERY 20 ms
 	if (SAMPLE_COUNTER < 20) {
 		SAMPLE_COUNTER++;
 =======
@@ -497,13 +495,13 @@ void mode_handler() {
  *----------------------------------------------------------------------------*/
 void freq_mode_handler() {
 	display_frequency();
-	if ((SWITCHES >> 9)&(0x1)) { //if SW10 is pressed
+	if ((SWITCHES >> 9)&(0x1L)) { //if SW10 is pressed
 		MODE = TEST_MODE;
 	}	
-	if ((SW_POS_EDGE & 0x1) && (FREQ_VAL <= 7000)) { //SW1
+	if ((SWITCHES & 0x1L) & (FREQ_VAL <= 7000)) { //SW1
 		FREQ_VAL += 1000;
 	}
-	if (((SW_POS_EDGE >> 1) & 0x1) && (FREQ_VAL >= 1125)) { //SW2
+	if (((SWITCHES >> 1) & 0x1L) & (FREQ_VAL >= 1125)) {
 		FREQ_VAL -= 1000;
 	}
 }

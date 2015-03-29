@@ -7,3 +7,46 @@ C:\Users\Jake\Documents\GitHub\audiometer\demoSTM32F4Blinky\Blinky.uvproj
 Project File Date:  03/11/2015
 
 <h2>Output:</h2>
+<<<<<<< HEAD
+=======
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
+Erase Done.
+Programming Done.
+Verify OK.
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
