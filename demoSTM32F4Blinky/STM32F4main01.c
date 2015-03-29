@@ -415,7 +415,7 @@ void SysTick_Handler(void) {
 <<<<<<< HEAD
 	seg7_handler();
 	
-	//RUN EVERY 100 ms
+	//RUN EVERY 20 ms
 	if (SAMPLE_COUNTER < 20) {
 		SAMPLE_COUNTER++;
 =======
@@ -496,10 +496,14 @@ void mode_handler() {
 void freq_mode_handler() {
 	display_frequency();
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if ((SWITCHES >> 9)&(0x1L)) { //if SW10 is pressed
 =======
 	if ((SWITCHES >> 9)&(0x1)) { //if SW10 is pressed
 >>>>>>> parent of c0ce714... something strange
+=======
+	if ((SWITCHES >> 9)&(0x1L)) { //if SW10 is pressed
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
 		MODE = TEST_MODE;
 	}	
 	if ((SWITCHES & 0x1L) & (FREQ_VAL <= 7000)) { //SW1

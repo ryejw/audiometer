@@ -211,11 +211,14 @@
           <count>3</count>
           <WinNumber>1</WinNumber>
           <ItemText>SWITCH_DEBOUNCE</ItemText>
+<<<<<<< HEAD
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
           <ItemText>sw_set</ItemText>
+=======
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -286,6 +289,7 @@
       <Focus>0</Focus>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>607</TopLine>
@@ -302,6 +306,12 @@
       <TopLine>483</TopLine>
       <CurrentLine>506</CurrentLine>
 >>>>>>> parent of c0ce714... something strange
+=======
+      <ColumnNumber>21</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>16</TopLine>
+      <CurrentLine>36</CurrentLine>
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
       <bDave2>0</bDave2>
       <PathWithFileName>.\STM32F4main01.c</PathWithFileName>
       <FilenameWithoutPath>STM32F4main01.c</FilenameWithoutPath>

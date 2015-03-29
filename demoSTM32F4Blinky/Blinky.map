@@ -18,7 +18,7 @@ Name             Origin             Length             Attributes
 Linker script and memory map
 
 
-.flash          0x08000000     0x3058
+.flash          0x08000000     0x3080
  *(.cs3.interrupt_vector)
  .cs3.interrupt_vector
                 0x08000000       0x40 aStartup.o
@@ -48,52 +48,52 @@ Linker script and memory map
                 0x08000c54                LED_On
                 0x08000c88                LED_Off
                 0x08000cbc                LED_Out
- .text          0x08000d08     0x2340 cMain.o
+ .text          0x08000d08     0x2368 cMain.o
                 0x08000d08                SystemCoreClockUpdate
                 0x08000efc                SysTick_Handler
                 0x08000f64                switch_edge_handler
                 0x080010c8                switch_queue_handler
                 0x08001158                mode_handler
                 0x080011d0                freq_mode_handler
-                0x08001274                display_frequency
-                0x08001368                test_mode_handler
-                0x08001398                display_intensity
-                0x08001478                switch_cluster_handler
-                0x080014b8                switch_handler
-                0x080018b8                Delay
-                0x080018f0                BTN_Init
-                0x08001974                BTN_Get
-                0x08001990                sub_uchar_from_quad_example
-                0x08001a40                seg7_handler
-                0x08001b6c                seg7_update
-                0x08002f3c                main
+                0x0800129c                display_frequency
+                0x08001390                test_mode_handler
+                0x080013c0                display_intensity
+                0x080014a0                switch_cluster_handler
+                0x080014e0                switch_handler
+                0x080018e0                Delay
+                0x08001918                BTN_Init
+                0x0800199c                BTN_Get
+                0x080019b8                sub_uchar_from_quad_example
+                0x08001a68                seg7_handler
+                0x08001b94                seg7_update
+                0x08002f64                main
  *(.rodata .rodata.*)
- .rodata        0x08003048       0x10 cLED.o
-                0x08003048                led_mask
-                0x08003058                __sidata = .
+ .rodata        0x08003070       0x10 cLED.o
+                0x08003070                led_mask
+                0x08003080                __sidata = .
 
-.glue_7         0x08003058        0x0
+.glue_7         0x08003080        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x08003058        0x0
+.glue_7t        0x08003080        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x08003058        0x0
+.vfp11_veneer   0x08003080        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x08003058        0x0
+.v4_bx          0x08003080        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x08003058        0x0
+.iplt           0x08003080        0x0
  .iplt          0x00000000        0x0 aStartup.o
 
-.igot.plt       0x08003058        0x0
+.igot.plt       0x08003080        0x0
  .igot.plt      0x00000000        0x0 aStartup.o
 
-.rel.dyn        0x08003058        0x0
+.rel.dyn        0x08003080        0x0
  .rel.iplt      0x00000000        0x0 aStartup.o
 
-.data_at_ram    0x20000000      0x1cc load address 0x08003058
+.data_at_ram    0x20000000      0x1c4 load address 0x08003080
                 0x20000000                __sdata = .
  *(.data .data.*)
  .data          0x20000000        0x0 aStartup.o
@@ -119,20 +119,18 @@ Linker script and memory map
  *fill*         0x20000038        0x8 
  .bss           0x20000040      0x110 aDemo.o
  .bss           0x20000150        0x0 cLED.o
- .bss           0x20000150       0x7c cMain.o
+ .bss           0x20000150       0x74 cMain.o
                 0x20000150                SWITCHES
                 0x20000154                SAMPLE_COUNTER
                 0x20000158                SW_QUEUE
                 0x200001a8                QUEUE_COUNTER
-                0x200001ac                SW_STATE
-                0x200001b0                SW_POS_EDGE
-                0x200001b4                SW_NEG_EDGE
-                0x200001b8                SW_PULSE
-                0x200001bc                PULSE_STATE
-                0x200001c0                SW_READ_ODD
-                0x200001c4                SW_READ_EVEN
-                0x200001c8                MODE
-                0x200001cc                __ebss = .
+                0x200001ac                SW_POS_EDGE
+                0x200001b0                SW_NEG_EDGE
+                0x200001b4                SW_STATE
+                0x200001b8                SW_READ_ODD
+                0x200001bc                SW_READ_EVEN
+                0x200001c0                MODE
+                0x200001c4                __ebss = .
                 0x20020000                __cs3_stack = 0x20020000
 LOAD aStartup.o
 LOAD aDemo.o
@@ -162,17 +160,17 @@ OUTPUT(Blinky.elf elf32-littlearm)
                                  0x12 (size before relaxing)
  .comment       0x00000000       0x12 cMain.o
 
-.debug_line     0x00000000      0x4fc
+.debug_line     0x00000000      0x4f0
  .debug_line    0x00000000       0x63 aStartup.o
  .debug_line    0x00000063       0xe8 aDemo.o
  .debug_line    0x0000014b       0xea cLED.o
- .debug_line    0x00000235      0x2c7 cMain.o
+ .debug_line    0x00000235      0x2bb cMain.o
 
-.debug_info     0x00000000     0x13dc
+.debug_info     0x00000000     0x13b6
  .debug_info    0x00000000       0x7e aStartup.o
  .debug_info    0x0000007e       0x7a aDemo.o
  .debug_info    0x000000f8      0x3e7 cLED.o
- .debug_info    0x000004df      0xefd cMain.o
+ .debug_info    0x000004df      0xed7 cMain.o
 
 .debug_abbrev   0x00000000      0x3e8
  .debug_abbrev  0x00000000       0x14 aStartup.o
@@ -190,7 +188,7 @@ OUTPUT(Blinky.elf elf32-littlearm)
  .debug_aranges
                 0x00000060       0x20 cMain.o
 
-.bss            0x200001d0      0x11c load address 0x08003230
+.bss            0x200001d0      0x11c load address 0x08003250
  COMMON         0x200001d0      0x110 aDemo.o
                 0x200001d0                Gshort
                 0x200001d2                Gchar
@@ -205,11 +203,11 @@ OUTPUT(Blinky.elf elf32-littlearm)
  .debug_loc     0x00000000      0x12c cLED.o
  .debug_loc     0x0000012c      0x400 cMain.o
 
-.debug_str      0x00000000      0xaad
+.debug_str      0x00000000      0xa98
  .debug_str     0x00000000      0x237 cLED.o
                                 0x270 (size before relaxing)
- .debug_str     0x00000237      0x876 cMain.o
-                                0xac8 (size before relaxing)
+ .debug_str     0x00000237      0x861 cMain.o
+                                0xab3 (size before relaxing)
 
 .debug_frame    0x00000000      0x2f4
  .debug_frame   0x00000000       0xb0 cLED.o

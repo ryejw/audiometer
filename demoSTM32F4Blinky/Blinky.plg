@@ -51,6 +51,7 @@ Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.
 Erase Done.
 Programming Done.
 Verify OK.
+<<<<<<< HEAD
 Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.AXF" 
 Erase Done.
 Programming Done.
@@ -88,4 +89,6 @@ Load "C:\\Users\\Jake\\Documents\\GitHub\\audiometer\\demoSTM32F4Blinky\\Blinky.
 Erase Done.
 Programming Done.
 Verify OK.
+>>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
+=======
 >>>>>>> parent of 01fa8d1... edge triggering on seg7 display update works
