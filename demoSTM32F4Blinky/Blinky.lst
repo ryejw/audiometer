@@ -101,7 +101,7 @@ call_main:
  800008a:	e7fe      	b.n	800008a <call_main+0xc>
 
 0800008c <TEXT_END>:
- 800008c:	08003058 	.word	0x08003058
+ 800008c:	08002fbc 	.word	0x08002fbc
 
 08000090 <DATA_BEG>:
  8000090:	20000000 	.word	0x20000000
@@ -1564,7 +1564,7 @@ void LED_On (unsigned int num) {
     GPIOD->BSRRL = led_mask[num];
  8000c62:	f44f 6340 	mov.w	r3, #3072	; 0xc00
  8000c66:	f2c4 0302 	movt	r3, #16386	; 0x4002
- 8000c6a:	f243 0248 	movw	r2, #12360	; 0x3048
+ 8000c6a:	f642 72ac 	movw	r2, #12204	; 0x2fac
  8000c6e:	f6c0 0200 	movt	r2, #2048	; 0x800
  8000c72:	6879      	ldr	r1, [r7, #4]
  8000c74:	f852 2021 	ldr.w	r2, [r2, r1, lsl #2]
@@ -1596,7 +1596,7 @@ void LED_Off (unsigned int num) {
     GPIOD->BSRRH = led_mask[num];
  8000c96:	f44f 6340 	mov.w	r3, #3072	; 0xc00
  8000c9a:	f2c4 0302 	movt	r3, #16386	; 0x4002
- 8000c9e:	f243 0248 	movw	r2, #12360	; 0x3048
+ 8000c9e:	f642 72ac 	movw	r2, #12204	; 0x2fac
  8000ca2:	f6c0 0200 	movt	r2, #2048	; 0x800
  8000ca6:	6879      	ldr	r1, [r7, #4]
  8000ca8:	f852 2021 	ldr.w	r2, [r2, r1, lsl #2]
@@ -5208,7 +5208,7 @@ int main (void) {
  8002f4c:	60bb      	str	r3, [r7, #8]
   uint32_t btns = 0;
  8002f4e:	f04f 0300 	mov.w	r3, #0
- 8002f52:	603b      	str	r3, [r7, #0]
+ 8002f52:	607b      	str	r3, [r7, #4]
 	
 	
 	//asmLDR_examples();
@@ -5252,112 +5252,15 @@ int main (void) {
  8002f9e:	f7fe fca7 	bl	80018f0 <BTN_Init>
   int toggle=0;
  8002fa2:	f04f 0300 	mov.w	r3, #0
- 8002fa6:	607b      	str	r3, [r7, #4]
-	
-  while(1) {                                    // Loop forever 
-		btns = BTN_Get();                           // Read button states       
- 8002fa8:	f7fe fce4 	bl	8001974 <BTN_Get>
- 8002fac:	6038      	str	r0, [r7, #0]
-
-    if (btns != (1UL << 0)) {
- 8002fae:	683b      	ldr	r3, [r7, #0]
- 8002fb0:	2b01      	cmp	r3, #1
- 8002fb2:	d03f      	beq.n	8003034 <main+0xf8>
-      // Calculate 'num': 0,1,...,LED_NUM-1,LED_NUM-1,...,1,0,0,...
-      num += dir;
- 8002fb4:	68fa      	ldr	r2, [r7, #12]
- 8002fb6:	68bb      	ldr	r3, [r7, #8]
- 8002fb8:	18d3      	adds	r3, r2, r3
- 8002fba:	60fb      	str	r3, [r7, #12]
-      if (num == LED_NUM) { dir = -1; num =  LED_NUM-1; } 
- 8002fbc:	68fb      	ldr	r3, [r7, #12]
- 8002fbe:	2b04      	cmp	r3, #4
- 8002fc0:	d106      	bne.n	8002fd0 <main+0x94>
- 8002fc2:	f04f 33ff 	mov.w	r3, #4294967295
- 8002fc6:	60bb      	str	r3, [r7, #8]
- 8002fc8:	f04f 0303 	mov.w	r3, #3
- 8002fcc:	60fb      	str	r3, [r7, #12]
- 8002fce:	e008      	b.n	8002fe2 <main+0xa6>
-      else if   (num < 0) { dir =  1; num =  0;         }
- 8002fd0:	68fb      	ldr	r3, [r7, #12]
- 8002fd2:	2b00      	cmp	r3, #0
- 8002fd4:	da05      	bge.n	8002fe2 <main+0xa6>
- 8002fd6:	f04f 0301 	mov.w	r3, #1
- 8002fda:	60bb      	str	r3, [r7, #8]
- 8002fdc:	f04f 0300 	mov.w	r3, #0
- 8002fe0:	60fb      	str	r3, [r7, #12]
-
-			if (toggle==0) {  	//LED and Delay in Assembly
- 8002fe2:	687b      	ldr	r3, [r7, #4]
- 8002fe4:	2b00      	cmp	r3, #0
- 8002fe6:	d111      	bne.n	800300c <main+0xd0>
-				asmLED_ON (num);
- 8002fe8:	68f8      	ldr	r0, [r7, #12]
- 8002fea:	f7fd f896 	bl	800011a <asmLED_ON>
-				MyasmDelay(50);
- 8002fee:	f04f 0032 	mov.w	r0, #50	; 0x32
- 8002ff2:	f7fd f886 	bl	8000102 <MyasmDelay>
-				asmLED_OFF(num);
- 8002ff6:	68f8      	ldr	r0, [r7, #12]
- 8002ff8:	f7fd f89b 	bl	8000132 <asmLED_OFF>
-				MyasmDelay(100);
- 8002ffc:	f04f 0064 	mov.w	r0, #100	; 0x64
- 8003000:	f7fd f87f 	bl	8000102 <MyasmDelay>
-				toggle=1;
- 8003004:	f04f 0301 	mov.w	r3, #1
- 8003008:	607b      	str	r3, [r7, #4]
+ 8002fa6:	603b      	str	r3, [r7, #0]
     else {
       LED_Out (0x0F);
       Delay(10);                                // Delay 10ms
     }
-
+	*/
   }
- 800300a:	e7cd      	b.n	8002fa8 <main+0x6c>
-				asmLED_OFF(num);
-				MyasmDelay(100);
-				toggle=1;
-			}
-			else {							//LED and Delay in C
-				LED_On (num);
- 800300c:	68fb      	ldr	r3, [r7, #12]
- 800300e:	4618      	mov	r0, r3
- 8003010:	f7fd fe20 	bl	8000c54 <LED_On>
-				Delay(50);
- 8003014:	f04f 0032 	mov.w	r0, #50	; 0x32
- 8003018:	f7fe fc4e 	bl	80018b8 <Delay>
-				LED_Off(num);
- 800301c:	68fb      	ldr	r3, [r7, #12]
- 800301e:	4618      	mov	r0, r3
- 8003020:	f7fd fe32 	bl	8000c88 <LED_Off>
-				Delay(100);
- 8003024:	f04f 0064 	mov.w	r0, #100	; 0x64
- 8003028:	f7fe fc46 	bl	80018b8 <Delay>
-				toggle=0;
- 800302c:	f04f 0300 	mov.w	r3, #0
- 8003030:	607b      	str	r3, [r7, #4]
-    else {
-      LED_Out (0x0F);
-      Delay(10);                                // Delay 10ms
-    }
+ 8002fa8:	e7fe      	b.n	8002fa8 <main+0x6c>
+ 8002faa:	bf00      	nop
 
-  }
- 8003032:	e7b9      	b.n	8002fa8 <main+0x6c>
-			}
-			
-			
-    }
-    else {
-      LED_Out (0x0F);
- 8003034:	f04f 000f 	mov.w	r0, #15
- 8003038:	f7fd fe40 	bl	8000cbc <LED_Out>
-      Delay(10);                                // Delay 10ms
- 800303c:	f04f 000a 	mov.w	r0, #10
- 8003040:	f7fe fc3a 	bl	80018b8 <Delay>
-    }
-
-  }
- 8003044:	e7b0      	b.n	8002fa8 <main+0x6c>
- 8003046:	bf00      	nop
-
-08003048 <led_mask>:
- 8003048:	1000 0000 2000 0000 4000 0000 8000 0000     ..... ...@......
+08002fac <led_mask>:
+ 8002fac:	1000 0000 2000 0000 4000 0000 8000 0000     ..... ...@......

@@ -1076,6 +1076,8 @@ int main (void) {
   int toggle=0;
 	
   while(1) {                                    // Loop forever 
+	
+		/*
 		btns = BTN_Get();                           // Read button states       
 
     if (btns != (1UL << 0)) {
@@ -1105,7 +1107,7 @@ int main (void) {
       LED_Out (0x0F);
       Delay(10);                                // Delay 10ms
     }
-
+	*/
   }
   
 }

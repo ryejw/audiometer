@@ -1064,36 +1064,7 @@ int main (void) {
   int toggle=0;
 
   while(1) {
-  btns = BTN_Get();
-
-    if (btns != (1UL << 0)) {
-
-      num += dir;
-      if (num == 4) { dir = -1; num = 4 -1; }
-      else if (num < 0) { dir = 1; num = 0; }
-
-   if (toggle==0) {
-    asmLED_ON (num);
-    MyasmDelay(50);
-    asmLED_OFF(num);
-    MyasmDelay(100);
-    toggle=1;
-   }
-   else {
-    LED_On (num);
-    Delay(50);
-    LED_Off(num);
-    Delay(100);
-    toggle=0;
-   }
-
-
-    }
-    else {
-      LED_Out (0x0F);
-      Delay(10);
-    }
-
+# 1112 "STM32F4main01.c"
   }
 
 }

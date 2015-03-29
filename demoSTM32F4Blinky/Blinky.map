@@ -18,7 +18,7 @@ Name             Origin             Length             Attributes
 Linker script and memory map
 
 
-.flash          0x08000000     0x3058
+.flash          0x08000000     0x2fbc
  *(.cs3.interrupt_vector)
  .cs3.interrupt_vector
                 0x08000000       0x40 aStartup.o
@@ -48,7 +48,7 @@ Linker script and memory map
                 0x08000c54                LED_On
                 0x08000c88                LED_Off
                 0x08000cbc                LED_Out
- .text          0x08000d08     0x2340 cMain.o
+ .text          0x08000d08     0x22a4 cMain.o
                 0x08000d08                SystemCoreClockUpdate
                 0x08000efc                SysTick_Handler
                 0x08000f64                switch_edge_handler
@@ -68,32 +68,32 @@ Linker script and memory map
                 0x08001b6c                seg7_update
                 0x08002f3c                main
  *(.rodata .rodata.*)
- .rodata        0x08003048       0x10 cLED.o
-                0x08003048                led_mask
-                0x08003058                __sidata = .
+ .rodata        0x08002fac       0x10 cLED.o
+                0x08002fac                led_mask
+                0x08002fbc                __sidata = .
 
-.glue_7         0x08003058        0x0
+.glue_7         0x08002fbc        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x08003058        0x0
+.glue_7t        0x08002fbc        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x08003058        0x0
+.vfp11_veneer   0x08002fbc        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x08003058        0x0
+.v4_bx          0x08002fbc        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x08003058        0x0
+.iplt           0x08002fbc        0x0
  .iplt          0x00000000        0x0 aStartup.o
 
-.igot.plt       0x08003058        0x0
+.igot.plt       0x08002fbc        0x0
  .igot.plt      0x00000000        0x0 aStartup.o
 
-.rel.dyn        0x08003058        0x0
+.rel.dyn        0x08002fbc        0x0
  .rel.iplt      0x00000000        0x0 aStartup.o
 
-.data_at_ram    0x20000000      0x1cc load address 0x08003058
+.data_at_ram    0x20000000      0x1cc load address 0x08002fbc
                 0x20000000                __sdata = .
  *(.data .data.*)
  .data          0x20000000        0x0 aStartup.o
@@ -162,11 +162,11 @@ OUTPUT(Blinky.elf elf32-littlearm)
                                  0x12 (size before relaxing)
  .comment       0x00000000       0x12 cMain.o
 
-.debug_line     0x00000000      0x4fc
+.debug_line     0x00000000      0x4da
  .debug_line    0x00000000       0x63 aStartup.o
  .debug_line    0x00000063       0xe8 aDemo.o
  .debug_line    0x0000014b       0xea cLED.o
- .debug_line    0x00000235      0x2c7 cMain.o
+ .debug_line    0x00000235      0x2a5 cMain.o
 
 .debug_info     0x00000000     0x13dc
  .debug_info    0x00000000       0x7e aStartup.o
@@ -190,7 +190,7 @@ OUTPUT(Blinky.elf elf32-littlearm)
  .debug_aranges
                 0x00000060       0x20 cMain.o
 
-.bss            0x200001d0      0x11c load address 0x08003230
+.bss            0x200001d0      0x11c load address 0x08003190
  COMMON         0x200001d0      0x110 aDemo.o
                 0x200001d0                Gshort
                 0x200001d2                Gchar

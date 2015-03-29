@@ -3864,7 +3864,7 @@ main:
 	str	r3, [r7, #8]
 	.loc 1 1058 0
 	mov	r3, #0
-	str	r3, [r7, #0]
+	str	r3, [r7, #4]
 	.loc 1 1064 0
 	movw	r3, #:lower16:SystemCoreClock
 	movt	r3, #:upper16:SystemCoreClock
@@ -3900,91 +3900,10 @@ main:
 	bl	BTN_Init
 	.loc 1 1077 0
 	mov	r3, #0
-	str	r3, [r7, #4]
-.L114:
-	.loc 1 1080 0
-	bl	BTN_Get
-	str	r0, [r7, #0]
-	.loc 1 1082 0
-	ldr	r3, [r7, #0]
-	cmp	r3, #1
-	beq	.L109
-	.loc 1 1084 0
-	ldr	r2, [r7, #12]
-	ldr	r3, [r7, #8]
-	adds	r3, r2, r3
-	str	r3, [r7, #12]
-	.loc 1 1085 0
-	ldr	r3, [r7, #12]
-	cmp	r3, #4
-	bne	.L110
-	.loc 1 1085 0 is_stmt 0 discriminator 1
-	mov	r3, #-1
-	str	r3, [r7, #8]
-	mov	r3, #3
-	str	r3, [r7, #12]
-	b	.L111
-.L110:
-	.loc 1 1086 0 is_stmt 1
-	ldr	r3, [r7, #12]
-	cmp	r3, #0
-	bge	.L111
-	.loc 1 1086 0 is_stmt 0 discriminator 1
-	mov	r3, #1
-	str	r3, [r7, #8]
-	mov	r3, #0
-	str	r3, [r7, #12]
-.L111:
-	.loc 1 1088 0 is_stmt 1
-	ldr	r3, [r7, #4]
-	cmp	r3, #0
-	bne	.L112
-	.loc 1 1089 0
-	ldr	r0, [r7, #12]
-	bl	asmLED_ON
-	.loc 1 1090 0
-	mov	r0, #50
-	bl	MyasmDelay
-	.loc 1 1091 0
-	ldr	r0, [r7, #12]
-	bl	asmLED_OFF
-	.loc 1 1092 0
-	mov	r0, #100
-	bl	MyasmDelay
-	.loc 1 1093 0
-	mov	r3, #1
-	str	r3, [r7, #4]
-	.loc 1 1110 0
-	b	.L114
-.L112:
-	.loc 1 1096 0
-	ldr	r3, [r7, #12]
-	mov	r0, r3
-	bl	LED_On
-	.loc 1 1097 0
-	mov	r0, #50
-	bl	Delay
-	.loc 1 1098 0
-	ldr	r3, [r7, #12]
-	mov	r0, r3
-	bl	LED_Off
-	.loc 1 1099 0
-	mov	r0, #100
-	bl	Delay
-	.loc 1 1100 0
-	mov	r3, #0
-	str	r3, [r7, #4]
-	.loc 1 1110 0
-	b	.L114
+	str	r3, [r7, #0]
 .L109:
-	.loc 1 1106 0
-	mov	r0, #15
-	bl	LED_Out
-	.loc 1 1107 0
-	mov	r0, #10
-	bl	Delay
-	.loc 1 1110 0
-	b	.L114
+	.loc 1 1112 0 discriminator 1
+	b	.L109
 	.cfi_endproc
 .LFE19:
 	.size	main, .-main
@@ -5647,7 +5566,7 @@ main:
 	.4byte	0x69
 	.byte	0x2
 	.byte	0x91
-	.sleb128 -24
+	.sleb128 -20
 	.uleb128 0x19
 	.byte	0x1
 	.4byte	.LASF200
@@ -5675,7 +5594,7 @@ main:
 	.4byte	0x89
 	.byte	0x2
 	.byte	0x91
-	.sleb128 -20
+	.sleb128 -24
 	.byte	0
 	.uleb128 0x26
 	.4byte	.LASF203
