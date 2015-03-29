@@ -25,6 +25,7 @@
 	int LED_GREEN = 0xC;
 	int LED_RED = 0x3;
 	int SWITCHES = 0x0;
+<<<<<<< HEAD
 	int SAMPLE_COUNTER=0;
 	#define QUEUE_SIZE 20
 	int SW_QUEUE[QUEUE_SIZE] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -35,6 +36,13 @@
 	int SW_PULSE = 0x0;
 	int PULSE_STATE = 0x0;
 		
+=======
+	#define SWITCH_SAMPLES 20
+	int SWITCH_QUEUE[SWITCH_SAMPLES] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	int SWITCH_COUNTER = 0;
+	int DEBOUNCE_COUNTER=0;
+	int SWITCH_DEBOUNCE = 0;
+>>>>>>> parent of f86263d... edge triggering
 	int SW_READ_ODD = 0;
 	int SW_READ_EVEN = 0;
 	int FREQ_VAL = 125;
@@ -405,66 +413,60 @@ volatile uint32_t msTicks;                      /* counts 1ms timeTicks       */
   SysTick_Handler
  *----------------------------------------------------------------------------*/
 void SysTick_Handler(void) {
-	//RUN EVERY 1 ms
   msTicks++; //need this for Delay()
+<<<<<<< HEAD
 	seg7_handler();
 	
 	//RUN EVERY 100 ms
 	if (SAMPLE_COUNTER < 20) {
 		SAMPLE_COUNTER++;
+=======
+	if (DEBOUNCE_COUNTER < 20) {
+		DEBOUNCE_COUNTER++;
+>>>>>>> parent of f86263d... edge triggering
 	}
 	else {
 		switch_cluster_handler();
-		switch_queue_handler();
-		switch_edge_handler();
 		mode_handler();
-		
-		SAMPLE_COUNTER = 0;
+		DEBOUNCE_COUNTER = 0;
 	}
+	//switch_queue_handler();
+	seg7_handler();
 }
 
 /*----------------------------------------------------------------------------
-  switch_edge_handler function
+  switch_debounce_handler function
  *----------------------------------------------------------------------------*/
-switch_edge_handler() {
-	//Reset edges
-	SW_POS_EDGE = 0x0;
-	SW_NEG_EDGE = 0x0;
-	
-	int i;
-	for (i=0; i<13; i++) {
-		//Check edges then update egdes and state
-		if (((SWITCHES & (0x1ul<<i))>>i) & !((SW_STATE & (0x1ul<<i))>>i)) { //sw=1, state=0
-				//positive edge
-				SW_POS_EDGE |= (0x1ul<<i);
-				//high state
-				SW_STATE |= (0x1ul<<i); //set
-		}
-		if (!((SWITCHES & (0x1ul<<i))>>i) & ((SW_STATE & (0x1ul<<i))>>i)) { //sw=0, state=1
-				//negative edge
-				SW_NEG_EDGE |= (0x1ul<<i);
-				//low state
-				SW_STATE &= ~(0x1ul<<i); //reset
+void switch_debounce_handler() {
+	if (SWITCH_COUNTER == SWITCH_SAMPLES) { //update every SWITCH_SAMPLES
+		int j=0;
+		for (j=0; j<13; j++) { //loop through all switches
+			int i=0;
+			for (i=0; i<SWITCH_SAMPLES-1; i++) {
+				if ((SWITCH_QUEUE[i] & (0x1ul<<j)) != (SWITCH_QUEUE[i+1] & (0x1ul<<j))) {
+					break;
+				}
+			}
+			if (i == SWITCH_SAMPLES-1) { //if loop makes it all the way through a.k.a. all switch samples are the same value
+				//update SWITCH_DEBOUNCE
+				SWITCH_DEBOUNCE &= ~(0x1ul<<j); //reset bit
+				SWITCH_DEBOUNCE += SWITCH_QUEUE[0] & (0x1ul<<j); //set bit
+			}
 		}
 	}
 }
 
 /*----------------------------------------------------------------------------
   switch_queue_handler function
-	NOTE: QUEUE[0] = newest item in queue
  *----------------------------------------------------------------------------*/
 void switch_queue_handler() { //build the switch queue
-	if (QUEUE_COUNTER < QUEUE_SIZE) {
-		int i;
-		for (i=QUEUE_SIZE; i>0; i--) { //shift all items in queue to the left by 1
-			SW_QUEUE[i] = SW_QUEUE[i-1];
-		}
-		SW_QUEUE[0] = SWITCHES;//store new item
-		
-		QUEUE_COUNTER++;
+	//NOTE: not actually a queue simply ovewrites oldest sample with newest
+	if (SWITCH_COUNTER < SWITCH_SAMPLES) {
+		SWITCH_QUEUE[SWITCH_COUNTER] = SWITCHES;
+		SWITCH_COUNTER++;
 	}
 	else {
-		QUEUE_COUNTER = 0; //reset switch counter
+		SWITCH_COUNTER = 0; //reset switch counter
 	}
 }
 
