@@ -139,11 +139,11 @@ SW_READ_EVEN:
 	.size	FREQ_VAL, 4
 FREQ_VAL:
 	.word	125
-	.global	INTENSITY_VAL
+	.global	TEST_VAL
 	.align	2
-	.type	INTENSITY_VAL, %object
-	.size	INTENSITY_VAL, 4
-INTENSITY_VAL:
+	.type	TEST_VAL, %object
+	.size	TEST_VAL, 4
+TEST_VAL:
 	.word	-10
 	.global	MODE
 	.bss
@@ -772,8 +772,8 @@ mode_handler:
 .L31:
 .LBB4:
 	.loc 1 477 0
-	movw	r3, #:lower16:SW_POS_EDGE
-	movt	r3, #:upper16:SW_POS_EDGE
+	movw	r3, #:lower16:SWITCHES
+	movt	r3, #:upper16:SWITCHES
 	ldr	r3, [r3, #0]
 	asr	r3, r3, #8
 	and	r3, r3, #1
@@ -788,8 +788,8 @@ mode_handler:
 	b	.L36
 .L34:
 	.loc 1 480 0
-	movw	r3, #:lower16:SW_POS_EDGE
-	movt	r3, #:upper16:SW_POS_EDGE
+	movw	r3, #:lower16:SWITCHES
+	movt	r3, #:upper16:SWITCHES
 	ldr	r3, [r3, #0]
 	asr	r3, r3, #9
 	and	r3, r3, #1
@@ -845,8 +845,8 @@ freq_mode_handler:
 	.loc 1 497 0
 	bl	display_frequency
 	.loc 1 498 0
-	movw	r3, #:lower16:SW_POS_EDGE
-	movt	r3, #:upper16:SW_POS_EDGE
+	movw	r3, #:lower16:SWITCHES
+	movt	r3, #:upper16:SWITCHES
 	ldr	r3, [r3, #0]
 	and	r3, r3, #512
 	cmp	r3, #0
@@ -903,7 +903,7 @@ freq_mode_handler:
 	movt	r3, #:upper16:FREQ_VAL
 	str	r2, [r3, #0]
 .L37:
-	.loc 1 528 0
+	.loc 1 507 0
 	pop	{r7, pc}
 	.cfi_endproc
 .LFE7:
@@ -915,7 +915,7 @@ freq_mode_handler:
 	.type	display_frequency, %function
 display_frequency:
 .LFB8:
-	.loc 1 534 0
+	.loc 1 513 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -930,17 +930,17 @@ display_frequency:
 	add	r7, sp, #0
 .LCFI23:
 	.cfi_def_cfa_register 7
-	.loc 1 536 0
+	.loc 1 515 0
 	movw	r3, #:lower16:FREQ_VAL
 	movt	r3, #:upper16:FREQ_VAL
 	ldr	r3, [r3, #0]
 	str	r3, [r7, #4]
-	.loc 1 538 0
+	.loc 1 517 0
 	ldr	r2, [r7, #4]
 	movw	r3, #999
 	cmp	r2, r3
 	ble	.L42
-	.loc 1 539 0
+	.loc 1 518 0
 	ldr	r2, [r7, #4]
 	movw	r3, #19923
 	movt	r3, 4194
@@ -951,7 +951,7 @@ display_frequency:
 	movw	r3, #:lower16:SEG7_DIGIT1
 	movt	r3, #:upper16:SEG7_DIGIT1
 	str	r2, [r3, #0]
-	.loc 1 540 0
+	.loc 1 519 0
 	movw	r3, #:lower16:SEG7_DIGIT1
 	movt	r3, #:upper16:SEG7_DIGIT1
 	ldr	r2, [r3, #0]
@@ -963,13 +963,13 @@ display_frequency:
 	str	r3, [r7, #4]
 	b	.L43
 .L42:
-	.loc 1 543 0
+	.loc 1 522 0
 	movw	r3, #:lower16:SEG7_DIGIT1
 	movt	r3, #:upper16:SEG7_DIGIT1
 	mov	r2, #10
 	str	r2, [r3, #0]
 .L43:
-	.loc 1 546 0
+	.loc 1 525 0
 	ldr	r2, [r7, #4]
 	movw	r3, #34079
 	movt	r3, 20971
@@ -980,7 +980,7 @@ display_frequency:
 	movw	r3, #:lower16:SEG7_DIGIT2
 	movt	r3, #:upper16:SEG7_DIGIT2
 	str	r2, [r3, #0]
-	.loc 1 547 0
+	.loc 1 526 0
 	movw	r3, #:lower16:SEG7_DIGIT2
 	movt	r3, #:upper16:SEG7_DIGIT2
 	ldr	r3, [r3, #0]
@@ -989,7 +989,7 @@ display_frequency:
 	ldr	r2, [r7, #4]
 	adds	r3, r2, r3
 	str	r3, [r7, #4]
-	.loc 1 548 0
+	.loc 1 527 0
 	ldr	r2, [r7, #4]
 	movw	r3, #26215
 	movt	r3, 26214
@@ -1000,7 +1000,7 @@ display_frequency:
 	movw	r3, #:lower16:SEG7_DIGIT3
 	movt	r3, #:upper16:SEG7_DIGIT3
 	str	r2, [r3, #0]
-	.loc 1 549 0
+	.loc 1 528 0
 	movw	r3, #:lower16:SEG7_DIGIT3
 	movt	r3, #:upper16:SEG7_DIGIT3
 	ldr	r3, [r3, #0]
@@ -1009,12 +1009,12 @@ display_frequency:
 	ldr	r2, [r7, #4]
 	adds	r3, r2, r3
 	str	r3, [r7, #4]
-	.loc 1 550 0
+	.loc 1 529 0
 	movw	r3, #:lower16:SEG7_DIGIT4
 	movt	r3, #:upper16:SEG7_DIGIT4
 	ldr	r2, [r7, #4]
 	str	r2, [r3, #0]
-	.loc 1 551 0
+	.loc 1 530 0
 	add	r7, r7, #12
 	mov	sp, r7
 	pop	{r7}
@@ -1029,7 +1029,7 @@ display_frequency:
 	.type	test_mode_handler, %function
 test_mode_handler:
 .LFB9:
-	.loc 1 555 0
+	.loc 1 534 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -1041,23 +1041,23 @@ test_mode_handler:
 	add	r7, sp, #0
 .LCFI25:
 	.cfi_def_cfa_register 7
-	.loc 1 556 0
+	.loc 1 535 0
 	bl	display_intensity
-	.loc 1 557 0
-	movw	r3, #:lower16:SW_POS_EDGE
-	movt	r3, #:upper16:SW_POS_EDGE
+	.loc 1 536 0
+	movw	r3, #:lower16:SWITCHES
+	movt	r3, #:upper16:SWITCHES
 	ldr	r3, [r3, #0]
 	asr	r3, r3, #8
 	and	r3, r3, #1
 	cmp	r3, #0
 	beq	.L44
-	.loc 1 558 0
+	.loc 1 537 0
 	movw	r3, #:lower16:MODE
 	movt	r3, #:upper16:MODE
 	mov	r2, #1
 	str	r2, [r3, #0]
 .L44:
-	.loc 1 560 0
+	.loc 1 539 0
 	pop	{r7, pc}
 	.cfi_endproc
 .LFE9:
@@ -1069,7 +1069,7 @@ test_mode_handler:
 	.type	display_intensity, %function
 display_intensity:
 .LFB10:
-	.loc 1 565 0
+	.loc 1 544 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -1084,43 +1084,43 @@ display_intensity:
 	add	r7, sp, #0
 .LCFI28:
 	.cfi_def_cfa_register 7
-	.loc 1 566 0
-	movw	r3, #:lower16:INTENSITY_VAL
-	movt	r3, #:upper16:INTENSITY_VAL
+	.loc 1 545 0
+	movw	r3, #:lower16:TEST_VAL
+	movt	r3, #:upper16:TEST_VAL
 	ldr	r3, [r3, #0]
 	str	r3, [r7, #4]
-	.loc 1 568 0
+	.loc 1 547 0
 	movw	r3, #:lower16:SEG7_DIGIT1
 	movt	r3, #:upper16:SEG7_DIGIT1
 	mov	r2, #10
 	str	r2, [r3, #0]
-	.loc 1 570 0
+	.loc 1 549 0
 	ldr	r3, [r7, #4]
 	cmp	r3, #0
 	bge	.L47
-	.loc 1 571 0
+	.loc 1 550 0
 	movw	r3, #:lower16:SEG7_DIGIT2
 	movt	r3, #:upper16:SEG7_DIGIT2
 	mov	r2, #17
 	str	r2, [r3, #0]
-	.loc 1 572 0
+	.loc 1 551 0
 	ldr	r3, [r7, #4]
 	rsb	r3, r3, #0
 	str	r3, [r7, #4]
 	b	.L48
 .L47:
-	.loc 1 574 0
+	.loc 1 553 0
 	ldr	r3, [r7, #4]
 	cmp	r3, #99
 	bgt	.L49
-	.loc 1 575 0
+	.loc 1 554 0
 	movw	r3, #:lower16:SEG7_DIGIT2
 	movt	r3, #:upper16:SEG7_DIGIT2
 	mov	r2, #10
 	str	r2, [r3, #0]
 	b	.L48
 .L49:
-	.loc 1 578 0
+	.loc 1 557 0
 	ldr	r2, [r7, #4]
 	movw	r3, #34079
 	movt	r3, 20971
@@ -1131,7 +1131,7 @@ display_intensity:
 	movw	r3, #:lower16:SEG7_DIGIT2
 	movt	r3, #:upper16:SEG7_DIGIT2
 	str	r2, [r3, #0]
-	.loc 1 579 0
+	.loc 1 558 0
 	movw	r3, #:lower16:SEG7_DIGIT2
 	movt	r3, #:upper16:SEG7_DIGIT2
 	ldr	r3, [r3, #0]
@@ -1141,7 +1141,7 @@ display_intensity:
 	adds	r3, r2, r3
 	str	r3, [r7, #4]
 .L48:
-	.loc 1 582 0
+	.loc 1 561 0
 	ldr	r2, [r7, #4]
 	movw	r3, #26215
 	movt	r3, 26214
@@ -1152,7 +1152,7 @@ display_intensity:
 	movw	r3, #:lower16:SEG7_DIGIT3
 	movt	r3, #:upper16:SEG7_DIGIT3
 	str	r2, [r3, #0]
-	.loc 1 583 0
+	.loc 1 562 0
 	movw	r3, #:lower16:SEG7_DIGIT3
 	movt	r3, #:upper16:SEG7_DIGIT3
 	ldr	r3, [r3, #0]
@@ -1161,12 +1161,12 @@ display_intensity:
 	ldr	r2, [r7, #4]
 	adds	r3, r2, r3
 	str	r3, [r7, #4]
-	.loc 1 584 0
+	.loc 1 563 0
 	movw	r3, #:lower16:SEG7_DIGIT4
 	movt	r3, #:upper16:SEG7_DIGIT4
 	ldr	r2, [r7, #4]
 	str	r2, [r3, #0]
-	.loc 1 585 0
+	.loc 1 564 0
 	add	r7, r7, #12
 	mov	sp, r7
 	pop	{r7}
@@ -1181,7 +1181,7 @@ display_intensity:
 	.type	switch_cluster_handler, %function
 switch_cluster_handler:
 .LFB11:
-	.loc 1 590 0
+	.loc 1 569 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -1193,28 +1193,28 @@ switch_cluster_handler:
 	add	r7, sp, #0
 .LCFI30:
 	.cfi_def_cfa_register 7
-	.loc 1 591 0
+	.loc 1 570 0
 	mov	r0, #1
 	bl	switch_handler
-	.loc 1 592 0
+	.loc 1 571 0
 	mov	r0, #3
 	bl	switch_handler
-	.loc 1 593 0
+	.loc 1 572 0
 	mov	r0, #5
 	bl	switch_handler
-	.loc 1 594 0
+	.loc 1 573 0
 	mov	r0, #7
 	bl	switch_handler
-	.loc 1 595 0
+	.loc 1 574 0
 	mov	r0, #9
 	bl	switch_handler
-	.loc 1 596 0
+	.loc 1 575 0
 	mov	r0, #11
 	bl	switch_handler
-	.loc 1 597 0
+	.loc 1 576 0
 	mov	r0, #13
 	bl	switch_handler
-	.loc 1 598 0
+	.loc 1 577 0
 	pop	{r7, pc}
 	.cfi_endproc
 .LFE11:
@@ -1226,7 +1226,7 @@ switch_cluster_handler:
 	.type	switch_handler, %function
 switch_handler:
 .LFB12:
-	.loc 1 603 0
+	.loc 1 582 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 16
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -1242,13 +1242,148 @@ switch_handler:
 .LCFI33:
 	.cfi_def_cfa_register 7
 	str	r0, [r7, #4]
-	.loc 1 605 0
+	.loc 1 584 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
 	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 585 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 586 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 587 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 588 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 589 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 590 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 593 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 594 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 597 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 600 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 601 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 602 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 603 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 604 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 605 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 606 0
@@ -1260,142 +1395,7 @@ switch_handler:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 607 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 608 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
 	.loc 1 609 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 610 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #1
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 611 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 614 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 615 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 618 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 621 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 622 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 623 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #1
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 624 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 625 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 626 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 627 0
-	mov	r3, #0
-	movt	r3, 16386
-	mov	r2, #0
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 630 0
 	ldr	r3, [r7, #4]
 	add	r3, r3, #-1
 	cmp	r3, #12
@@ -1418,7 +1418,7 @@ switch_handler:
 	.word	.L52+1
 	.word	.L59+1
 .L53:
-	.loc 1 632 0
+	.loc 1 611 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -1427,10 +1427,10 @@ switch_handler:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 633 0
+	.loc 1 612 0
 	b	.L52
 .L54:
-	.loc 1 635 0
+	.loc 1 614 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -1439,10 +1439,10 @@ switch_handler:
 	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 636 0
+	.loc 1 615 0
 	b	.L52
 .L55:
-	.loc 1 638 0
+	.loc 1 617 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -1451,10 +1451,10 @@ switch_handler:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 639 0
+	.loc 1 618 0
 	b	.L52
 .L56:
-	.loc 1 641 0
+	.loc 1 620 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -1463,10 +1463,10 @@ switch_handler:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 642 0
+	.loc 1 621 0
 	b	.L52
 .L57:
-	.loc 1 644 0
+	.loc 1 623 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -1475,10 +1475,10 @@ switch_handler:
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 645 0
+	.loc 1 624 0
 	b	.L52
 .L58:
-	.loc 1 647 0
+	.loc 1 626 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -1487,10 +1487,10 @@ switch_handler:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 648 0
+	.loc 1 627 0
 	b	.L52
 .L59:
-	.loc 1 650 0
+	.loc 1 629 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
@@ -1499,10 +1499,10 @@ switch_handler:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 651 0
+	.loc 1 630 0
 	nop
 .L52:
-	.loc 1 655 0
+	.loc 1 634 0
 	mov	r3, #3072
 	movt	r3, 16386
 	mov	r2, #3072
@@ -1511,7 +1511,7 @@ switch_handler:
 	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 656 0
+	.loc 1 635 0
 	mov	r3, #3072
 	movt	r3, 16386
 	mov	r2, #3072
@@ -1520,7 +1520,7 @@ switch_handler:
 	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 659 0
+	.loc 1 638 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -1529,10 +1529,10 @@ switch_handler:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 662 0
+	.loc 1 641 0
 	movw	r3, #57005
 	str	r3, [r7, #12]
-	.loc 1 663 0
+	.loc 1 642 0
 	mov	r3, #0
 	movt	r3, 16386
 	ldr	r3, [r3, #16]
@@ -1543,7 +1543,7 @@ switch_handler:
 	moveq	r3, #1
 	uxtb	r3, r3
 	str	r3, [r7, #12]
-	.loc 1 664 0
+	.loc 1 643 0
 	ldr	r3, [r7, #4]
 	add	r3, r3, #-1
 	mov	r2, #1
@@ -1557,7 +1557,7 @@ switch_handler:
 	movw	r3, #:lower16:SWITCHES
 	movt	r3, #:upper16:SWITCHES
 	str	r2, [r3, #0]
-	.loc 1 665 0
+	.loc 1 644 0
 	ldr	r3, [r7, #4]
 	add	r3, r3, #-1
 	ldr	r2, [r7, #12]
@@ -1569,7 +1569,7 @@ switch_handler:
 	movw	r3, #:lower16:SWITCHES
 	movt	r3, #:upper16:SWITCHES
 	str	r2, [r3, #0]
-	.loc 1 667 0
+	.loc 1 646 0
 	mov	r3, #2048
 	movt	r3, 16386
 	ldr	r3, [r3, #16]
@@ -1580,7 +1580,7 @@ switch_handler:
 	moveq	r3, #1
 	uxtb	r3, r3
 	str	r3, [r7, #12]
-	.loc 1 668 0
+	.loc 1 647 0
 	mov	r2, #1
 	ldr	r3, [r7, #4]
 	lsl	r3, r2, r3
@@ -1593,7 +1593,7 @@ switch_handler:
 	movw	r3, #:lower16:SWITCHES
 	movt	r3, #:upper16:SWITCHES
 	str	r2, [r3, #0]
-	.loc 1 669 0
+	.loc 1 648 0
 	ldr	r2, [r7, #12]
 	ldr	r3, [r7, #4]
 	lsl	r2, r2, r3
@@ -1604,15 +1604,15 @@ switch_handler:
 	movw	r3, #:lower16:SWITCHES
 	movt	r3, #:upper16:SWITCHES
 	str	r2, [r3, #0]
-	.loc 1 671 0
+	.loc 1 650 0
 	movw	r3, #2989
 	str	r3, [r7, #8]
-	.loc 1 672 0
+	.loc 1 651 0
 	movw	r3, #:lower16:SWITCHES
 	movt	r3, #:upper16:SWITCHES
 	ldr	r3, [r3, #0]
 	str	r3, [r7, #8]
-	.loc 1 675 0
+	.loc 1 654 0
 	add	r7, r7, #20
 	mov	sp, r7
 	pop	{r7}
@@ -1627,7 +1627,7 @@ switch_handler:
 	.type	Delay, %function
 Delay:
 .LFB13:
-	.loc 1 681 0
+	.loc 1 660 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 16
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -1643,14 +1643,14 @@ Delay:
 .LCFI36:
 	.cfi_def_cfa_register 7
 	str	r0, [r7, #4]
-	.loc 1 687 0
+	.loc 1 666 0
 	movw	r3, #9029
 	movt	r3, 1
 	str	r3, [r7, #12]
-	.loc 1 688 0
+	.loc 1 667 0
 	nop
 .L62:
-	.loc 1 688 0 is_stmt 0 discriminator 1
+	.loc 1 667 0 is_stmt 0 discriminator 1
 	ldr	r3, [r7, #12]
 	cmp	r3, #0
 	ite	eq
@@ -1662,9 +1662,9 @@ Delay:
 	str	r2, [r7, #12]
 	cmp	r3, #0
 	bne	.L62
-	.loc 1 689 0 is_stmt 1
+	.loc 1 668 0 is_stmt 1
 	nop
-	.loc 1 690 0
+	.loc 1 669 0
 	add	r7, r7, #20
 	mov	sp, r7
 	pop	{r7}
@@ -1679,7 +1679,7 @@ Delay:
 	.type	BTN_Init, %function
 BTN_Init:
 .LFB14:
-	.loc 1 696 0
+	.loc 1 675 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -1691,7 +1691,7 @@ BTN_Init:
 	add	r7, sp, #0
 .LCFI38:
 	.cfi_def_cfa_register 7
-	.loc 1 698 0
+	.loc 1 677 0
 	mov	r3, #14336
 	movt	r3, 16386
 	mov	r2, #14336
@@ -1699,7 +1699,7 @@ BTN_Init:
 	ldr	r2, [r2, #48]
 	orr	r2, r2, #1
 	str	r2, [r3, #48]
-	.loc 1 700 0
+	.loc 1 679 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
@@ -1707,7 +1707,7 @@ BTN_Init:
 	ldr	r2, [r2, #0]
 	bic	r2, r2, #3
 	str	r2, [r3, #0]
-	.loc 1 701 0
+	.loc 1 680 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
@@ -1715,7 +1715,7 @@ BTN_Init:
 	ldr	r2, [r2, #8]
 	bic	r2, r2, #3
 	str	r2, [r3, #8]
-	.loc 1 702 0
+	.loc 1 681 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
@@ -1723,7 +1723,7 @@ BTN_Init:
 	ldr	r2, [r2, #8]
 	orr	r2, r2, #2
 	str	r2, [r3, #8]
-	.loc 1 703 0
+	.loc 1 682 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
@@ -1731,7 +1731,7 @@ BTN_Init:
 	ldr	r2, [r2, #12]
 	bic	r2, r2, #3
 	str	r2, [r3, #12]
-	.loc 1 704 0
+	.loc 1 683 0
 	mov	sp, r7
 	pop	{r7}
 	bx	lr
@@ -1745,7 +1745,7 @@ BTN_Init:
 	.type	BTN_Get, %function
 BTN_Get:
 .LFB15:
-	.loc 1 709 0
+	.loc 1 688 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -1757,12 +1757,12 @@ BTN_Get:
 	add	r7, sp, #0
 .LCFI40:
 	.cfi_def_cfa_register 7
-	.loc 1 711 0
+	.loc 1 690 0
 	mov	r3, #0
 	movt	r3, 16386
 	ldr	r3, [r3, #16]
 	and	r3, r3, #1
-	.loc 1 712 0
+	.loc 1 691 0
 	mov	r0, r3
 	mov	sp, r7
 	pop	{r7}
@@ -1777,7 +1777,7 @@ BTN_Get:
 	.type	sub_uchar_from_quad_example, %function
 sub_uchar_from_quad_example:
 .LFB16:
-	.loc 1 736 0
+	.loc 1 715 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 40
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -1792,7 +1792,7 @@ sub_uchar_from_quad_example:
 	add	r7, sp, #0
 .LCFI43:
 	.cfi_def_cfa_register 7
-	.loc 1 739 0
+	.loc 1 718 0
 	mov	r3, #0
 	str	r3, [r7, #4]
 	mov	r3, #0
@@ -1801,10 +1801,10 @@ sub_uchar_from_quad_example:
 	str	r3, [r7, #12]
 	mov	r3, #4
 	str	r3, [r7, #16]
-	.loc 1 740 0
+	.loc 1 719 0
 	mov	r3, #1
 	strb	r3, [r7, #39]
-	.loc 1 741 0
+	.loc 1 720 0
 	add	r1, r7, #20
 	add	r2, r7, #4
 	ldrb	r3, [r7, #39]	@ zero_extendqisi2
@@ -1812,22 +1812,22 @@ sub_uchar_from_quad_example:
 	mov	r1, r2
 	mov	r2, r3
 	bl	sub_uchar_from_quad_asm
-	.loc 1 743 0
+	.loc 1 722 0
 	mov	r3, #0
 	str	r3, [r7, #4]
-	.loc 1 744 0
+	.loc 1 723 0
 	mov	r3, #0
 	str	r3, [r7, #8]
-	.loc 1 745 0
+	.loc 1 724 0
 	mov	r3, #3
 	str	r3, [r7, #12]
-	.loc 1 746 0
+	.loc 1 725 0
 	mov	r3, #16
 	str	r3, [r7, #16]
-	.loc 1 747 0
+	.loc 1 726 0
 	mov	r3, #32
 	strb	r3, [r7, #39]
-	.loc 1 748 0
+	.loc 1 727 0
 	add	r1, r7, #20
 	add	r2, r7, #4
 	ldrb	r3, [r7, #39]	@ zero_extendqisi2
@@ -1835,22 +1835,22 @@ sub_uchar_from_quad_example:
 	mov	r1, r2
 	mov	r2, r3
 	bl	sub_uchar_from_quad_asm
-	.loc 1 750 0
+	.loc 1 729 0
 	mov	r3, #-2147483648
 	str	r3, [r7, #4]
-	.loc 1 751 0
+	.loc 1 730 0
 	mov	r3, #0
 	str	r3, [r7, #8]
-	.loc 1 752 0
+	.loc 1 731 0
 	mov	r3, #0
 	str	r3, [r7, #12]
-	.loc 1 753 0
+	.loc 1 732 0
 	mov	r3, #0
 	str	r3, [r7, #16]
-	.loc 1 754 0
+	.loc 1 733 0
 	mov	r3, #1
 	strb	r3, [r7, #39]
-	.loc 1 755 0
+	.loc 1 734 0
 	add	r1, r7, #20
 	add	r2, r7, #4
 	ldrb	r3, [r7, #39]	@ zero_extendqisi2
@@ -1858,7 +1858,7 @@ sub_uchar_from_quad_example:
 	mov	r1, r2
 	mov	r2, r3
 	bl	sub_uchar_from_quad_asm
-	.loc 1 756 0
+	.loc 1 735 0
 	add	r7, r7, #40
 	mov	sp, r7
 	pop	{r7, pc}
@@ -1872,7 +1872,7 @@ sub_uchar_from_quad_example:
 	.type	seg7_handler, %function
 seg7_handler:
 .LFB17:
-	.loc 1 778 0
+	.loc 1 757 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -1884,7 +1884,7 @@ seg7_handler:
 	add	r7, sp, #0
 .LCFI45:
 	.cfi_def_cfa_register 7
-	.loc 1 779 0
+	.loc 1 758 0
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	ldr	r3, [r3, #0]
@@ -1902,14 +1902,14 @@ seg7_handler:
 	.word	.L74+1
 .L70:
 .LBB5:
-	.loc 1 781 0
+	.loc 1 760 0
 	movw	r3, #:lower16:SEG7_DIGIT1
 	movt	r3, #:upper16:SEG7_DIGIT1
 	ldr	r3, [r3, #0]
 	mov	r0, #1
 	mov	r1, r3
 	bl	seg7_update
-	.loc 1 782 0
+	.loc 1 761 0
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	ldr	r3, [r3, #0]
@@ -1917,17 +1917,17 @@ seg7_handler:
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	str	r2, [r3, #0]
-	.loc 1 783 0
+	.loc 1 762 0
 	b	.L77
 .L71:
-	.loc 1 785 0
+	.loc 1 764 0
 	movw	r3, #:lower16:SEG7_DIGIT2
 	movt	r3, #:upper16:SEG7_DIGIT2
 	ldr	r3, [r3, #0]
 	mov	r0, #2
 	mov	r1, r3
 	bl	seg7_update
-	.loc 1 786 0
+	.loc 1 765 0
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	ldr	r3, [r3, #0]
@@ -1935,17 +1935,17 @@ seg7_handler:
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	str	r2, [r3, #0]
-	.loc 1 787 0
+	.loc 1 766 0
 	b	.L77
 .L72:
-	.loc 1 789 0
+	.loc 1 768 0
 	movw	r3, #:lower16:SEG7_DIGIT3
 	movt	r3, #:upper16:SEG7_DIGIT3
 	ldr	r3, [r3, #0]
 	mov	r0, #3
 	mov	r1, r3
 	bl	seg7_update
-	.loc 1 790 0
+	.loc 1 769 0
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	ldr	r3, [r3, #0]
@@ -1953,17 +1953,17 @@ seg7_handler:
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	str	r2, [r3, #0]
-	.loc 1 791 0
+	.loc 1 770 0
 	b	.L77
 .L73:
-	.loc 1 793 0
+	.loc 1 772 0
 	movw	r3, #:lower16:SEG7_DIGIT4
 	movt	r3, #:upper16:SEG7_DIGIT4
 	ldr	r3, [r3, #0]
 	mov	r0, #4
 	mov	r1, r3
 	bl	seg7_update
-	.loc 1 794 0
+	.loc 1 773 0
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	ldr	r3, [r3, #0]
@@ -1971,17 +1971,17 @@ seg7_handler:
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	str	r2, [r3, #0]
-	.loc 1 795 0
+	.loc 1 774 0
 	b	.L77
 .L74:
-	.loc 1 797 0
+	.loc 1 776 0
 	movw	r3, #:lower16:SEG7_COLON_DEGREE
 	movt	r3, #:upper16:SEG7_COLON_DEGREE
 	ldr	r3, [r3, #0]
 	mov	r0, #5
 	mov	r1, r3
 	bl	seg7_update
-	.loc 1 798 0
+	.loc 1 777 0
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	ldr	r3, [r3, #0]
@@ -1989,19 +1989,19 @@ seg7_handler:
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	str	r2, [r3, #0]
-	.loc 1 799 0
+	.loc 1 778 0
 	b	.L77
 .L69:
-	.loc 1 801 0
+	.loc 1 780 0
 	movw	r3, #:lower16:SEG7_COUNTER
 	movt	r3, #:upper16:SEG7_COUNTER
 	mov	r2, #1
 	str	r2, [r3, #0]
-	.loc 1 802 0
+	.loc 1 781 0
 	nop
 .L77:
 .LBE5:
-	.loc 1 804 0
+	.loc 1 783 0
 	mov	r0, r3
 	pop	{r7, pc}
 	.cfi_endproc
@@ -2014,7 +2014,7 @@ seg7_handler:
 	.type	seg7_update, %function
 seg7_update:
 .LFB18:
-	.loc 1 809 0
+	.loc 1 788 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 8
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -2031,7 +2031,7 @@ seg7_update:
 	.cfi_def_cfa_register 7
 	str	r0, [r7, #4]
 	str	r1, [r7, #0]
-	.loc 1 811 0
+	.loc 1 790 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2040,7 +2040,7 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 814 0
+	.loc 1 793 0
 	ldr	r3, [r7, #0]
 	cmp	r3, #17
 	bhi	.L79
@@ -2067,7 +2067,7 @@ seg7_update:
 	.word	.L96+1
 	.word	.L97+1
 .L80:
-	.loc 1 816 0
+	.loc 1 795 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2076,7 +2076,7 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 817 0
+	.loc 1 796 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2085,13 +2085,172 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 818 0
+	.loc 1 797 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 798 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 799 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 800 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 801 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 802 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 803 0
+	b	.L79
+.L81:
+	.loc 1 805 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 806 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 807 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 808 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 809 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 810 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 811 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 812 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 813 0
+	b	.L79
+.L82:
+	.loc 1 815 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 816 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 817 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 818 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 819 0
@@ -2100,37 +2259,28 @@ seg7_update:
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 820 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
+	.loc 1 820 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 821 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #4
+	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 822 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 823 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2139,19 +2289,19 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 824 0
+	.loc 1 823 0
 	b	.L79
-.L81:
-	.loc 1 826 0
+.L83:
+	.loc 1 825 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 827 0
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 826 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2160,13 +2310,22 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 828 0
+	.loc 1 827 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 828 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 829 0
@@ -2175,16 +2334,16 @@ seg7_update:
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
+	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 830 0
-	mov	r3, #1024
+	mov	r3, #2048
 	movt	r3, 16386
-	mov	r2, #1024
+	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
+	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 831 0
@@ -2192,20 +2351,11 @@ seg7_update:
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 832 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #16
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 833 0
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 832 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2214,19 +2364,19 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 834 0
+	.loc 1 833 0
 	b	.L79
-.L82:
-	.loc 1 836 0
+.L84:
+	.loc 1 835 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 837 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 836 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2235,13 +2385,22 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 838 0
+	.loc 1 837 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 838 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 839 0
@@ -2249,17 +2408,17 @@ seg7_update:
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #32
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 840 0
-	mov	r3, #1024
+	mov	r3, #2048
 	movt	r3, 16386
-	mov	r2, #1024
+	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2048
+	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 841 0
@@ -2267,20 +2426,11 @@ seg7_update:
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 842 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
 	ldrh	r2, [r2, #26]
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 843 0
+	.loc 1 842 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2289,10 +2439,10 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 844 0
+	.loc 1 843 0
 	b	.L79
-.L83:
-	.loc 1 846 0
+.L85:
+	.loc 1 845 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2301,22 +2451,31 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 847 0
+	.loc 1 846 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 848 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 847 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 848 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 849 0
@@ -2324,29 +2483,20 @@ seg7_update:
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 850 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
 	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 851 0
+	.loc 1 850 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #4
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 852 0
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 851 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2355,7 +2505,7 @@ seg7_update:
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 853 0
+	.loc 1 852 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2364,34 +2514,43 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 854 0
+	.loc 1 853 0
 	b	.L79
-.L84:
-	.loc 1 856 0
+.L86:
+	.loc 1 855 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 857 0
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 856 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 858 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 857 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 858 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 859 0
@@ -2399,38 +2558,29 @@ seg7_update:
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 860 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2048
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 860 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
 	.loc 1 861 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 862 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 863 0
+	.loc 1 862 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2439,10 +2589,10 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 864 0
+	.loc 1 863 0
 	b	.L79
-.L85:
-	.loc 1 866 0
+.L87:
+	.loc 1 865 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2451,16 +2601,16 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 867 0
+	.loc 1 866 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 868 0
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 867 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
@@ -2469,16 +2619,16 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 869 0
+	.loc 1 868 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 870 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 869 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2487,7 +2637,7 @@ seg7_update:
 	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 871 0
+	.loc 1 870 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2496,16 +2646,16 @@ seg7_update:
 	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 872 0
+	.loc 1 871 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #16
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 873 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 872 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2514,10 +2664,10 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 874 0
+	.loc 1 873 0
 	b	.L79
-.L86:
-	.loc 1 876 0
+.L88:
+	.loc 1 875 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2526,22 +2676,31 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 877 0
+	.loc 1 876 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 878 0
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 877 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 878 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 879 0
@@ -2550,16 +2709,16 @@ seg7_update:
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #32
+	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 880 0
-	mov	r3, #1024
+	mov	r3, #2048
 	movt	r3, 16386
-	mov	r2, #1024
+	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2048
+	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 881 0
@@ -2568,19 +2727,10 @@ seg7_update:
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 882 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 883 0
+	.loc 1 882 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2589,10 +2739,10 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 884 0
+	.loc 1 883 0
 	b	.L79
-.L87:
-	.loc 1 886 0
+.L89:
+	.loc 1 885 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2601,61 +2751,61 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 887 0
+	.loc 1 886 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 887 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 888 0
-	mov	r3, #0
+	mov	r3, #1024
 	movt	r3, 16386
-	mov	r2, #0
+	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 889 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 890 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
+	.loc 1 890 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
 	.loc 1 891 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #4
+	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 892 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 893 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2664,73 +2814,73 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 894 0
+	.loc 1 893 0
 	b	.L79
-.L88:
-	.loc 1 896 0
+.L90:
+	.loc 1 895 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 897 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 896 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 898 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 897 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 898 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 899 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 900 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2048
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 900 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 901 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 902 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #16
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 903 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 902 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2739,10 +2889,10 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 904 0
+	.loc 1 903 0
 	b	.L79
-.L89:
-	.loc 1 906 0
+.L91:
+	.loc 1 905 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2751,7 +2901,7 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 907 0
+	.loc 1 906 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2760,31 +2910,40 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 908 0
+	.loc 1 907 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 908 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 909 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
+	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 910 0
-	mov	r3, #1024
+	mov	r3, #2048
 	movt	r3, 16386
-	mov	r2, #1024
+	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
+	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 911 0
@@ -2792,20 +2951,11 @@ seg7_update:
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 912 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #16
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 913 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 912 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2814,10 +2964,10 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 914 0
+	.loc 1 913 0
 	b	.L79
-.L90:
-	.loc 1 916 0
+.L92:
+	.loc 1 915 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2826,7 +2976,7 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 917 0
+	.loc 1 916 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2835,13 +2985,22 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 918 0
+	.loc 1 917 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 918 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 919 0
@@ -2850,16 +3009,16 @@ seg7_update:
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
+	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 920 0
-	mov	r3, #1024
+	mov	r3, #2048
 	movt	r3, 16386
-	mov	r2, #1024
+	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
+	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 921 0
@@ -2868,19 +3027,10 @@ seg7_update:
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 922 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 923 0
+	.loc 1 922 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2889,10 +3039,10 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 924 0
+	.loc 1 923 0
 	b	.L79
-.L91:
-	.loc 1 926 0
+.L93:
+	.loc 1 925 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -2901,7 +3051,7 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 927 0
+	.loc 1 926 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2910,13 +3060,22 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 928 0
+	.loc 1 927 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 928 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 929 0
@@ -2925,16 +3084,16 @@ seg7_update:
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
+	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 930 0
-	mov	r3, #1024
+	mov	r3, #2048
 	movt	r3, 16386
-	mov	r2, #1024
+	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
+	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 931 0
@@ -2943,19 +3102,10 @@ seg7_update:
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 932 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 933 0
+	.loc 1 932 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2964,19 +3114,19 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 934 0
+	.loc 1 933 0
 	b	.L79
-.L92:
-	.loc 1 936 0
+.L94:
+	.loc 1 935 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 937 0
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 936 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -2985,13 +3135,22 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 938 0
+	.loc 1 937 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 938 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 939 0
@@ -2999,38 +3158,29 @@ seg7_update:
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 940 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2048
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 940 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
 	.loc 1 941 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 942 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #16
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 943 0
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 942 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -3039,37 +3189,37 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 944 0
+	.loc 1 943 0
 	b	.L79
-.L93:
-	.loc 1 946 0
+.L95:
+	.loc 1 945 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 947 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 946 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 947 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 948 0
-	mov	r3, #0
-	movt	r3, 16386
-	mov	r2, #0
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 949 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -3078,34 +3228,34 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 950 0
+	.loc 1 949 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2048
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 950 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
 	.loc 1 951 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 952 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #16
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 953 0
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 952 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -3114,19 +3264,19 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 954 0
+	.loc 1 953 0
 	b	.L79
-.L94:
-	.loc 1 956 0
+.L96:
+	.loc 1 955 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 957 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 956 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -3135,13 +3285,22 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 958 0
+	.loc 1 957 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
+	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 958 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 959 0
@@ -3150,37 +3309,28 @@ seg7_update:
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 960 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
 	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
+	.loc 1 960 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 961 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 962 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 963 0
+	.loc 1 962 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -3189,10 +3339,10 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 964 0
+	.loc 1 963 0
 	b	.L79
-.L95:
-	.loc 1 966 0
+.L97:
+	.loc 1 965 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -3201,61 +3351,61 @@ seg7_update:
 	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 967 0
+	.loc 1 966 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 967 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 968 0
-	mov	r3, #0
+	mov	r3, #1024
 	movt	r3, 16386
-	mov	r2, #0
+	mov	r2, #1024
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 969 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
+	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 970 0
-	mov	r3, #1024
+	mov	r3, #2048
 	movt	r3, 16386
-	mov	r2, #1024
+	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2048
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #4
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 971 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 972 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 973 0
+	.loc 1 972 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -3264,178 +3414,28 @@ seg7_update:
 	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 974 0
-	b	.L79
-.L96:
-	.loc 1 976 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 977 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
+	.loc 1 973 0
+	nop
+.L79:
 	.loc 1 978 0
-	mov	r3, #0
+	mov	r3, #3072
 	movt	r3, 16386
-	mov	r2, #0
+	mov	r2, #3072
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2
+	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
 	.loc 1 979 0
-	mov	r3, #1024
+	mov	r3, #3072
 	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 980 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 981 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
+	mov	r2, #3072
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
 	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 982 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 983 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #1
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 984 0
-	b	.L79
-.L97:
-	.loc 1 986 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 987 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 988 0
-	mov	r3, #0
-	movt	r3, 16386
-	mov	r2, #0
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 989 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 990 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 991 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 992 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 993 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #1
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 994 0
-	nop
-.L79:
-	.loc 1 999 0
-	mov	r3, #3072
-	movt	r3, 16386
-	mov	r2, #3072
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 1000 0
-	mov	r3, #3072
-	movt	r3, 16386
-	mov	r2, #3072
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1003 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
@@ -3444,7 +3444,7 @@ seg7_update:
 	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1006 0
+	.loc 1 985 0
 	ldr	r3, [r7, #4]
 	add	r3, r3, #-1
 	cmp	r3, #4
@@ -3459,7 +3459,7 @@ seg7_update:
 	.word	.L103+1
 	.word	.L104+1
 .L100:
-	.loc 1 1008 0
+	.loc 1 987 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -3468,7 +3468,7 @@ seg7_update:
 	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 1009 0
+	.loc 1 988 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
@@ -3477,13 +3477,172 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1010 0
+	.loc 1 989 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
 	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 990 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 991 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 992 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 993 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 994 0
+	b	.L99
+.L101:
+	.loc 1 996 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 997 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 998 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 999 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1000 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1001 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1002 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2048
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1003 0
+	b	.L99
+.L102:
+	.loc 1 1005 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #4
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1006 0
+	mov	r3, #0
+	movt	r3, 16386
+	mov	r2, #0
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1007 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 1008 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1009 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1010 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 1011 0
@@ -3492,40 +3651,13 @@ seg7_update:
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1012 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1013 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #1
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1014 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1015 0
+	.loc 1 1012 0
 	b	.L99
-.L101:
-	.loc 1 1017 0
+.L103:
+	.loc 1 1014 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -3534,22 +3666,49 @@ seg7_update:
 	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1018 0
+	.loc 1 1015 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
 	movt	r2, 16386
-	ldrh	r2, [r2, #26]
+	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2
 	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 1019 0
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1016 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
 	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1017 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 1018 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #32
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1019 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 1020 0
@@ -3558,40 +3717,13 @@ seg7_update:
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1021 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1022 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #1
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1023 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1024 0
+	.loc 1 1021 0
 	b	.L99
-.L102:
-	.loc 1 1026 0
+.L104:
+	.loc 1 1023 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
@@ -3600,7 +3732,7 @@ seg7_update:
 	orr	r2, r2, #4
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1027 0
+	.loc 1 1024 0
 	mov	r3, #0
 	movt	r3, 16386
 	mov	r2, #0
@@ -3609,223 +3741,91 @@ seg7_update:
 	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1028 0
+	.loc 1 1025 0
+	mov	r3, #2048
+	movt	r3, 16386
+	mov	r2, #2048
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #16
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1026 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #2
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
+	.loc 1 1027 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #16
+	orr	r2, r2, #32
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
+	.loc 1 1028 0
+	mov	r3, #1024
+	movt	r3, 16386
+	mov	r2, #1024
+	movt	r2, 16386
+	ldrh	r2, [r2, #24]
+	orr	r2, r2, #1
+	uxth	r2, r2
+	strh	r2, [r3, #24]	@ movhi
 	.loc 1 1029 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
+	orr	r2, r2, #2048
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 1030 0
+	nop
+.L99:
+	.loc 1 1033 0
 	mov	r3, #2048
 	movt	r3, 16386
 	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2048
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1031 0
-	mov	r3, #1024
+	strh	r2, [r3, #26]	@ movhi
+	.loc 1 1034 0
+	mov	r3, #2048
 	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #1
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1032 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
+	mov	r2, #2048
 	movt	r2, 16386
 	ldrh	r2, [r2, #24]
 	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1033 0
-	b	.L99
-.L103:
-	.loc 1 1035 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1036 0
-	mov	r3, #0
-	movt	r3, 16386
-	mov	r2, #0
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
 	uxth	r2, r2
 	strh	r2, [r3, #24]	@ movhi
 	.loc 1 1037 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1038 0
 	mov	r3, #1024
 	movt	r3, 16386
 	mov	r2, #1024
 	movt	r2, 16386
 	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2
+	orr	r2, r2, #16
 	uxth	r2, r2
 	strh	r2, [r3, #26]	@ movhi
-	.loc 1 1039 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
 	.loc 1 1040 0
-	mov	r3, #1024
+	mov	r3, #2048
 	movt	r3, 16386
-	mov	r2, #1024
+	mov	r2, #2048
 	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #1
+	ldrh	r2, [r2, #26]
+	orr	r2, r2, #2
 	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
+	strh	r2, [r3, #26]	@ movhi
 	.loc 1 1041 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1042 0
-	b	.L99
-.L104:
-	.loc 1 1044 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #4
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1045 0
-	mov	r3, #0
-	movt	r3, 16386
-	mov	r2, #0
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1046 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1047 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1048 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #32
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 1049 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #1
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1050 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1051 0
-	nop
-.L99:
-	.loc 1 1054 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 1055 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #24]
-	orr	r2, r2, #2048
-	uxth	r2, r2
-	strh	r2, [r3, #24]	@ movhi
-	.loc 1 1058 0
-	mov	r3, #1024
-	movt	r3, 16386
-	mov	r2, #1024
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #16
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 1061 0
-	mov	r3, #2048
-	movt	r3, 16386
-	mov	r2, #2048
-	movt	r2, 16386
-	ldrh	r2, [r2, #26]
-	orr	r2, r2, #2
-	uxth	r2, r2
-	strh	r2, [r3, #26]	@ movhi
-	.loc 1 1062 0
 	mov	r0, r3
 	add	r7, r7, #12
 	mov	sp, r7
@@ -3841,7 +3841,7 @@ seg7_update:
 	.type	main, %function
 main:
 .LFB19:
-	.loc 1 1068 0
+	.loc 1 1047 0
 	.cfi_startproc
 	@ args = 0, pretend = 0, frame = 16
 	@ frame_needed = 1, uses_anonymous_args = 0
@@ -3856,24 +3856,24 @@ main:
 	add	r7, sp, #0
 .LCFI51:
 	.cfi_def_cfa_register 7
-	.loc 1 1077 0
+	.loc 1 1056 0
 	mov	r3, #-1
 	str	r3, [r7, #12]
-	.loc 1 1078 0
+	.loc 1 1057 0
 	mov	r3, #1
 	str	r3, [r7, #8]
-	.loc 1 1079 0
+	.loc 1 1058 0
 	mov	r3, #0
 	str	r3, [r7, #0]
-	.loc 1 1085 0
+	.loc 1 1064 0
 	movw	r3, #:lower16:SystemCoreClock
 	movt	r3, #:upper16:SystemCoreClock
 	mov	r2, #31232
 	movt	r2, 2563
 	str	r2, [r3, #0]
-	.loc 1 1090 0
+	.loc 1 1069 0
 	bl	SystemCoreClockUpdate
-	.loc 1 1091 0
+	.loc 1 1070 0
 	movw	r3, #:lower16:SystemCoreClock
 	movt	r3, #:upper16:SystemCoreClock
 	ldr	r2, [r3, #0]
@@ -3887,103 +3887,103 @@ main:
 	cmp	r3, #0
 	beq	.L107
 .L108:
-	.loc 1 1092 0 discriminator 1
+	.loc 1 1071 0 discriminator 1
 	b	.L108
 .L107:
-	.loc 1 1094 0
+	.loc 1 1073 0
 	bl	SEG7_Init
-	.loc 1 1095 0
+	.loc 1 1074 0
 	bl	switch_init
-	.loc 1 1096 0
+	.loc 1 1075 0
 	bl	LED_Init
-	.loc 1 1097 0
+	.loc 1 1076 0
 	bl	BTN_Init
-	.loc 1 1098 0
+	.loc 1 1077 0
 	mov	r3, #0
 	str	r3, [r7, #4]
 .L114:
-	.loc 1 1101 0
+	.loc 1 1080 0
 	bl	BTN_Get
 	str	r0, [r7, #0]
-	.loc 1 1103 0
+	.loc 1 1082 0
 	ldr	r3, [r7, #0]
 	cmp	r3, #1
 	beq	.L109
-	.loc 1 1105 0
+	.loc 1 1084 0
 	ldr	r2, [r7, #12]
 	ldr	r3, [r7, #8]
 	adds	r3, r2, r3
 	str	r3, [r7, #12]
-	.loc 1 1106 0
+	.loc 1 1085 0
 	ldr	r3, [r7, #12]
 	cmp	r3, #4
 	bne	.L110
-	.loc 1 1106 0 is_stmt 0 discriminator 1
+	.loc 1 1085 0 is_stmt 0 discriminator 1
 	mov	r3, #-1
 	str	r3, [r7, #8]
 	mov	r3, #3
 	str	r3, [r7, #12]
 	b	.L111
 .L110:
-	.loc 1 1107 0 is_stmt 1
+	.loc 1 1086 0 is_stmt 1
 	ldr	r3, [r7, #12]
 	cmp	r3, #0
 	bge	.L111
-	.loc 1 1107 0 is_stmt 0 discriminator 1
+	.loc 1 1086 0 is_stmt 0 discriminator 1
 	mov	r3, #1
 	str	r3, [r7, #8]
 	mov	r3, #0
 	str	r3, [r7, #12]
 .L111:
-	.loc 1 1109 0 is_stmt 1
+	.loc 1 1088 0 is_stmt 1
 	ldr	r3, [r7, #4]
 	cmp	r3, #0
 	bne	.L112
-	.loc 1 1110 0
+	.loc 1 1089 0
 	ldr	r0, [r7, #12]
 	bl	asmLED_ON
-	.loc 1 1111 0
+	.loc 1 1090 0
 	mov	r0, #50
 	bl	MyasmDelay
-	.loc 1 1112 0
+	.loc 1 1091 0
 	ldr	r0, [r7, #12]
 	bl	asmLED_OFF
-	.loc 1 1113 0
+	.loc 1 1092 0
 	mov	r0, #100
 	bl	MyasmDelay
-	.loc 1 1114 0
+	.loc 1 1093 0
 	mov	r3, #1
 	str	r3, [r7, #4]
-	.loc 1 1131 0
+	.loc 1 1110 0
 	b	.L114
 .L112:
-	.loc 1 1117 0
+	.loc 1 1096 0
 	ldr	r3, [r7, #12]
 	mov	r0, r3
 	bl	LED_On
-	.loc 1 1118 0
+	.loc 1 1097 0
 	mov	r0, #50
 	bl	Delay
-	.loc 1 1119 0
+	.loc 1 1098 0
 	ldr	r3, [r7, #12]
 	mov	r0, r3
 	bl	LED_Off
-	.loc 1 1120 0
+	.loc 1 1099 0
 	mov	r0, #100
 	bl	Delay
-	.loc 1 1121 0
+	.loc 1 1100 0
 	mov	r3, #0
 	str	r3, [r7, #4]
-	.loc 1 1131 0
+	.loc 1 1110 0
 	b	.L114
 .L109:
-	.loc 1 1127 0
+	.loc 1 1106 0
 	mov	r0, #15
 	bl	LED_Out
-	.loc 1 1128 0
+	.loc 1 1107 0
 	mov	r0, #10
 	bl	Delay
-	.loc 1 1131 0
+	.loc 1 1110 0
 	b	.L114
 	.cfi_endproc
 .LFE19:
@@ -5357,7 +5357,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF184
 	.byte	0x1
-	.2byte	0x216
+	.2byte	0x201
 	.4byte	.LFB8
 	.4byte	.LFE8
 	.4byte	.LLST8
@@ -5366,7 +5366,7 @@ main:
 	.uleb128 0x14
 	.4byte	.LASF185
 	.byte	0x1
-	.2byte	0x218
+	.2byte	0x203
 	.4byte	0x89
 	.byte	0x2
 	.byte	0x91
@@ -5376,7 +5376,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF183
 	.byte	0x1
-	.2byte	0x22b
+	.2byte	0x216
 	.4byte	.LFB9
 	.4byte	.LFE9
 	.4byte	.LLST9
@@ -5386,7 +5386,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF186
 	.byte	0x1
-	.2byte	0x22c
+	.2byte	0x217
 	.4byte	0x89
 	.byte	0x1
 	.uleb128 0x1a
@@ -5396,7 +5396,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF186
 	.byte	0x1
-	.2byte	0x235
+	.2byte	0x220
 	.4byte	.LFB10
 	.4byte	.LFE10
 	.4byte	.LLST10
@@ -5405,7 +5405,7 @@ main:
 	.uleb128 0x13
 	.ascii	"val\000"
 	.byte	0x1
-	.2byte	0x236
+	.2byte	0x221
 	.4byte	0x89
 	.byte	0x2
 	.byte	0x91
@@ -5415,7 +5415,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF178
 	.byte	0x1
-	.2byte	0x24e
+	.2byte	0x239
 	.4byte	.LFB11
 	.4byte	.LFE11
 	.4byte	.LLST11
@@ -5425,7 +5425,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF187
 	.byte	0x1
-	.2byte	0x24f
+	.2byte	0x23a
 	.4byte	0x89
 	.byte	0x1
 	.uleb128 0x1a
@@ -5435,7 +5435,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF187
 	.byte	0x1
-	.2byte	0x25b
+	.2byte	0x246
 	.byte	0x1
 	.4byte	.LFB12
 	.4byte	.LFE12
@@ -5445,7 +5445,7 @@ main:
 	.uleb128 0x16
 	.4byte	.LASF188
 	.byte	0x1
-	.2byte	0x25b
+	.2byte	0x246
 	.4byte	0x89
 	.byte	0x2
 	.byte	0x91
@@ -5453,7 +5453,7 @@ main:
 	.uleb128 0x13
 	.ascii	"val\000"
 	.byte	0x1
-	.2byte	0x296
+	.2byte	0x281
 	.4byte	0x89
 	.byte	0x2
 	.byte	0x91
@@ -5461,7 +5461,7 @@ main:
 	.uleb128 0x13
 	.ascii	"sw\000"
 	.byte	0x1
-	.2byte	0x29f
+	.2byte	0x28a
 	.4byte	0x89
 	.byte	0x2
 	.byte	0x91
@@ -5471,7 +5471,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF189
 	.byte	0x1
-	.2byte	0x2a9
+	.2byte	0x294
 	.byte	0x1
 	.4byte	.LFB13
 	.4byte	.LFE13
@@ -5481,7 +5481,7 @@ main:
 	.uleb128 0x16
 	.4byte	.LASF190
 	.byte	0x1
-	.2byte	0x2a9
+	.2byte	0x294
 	.4byte	0x69
 	.byte	0x2
 	.byte	0x91
@@ -5489,7 +5489,7 @@ main:
 	.uleb128 0x14
 	.4byte	.LASF191
 	.byte	0x1
-	.2byte	0x2aa
+	.2byte	0x295
 	.4byte	0x69
 	.byte	0x2
 	.byte	0x91
@@ -5499,7 +5499,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF233
 	.byte	0x1
-	.2byte	0x2b8
+	.2byte	0x2a3
 	.byte	0x1
 	.4byte	.LFB14
 	.4byte	.LFE14
@@ -5509,7 +5509,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF234
 	.byte	0x1
-	.2byte	0x2c5
+	.2byte	0x2b0
 	.byte	0x1
 	.4byte	0x69
 	.4byte	.LFB15
@@ -5520,7 +5520,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF192
 	.byte	0x1
-	.2byte	0x2e0
+	.2byte	0x2cb
 	.4byte	.LFB16
 	.4byte	.LFE16
 	.4byte	.LLST16
@@ -5529,7 +5529,7 @@ main:
 	.uleb128 0x14
 	.4byte	.LASF193
 	.byte	0x1
-	.2byte	0x2e1
+	.2byte	0x2cc
 	.4byte	0xc19
 	.byte	0x2
 	.byte	0x91
@@ -5537,7 +5537,7 @@ main:
 	.uleb128 0x14
 	.4byte	.LASF194
 	.byte	0x1
-	.2byte	0x2e3
+	.2byte	0x2ce
 	.4byte	0xc19
 	.byte	0x2
 	.byte	0x91
@@ -5545,7 +5545,7 @@ main:
 	.uleb128 0x14
 	.4byte	.LASF195
 	.byte	0x1
-	.2byte	0x2e4
+	.2byte	0x2cf
 	.4byte	0x37
 	.byte	0x2
 	.byte	0x91
@@ -5562,7 +5562,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF177
 	.byte	0x1
-	.2byte	0x30a
+	.2byte	0x2f5
 	.4byte	0x89
 	.4byte	.LFB17
 	.4byte	.LFE17
@@ -5576,7 +5576,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF196
 	.byte	0x1
-	.2byte	0x30d
+	.2byte	0x2f8
 	.4byte	0x89
 	.byte	0x1
 	.uleb128 0x1a
@@ -5587,7 +5587,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF196
 	.byte	0x1
-	.2byte	0x329
+	.2byte	0x314
 	.byte	0x1
 	.4byte	0x89
 	.4byte	.LFB18
@@ -5598,7 +5598,7 @@ main:
 	.uleb128 0x16
 	.4byte	.LASF197
 	.byte	0x1
-	.2byte	0x329
+	.2byte	0x314
 	.4byte	0x89
 	.byte	0x2
 	.byte	0x91
@@ -5606,7 +5606,7 @@ main:
 	.uleb128 0x24
 	.ascii	"val\000"
 	.byte	0x1
-	.2byte	0x329
+	.2byte	0x314
 	.4byte	0x89
 	.byte	0x2
 	.byte	0x91
@@ -5616,7 +5616,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF198
 	.byte	0x1
-	.2byte	0x42c
+	.2byte	0x417
 	.byte	0x1
 	.4byte	0x89
 	.4byte	.LFB19
@@ -5627,7 +5627,7 @@ main:
 	.uleb128 0x13
 	.ascii	"num\000"
 	.byte	0x1
-	.2byte	0x435
+	.2byte	0x420
 	.4byte	0x57
 	.byte	0x2
 	.byte	0x91
@@ -5635,7 +5635,7 @@ main:
 	.uleb128 0x13
 	.ascii	"dir\000"
 	.byte	0x1
-	.2byte	0x436
+	.2byte	0x421
 	.4byte	0x57
 	.byte	0x2
 	.byte	0x91
@@ -5643,7 +5643,7 @@ main:
 	.uleb128 0x14
 	.4byte	.LASF199
 	.byte	0x1
-	.2byte	0x437
+	.2byte	0x422
 	.4byte	0x69
 	.byte	0x2
 	.byte	0x91
@@ -5652,7 +5652,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF200
 	.byte	0x1
-	.2byte	0x446
+	.2byte	0x431
 	.4byte	0x89
 	.byte	0x1
 	.4byte	0xd00
@@ -5662,7 +5662,7 @@ main:
 	.byte	0x1
 	.4byte	.LASF201
 	.byte	0x1
-	.2byte	0x447
+	.2byte	0x432
 	.4byte	0x89
 	.byte	0x1
 	.4byte	0xd14
@@ -5671,7 +5671,7 @@ main:
 	.uleb128 0x14
 	.4byte	.LASF202
 	.byte	0x1
-	.2byte	0x44a
+	.2byte	0x435
 	.4byte	0x89
 	.byte	0x2
 	.byte	0x91
@@ -5881,7 +5881,7 @@ main:
 	.byte	0x1
 	.byte	0x5
 	.byte	0x3
-	.4byte	INTENSITY_VAL
+	.4byte	TEST_VAL
 	.uleb128 0x26
 	.4byte	.LASF225
 	.byte	0x1
@@ -7275,6 +7275,8 @@ main:
 	.ascii	"USART6_IRQn\000"
 .LASF179:
 	.ascii	"switch_queue_handler\000"
+.LASF224:
+	.ascii	"TEST_VAL\000"
 .LASF108:
 	.ascii	"TIM5_IRQn\000"
 .LASF67:
@@ -7393,8 +7395,6 @@ main:
 	.ascii	"pllvco\000"
 .LASF25:
 	.ascii	"AHB2RSTR\000"
-.LASF224:
-	.ascii	"INTENSITY_VAL\000"
 .LASF169:
 	.ascii	"pllp\000"
 .LASF133:

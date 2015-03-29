@@ -178,27 +178,22 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SW_NEG_EDGE</ItemText>
+          <ItemText>SWITCH_QUEUE</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SW_POS_EDGE</ItemText>
+          <ItemText>i</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SW_STATE</ItemText>
+          <ItemText>SWITCH_COUNTER</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SWITCHES</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>FREQ_VAL</ItemText>
+          <ItemText>SWITCH_DEBOUNCE</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -254,10 +249,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>4</ColumnNumber>
+      <ColumnNumber>21</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>493</TopLine>
-      <CurrentLine>508</CurrentLine>
+      <TopLine>16</TopLine>
+      <CurrentLine>36</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\STM32F4main01.c</PathWithFileName>
       <FilenameWithoutPath>STM32F4main01.c</FilenameWithoutPath>

@@ -111,7 +111,7 @@ Linker script and memory map
                 0x20000028                LED_GREEN
                 0x2000002c                LED_RED
                 0x20000030                FREQ_VAL
-                0x20000034                INTENSITY_VAL
+                0x20000034                TEST_VAL
                 0x20000038                __edata = .
                 0x20000038                __sbss = .
  *(.bss .bss.*)
@@ -162,11 +162,11 @@ OUTPUT(Blinky.elf elf32-littlearm)
                                  0x12 (size before relaxing)
  .comment       0x00000000       0x12 cMain.o
 
-.debug_line     0x00000000      0x4fe
+.debug_line     0x00000000      0x4fc
  .debug_line    0x00000000       0x63 aStartup.o
  .debug_line    0x00000063       0xe8 aDemo.o
  .debug_line    0x0000014b       0xea cLED.o
- .debug_line    0x00000235      0x2c9 cMain.o
+ .debug_line    0x00000235      0x2c7 cMain.o
 
 .debug_info     0x00000000     0x13dc
  .debug_info    0x00000000       0x7e aStartup.o
@@ -205,11 +205,11 @@ OUTPUT(Blinky.elf elf32-littlearm)
  .debug_loc     0x00000000      0x12c cLED.o
  .debug_loc     0x0000012c      0x400 cMain.o
 
-.debug_str      0x00000000      0xab2
+.debug_str      0x00000000      0xaad
  .debug_str     0x00000000      0x237 cLED.o
                                 0x270 (size before relaxing)
- .debug_str     0x00000237      0x87b cMain.o
-                                0xacd (size before relaxing)
+ .debug_str     0x00000237      0x876 cMain.o
+                                0xac8 (size before relaxing)
 
 .debug_frame    0x00000000      0x2f4
  .debug_frame   0x00000000       0xb0 cLED.o

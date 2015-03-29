@@ -38,7 +38,7 @@
 	int SW_READ_ODD = 0;
 	int SW_READ_EVEN = 0;
 	int FREQ_VAL = 125;
-	int INTENSITY_VAL = -10;
+	int TEST_VAL = -10;
 	int MODE = 0;
 	
 	#define FREQ_MODE 1
@@ -409,7 +409,7 @@ void SysTick_Handler(void) {
   msTicks++; //need this for Delay()
 	seg7_handler();
 	
-	//RUN EVERY 20 ms
+	//RUN EVERY 100 ms
 	if (SAMPLE_COUNTER < 20) {
 		SAMPLE_COUNTER++;
 	}
@@ -474,10 +474,10 @@ void switch_queue_handler() { //build the switch queue
 void mode_handler() {
 	switch(MODE){
 		case 0: //INIT_MODE
-			if ((SW_POS_EDGE >> 8)&(0x1L)) { //if SW9 is pressed
+			if ((SWITCHES >> 8)&(0x1L)) { //if SW9 is pressed
 				MODE = FREQ_MODE;
 			}
-			else if ((SW_POS_EDGE >> 9)&(0x1L)) { //if SW10 is pressed
+			else if ((SWITCHES >> 9)&(0x1L)) { //if SW10 is pressed
 				MODE = TEST_MODE;
 			}
 			break;
@@ -495,7 +495,7 @@ void mode_handler() {
  *----------------------------------------------------------------------------*/
 void freq_mode_handler() {
 	display_frequency();
-	if ((SW_POS_EDGE >> 9)&(0x1)) { //if SW10 is pressed
+	if ((SWITCHES >> 9)&(0x1)) { //if SW10 is pressed
 		MODE = TEST_MODE;
 	}	
 	if ((SW_POS_EDGE & 0x1) && (FREQ_VAL <= 7000)) { //SW1
@@ -504,27 +504,6 @@ void freq_mode_handler() {
 	if (((SW_POS_EDGE >> 1) & 0x1) && (FREQ_VAL >= 1125)) { //SW2
 		FREQ_VAL -= 1000;
 	}
-	
-	/*
-	if (((SW_POS_EDGE >> 2) & 0x1) && (FREQ_VAL <= 7900)) { //SW3
-		FREQ_VAL += 100;
-	}
-	if (((SW_POS_EDGE >> 3) & 0x1) && (FREQ_VAL >= 225)) { //SW4
-		FREQ_VAL -= 100;
-	}
-	if (((SW_POS_EDGE >> 4) & 0x1) && (FREQ_VAL <= 7990)) { //SW5
-		FREQ_VAL += 10;
-	}
-	if (((SW_POS_EDGE >> 5) & 0x1) && (FREQ_VAL >= 135)) { //SW6
-		FREQ_VAL -= 10;
-	}
-	if (((SW_POS_EDGE >> 6) & 0x1) && (FREQ_VAL <= 7999)) { //SW7
-		FREQ_VAL += 1;
-	}
-	if (((SW_POS_EDGE >> 7) & 0x1) && (FREQ_VAL >= 126)) { //SW8
-		FREQ_VAL -= 1;
-	}	
-	*/
 }
 
 
@@ -554,7 +533,7 @@ void display_frequency(){
  *----------------------------------------------------------------------------*/
 void test_mode_handler() {
   display_intensity();
-	if ((SW_POS_EDGE >> 8)&(0x1L)) { //if SW9 is pressed
+	if ((SWITCHES >> 8)&(0x1L)) { //if SW9 is pressed
 		MODE = FREQ_MODE;
 	}	
 }
@@ -563,7 +542,7 @@ void test_mode_handler() {
   display_intensity function
  *----------------------------------------------------------------------------*/
 void display_intensity() {
-	int val = INTENSITY_VAL;
+	int val = TEST_VAL;
 	//DIGIT1
 	SEG7_DIGIT1 = 10; //off
 	//DIGIT2

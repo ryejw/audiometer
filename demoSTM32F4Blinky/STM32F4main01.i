@@ -26,7 +26,7 @@
  int SW_READ_ODD = 0;
  int SW_READ_EVEN = 0;
  int FREQ_VAL = 125;
- int INTENSITY_VAL = -10;
+ int TEST_VAL = -10;
  int MODE = 0;
 
 
@@ -468,10 +468,10 @@ void switch_queue_handler() {
 void mode_handler() {
  switch(MODE){
   case 0:
-   if ((SW_POS_EDGE >> 8)&(0x1L)) {
+   if ((SWITCHES >> 8)&(0x1L)) {
     MODE = 1;
    }
-   else if ((SW_POS_EDGE >> 9)&(0x1L)) {
+   else if ((SWITCHES >> 9)&(0x1L)) {
     MODE = 2;
    }
    break;
@@ -489,7 +489,7 @@ void mode_handler() {
 
 void freq_mode_handler() {
  display_frequency();
- if ((SW_POS_EDGE >> 9)&(0x1)) {
+ if ((SWITCHES >> 9)&(0x1)) {
   MODE = 2;
  }
  if ((SW_POS_EDGE & 0x1) && (FREQ_VAL <= 7000)) {
@@ -498,7 +498,6 @@ void freq_mode_handler() {
  if (((SW_POS_EDGE >> 1) & 0x1) && (FREQ_VAL >= 1125)) {
   FREQ_VAL -= 1000;
  }
-# 528 "STM32F4main01.c"
 }
 
 
@@ -528,7 +527,7 @@ void display_frequency(){
 
 void test_mode_handler() {
   display_intensity();
- if ((SW_POS_EDGE >> 8)&(0x1L)) {
+ if ((SWITCHES >> 8)&(0x1L)) {
   MODE = 1;
  }
 }
@@ -537,7 +536,7 @@ void test_mode_handler() {
 
 
 void display_intensity() {
- int val = INTENSITY_VAL;
+ int val = TEST_VAL;
 
  SEG7_DIGIT1 = 10;
 
@@ -1040,7 +1039,7 @@ int seg7_update(int digit, int val) {
 
 
 int main (void) {
-# 1077 "STM32F4main01.c"
+# 1056 "STM32F4main01.c"
   int32_t num = -1;
   int32_t dir = 1;
   uint32_t btns = 0;
